@@ -70,10 +70,10 @@ public class JMusicBot {
                         + "jarの名前の前に-Dnogui = trueフラグを使用してください。 例：java -jar -Dnogui=true JMusicBot.jar");
             } else if ("-nocheckupdates".equalsIgnoreCase(arg)) {
                 CHECK_UPDATE = false;
-                prompt.alert(Prompt.Level.INFO, "Startup", "アップデートチェックを無効にしました。");
+                log.info("アップデートチェックを無効にしました");
             } else if ("-auditcommands".equalsIgnoreCase(arg)) {
                 COMMAND_AUDIT_ENABLED = true;
-                prompt.alert(Prompt.Level.INFO, "CommandAudit", "実行されたコマンドの記録を有効にしました。");
+                log.info("実行されたコマンドの記録を有効にしました。");
             }
 
         // get and check latest version
