@@ -26,11 +26,7 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import dev.cosgy.JMusicBot.commands.general.AboutCommand;
-import dev.cosgy.JMusicBot.commands.general.PingCommand;
-import dev.cosgy.JMusicBot.commands.general.ServerInfo;
-import dev.cosgy.JMusicBot.commands.general.SettingsCmd;
-import dev.cosgy.JMusicBot.commands.general.UserInfo;
+import dev.cosgy.JMusicBot.commands.general.*;
 import dev.cosgy.JMusicBot.commands.listeners.CommandAudit;
 import dev.cosgy.JMusicBot.commands.music.MylistCmd;
 import dev.cosgy.JMusicBot.commands.music.NicoSearchCmd;
@@ -74,10 +70,10 @@ public class JMusicBot {
                         + "jarの名前の前に-Dnogui = trueフラグを使用してください。 例：java -jar -Dnogui=true JMusicBot.jar");
             } else if ("-nocheckupdates".equalsIgnoreCase(arg)) {
                 CHECK_UPDATE = false;
-                prompt.alert(Prompt.Level.INFO, "Startup", "アップデートチェックを無効にしました。");
+                log.info("アップデートチェックを無効にしました");
             } else if ("-auditcommands".equalsIgnoreCase(arg)) {
                 COMMAND_AUDIT_ENABLED = true;
-                prompt.alert(Prompt.Level.INFO, "CommandAudit", "実行されたコマンドの記録を有効にしました。");
+                log.info("実行されたコマンドの記録を有効にしました。");
             }
 
         // get and check latest version
@@ -120,6 +116,7 @@ public class JMusicBot {
                         // General
                         new ServerInfo(),
                         new UserInfo(),
+                        new InviteCommand(),
                         // Music
                         new LyricsCmd(bot),
                         new NowplayingCmd(bot),

@@ -61,7 +61,7 @@ public class nicoSearchAPI {
                         result.getString("title"),
                         result.getString("description"),
                         result.getString("tags").split(" "),
-                        result.getString("categoryTags").split(" "),
+                        (result.isNull("categoryTags") ? new String[0] : result.getString("categoryTags").split(" ")), // FIX categoryTags: null json parse error
                         result.getInt("viewCounter"),
                         result.getInt("mylistCounter"),
                         result.getInt("commentCounter"),

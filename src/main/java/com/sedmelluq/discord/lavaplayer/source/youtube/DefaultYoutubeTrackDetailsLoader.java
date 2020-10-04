@@ -37,7 +37,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
             int statusCode = response.getStatusLine().getStatusCode();
 
             if (!HttpClientTools.isSuccessWithContent(statusCode)) {
-                throw new IOException("ビデオページ応答の無効なステータスコード： " + statusCode);
+                throw new IOException("YouTubeがエラーコードを返しました: " + statusCode);
             }
 
             String responseText = EntityUtils.toString(response.getEntity(), UTF_8);
