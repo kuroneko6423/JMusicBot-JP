@@ -16,7 +16,7 @@
 package com.jagrosh.jmusicbot.commands;
 
 import com.jagrosh.jdautilities.command.Command;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -25,7 +25,7 @@ public abstract class AdminCommand extends Command {
     public AdminCommand() {
         this.category = new Category("Admin", event ->
         {
-            if (event.getAuthor().getId().equals(event.getClient().getOwnerId()))
+            if (event.isOwner() || event.getMember().isOwner())
                 return true;
             if (event.getGuild() == null)
                 return true;

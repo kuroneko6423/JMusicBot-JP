@@ -20,8 +20,8 @@ import com.jagrosh.jlyrics.LyricsClient;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -32,8 +32,8 @@ public class LyricsCmd extends MusicCommand {
     public LyricsCmd(Bot bot) {
         super(bot);
         this.name = "lyrics";
-        this.arguments = "[song name]";
-        this.help = "現在再生中の曲の歌詞を表示します";
+        this.arguments = "[曲名]";
+        this.help = "現在再生中の曲または指定した曲名の歌詞を表示します";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
@@ -50,7 +50,7 @@ public class LyricsCmd extends MusicCommand {
         client.getLyrics(title).thenAccept(lyrics ->
         {
             if (lyrics == null) {
-                event.replyError("`" + title + "` の歌詞は見つかりませんでした。" + (event.getArgs().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [song name]`)" : ""));
+                event.replyError("`" + title + "` の歌詞は見つかりませんでした。" + (event.getArgs().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : ""));
                 return;
             }
 
@@ -59,7 +59,7 @@ public class LyricsCmd extends MusicCommand {
                     .setColor(event.getSelfMember().getColor())
                     .setTitle(lyrics.getTitle(), lyrics.getURL());
             if (lyrics.getContent().length() > 15000) {
-                event.replyWarning(" `" + title + "` の歌詞の曲が見つかりましたが、正しくないかもしれません: " + lyrics.getURL());
+                event.replyWarning(" `" + title + "` の歌詞の曲が見つかりましたが、正しくない可能性があります: " + lyrics.getURL());
             } else if (lyrics.getContent().length() > 2000) {
                 String content = lyrics.getContent().trim();
                 while (content.length() > 2000) {

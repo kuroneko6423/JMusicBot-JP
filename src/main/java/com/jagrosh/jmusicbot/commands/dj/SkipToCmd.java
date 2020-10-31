@@ -25,9 +25,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SkiptoCmd extends DJCommand {
+public class SkipToCmd extends DJCommand {
     Logger log = LoggerFactory.getLogger("Skip");
-    public SkiptoCmd(Bot bot) {
+
+    public SkipToCmd(Bot bot) {
         super(bot);
         this.name = "skipto";
         this.help = "指定された曲にスキップします";
@@ -42,12 +43,12 @@ public class SkiptoCmd extends DJCommand {
         try {
             index = Integer.parseInt(event.getArgs());
         } catch (NumberFormatException e) {
-            event.reply(event.getClient().getError() + " `" + event.getArgs() + "` 有効な整数ではありません。");
+            event.reply(event.getClient().getError() + " `" + event.getArgs() + "` は有効な整数ではありません。");
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (index < 1 || index > handler.getQueue().size()) {
-            event.reply(event.getClient().getError() + " 1から" + handler.getQueue().size() + "の間の有効な整数でないといけません!");
+            event.reply(event.getClient().getError() + " 1から" + handler.getQueue().size() + "の間の整数でないといけません!");
             return;
         }
         handler.getQueue().skip(index - 1);

@@ -18,12 +18,17 @@ package com.jagrosh.jmusicbot.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
-import net.dv8tion.jda.core.entities.GuildVoiceState;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import dev.cosgy.JMusicBot.util.MaintenanceInfo;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+
+import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -43,17 +48,24 @@ public abstract class MusicCommand extends Command {
     protected void execute(CommandEvent event) {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
+        if(bot.getConfig().getCosgyDevHost()) {
+            try {
+                MaintenanceInfo.CommandInfo(event);
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
         if (tchannel != null && !event.getTextChannel().equals(tchannel)) {
             try {
                 event.getMessage().delete().queue();
             } catch (PermissionException ignore) {
             }
-            event.replyInDm(event.getClient().getError() + " そのコマンドを使用できるのは" + tchannel.getAsMention() + "です!");
+            event.replyInDm(event.getClient().getError() + String.format("コマンドは%sでのみ実行できます", tchannel.getAsMention()));
             return;
         }
         bot.getPlayerManager().setUpHandler(event.getGuild()); // no point constantly checking for this later
         if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
-            event.reply(event.getClient().getError() + "それを使うには音楽が流れていないといけません！");
+            event.reply(event.getClient().getError() + "コマンドを使用するには、再生中である必要があります。");
             return;
         }
         if (beListening) {
@@ -62,14 +74,14 @@ public abstract class MusicCommand extends Command {
                 current = settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
             if (!userState.inVoiceChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
-                event.replyError("これを使うには " + (current == null ? "音声チャンネル" : "**" + current.getName() + "**") + " で聴いている必要があります。");
+                event.replyError(String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getName() + "**")));
                 return;
             }
             if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
-                    event.reply(event.getClient().getError() + "**" + userState.getChannel().getName() + "**に接続できません!");
+                    event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getName()));
                     return;
                 }
             }

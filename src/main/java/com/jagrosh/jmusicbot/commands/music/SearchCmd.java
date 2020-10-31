@@ -27,8 +27,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,9 +36,9 @@ import java.util.concurrent.TimeUnit;
  * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class SearchCmd extends MusicCommand {
-    protected String searchPrefix = "ytsearch:";
     private final OrderedMenu.Builder builder;
     private final String searchingEmoji;
+    protected String searchPrefix = "ytsearch:";
 
     public SearchCmd(Bot bot) {
         super(bot);
@@ -80,7 +80,7 @@ public class SearchCmd extends MusicCommand {
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " このトラック (**" + track.getInfo().title + "**) : `は許可されている最大長より長いです。"
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + "**" + track.getInfo().title + "**`は許可されている最大長より長いです。"
                         + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
@@ -100,7 +100,7 @@ public class SearchCmd extends MusicCommand {
                     {
                         AudioTrack track = playlist.getTracks().get(i - 1);
                         if (bot.getConfig().isTooLong(track)) {
-                            event.replyWarning("このトラック (**" + track.getInfo().title + "**) : `は許可されている最大長よりも長いです。"
+                            event.replyWarning("**" + track.getInfo().title + "**`は許可されている最大長よりも長いです。"
                                     + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`");
                             return;
                         }
@@ -130,9 +130,9 @@ public class SearchCmd extends MusicCommand {
         public void loadFailed(FriendlyException throwable) {
 
             if (throwable.severity == Severity.COMMON)
-                m.editMessage(event.getClient().getError() + " 読み込みエラー: " + throwable.getMessage()).queue();
+                m.editMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + throwable.getMessage()).queue();
             else
-                m.editMessage(event.getClient().getError() + " 読み込みエラー").queue();
+                m.editMessage(event.getClient().getError() + " 読み込み中にエラーが発生しました").queue();
         }
     }
 }

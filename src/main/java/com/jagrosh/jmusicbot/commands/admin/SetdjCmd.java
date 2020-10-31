@@ -21,7 +21,7 @@ import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.AdminCommand;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +57,8 @@ public class SetdjCmd extends AdminCommand {
                 event.reply(event.getClient().getWarning() + FormatUtil.listOfRoles(list, event.getArgs()));
             else {
                 s.setDJRole(list.get(0));
-                log.info("DJコマンドを使える役割が追加されました。("+ list.get(0).getName() +")");
-                event.reply(event.getClient().getSuccess() + "DJコマンドは役割が、**" + list.get(0).getName() + "**のユーザーが使用することができます");
+                log.info("DJコマンドを使える役割が追加されました。(" + list.get(0).getName() + ")");
+                event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + list.get(0).getName() + "**のユーザーが使用できるように設定しました。");
             }
         }
     }

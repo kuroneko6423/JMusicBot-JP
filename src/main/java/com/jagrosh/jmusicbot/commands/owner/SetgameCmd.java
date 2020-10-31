@@ -18,7 +18,7 @@ package com.jagrosh.jmusicbot.commands.owner;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.OwnerCommand;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -41,7 +41,7 @@ public class SetgameCmd extends OwnerCommand {
     protected void execute(CommandEvent event) {
         String title = event.getArgs().toLowerCase().startsWith("playing") ? event.getArgs().substring(7).trim() : event.getArgs();
         try {
-            event.getJDA().getPresence().setGame(title.isEmpty() ? null : Game.playing(title));
+            event.getJDA().getPresence().setActivity(title.isEmpty() ? null : Activity.playing(title));
             event.reply(event.getClient().getSuccess() + " **" + event.getSelfUser().getName()
                     + "** は " + (title.isEmpty() ? "何もなくなりました。" : "現在、`" + title + "`を再生中です。"));
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class SetgameCmd extends OwnerCommand {
                 return;
             }
             try {
-                event.getJDA().getPresence().setGame(Game.streaming(parts[1], "https://twitch.tv/" + parts[0]));
+                event.getJDA().getPresence().setActivity(Activity.streaming(parts[1], "https://twitch.tv/" + parts[0]));
                 event.replySuccess("**" + event.getSelfUser().getName()
                         + "** は、現在`" + parts[1] + "`をストリーム中です。");
             } catch (Exception e) {
@@ -87,15 +87,15 @@ public class SetgameCmd extends OwnerCommand {
         @Override
         protected void execute(CommandEvent event) {
             if (event.getArgs().isEmpty()) {
-                event.replyError("聴くためのタイトルを含めてください！");
+                event.replyError("聴いているタイトルを含めてください！");
                 return;
             }
             String title = event.getArgs().toLowerCase().startsWith("to") ? event.getArgs().substring(2).trim() : event.getArgs();
             try {
-                event.getJDA().getPresence().setGame(Game.listening(title));
+                event.getJDA().getPresence().setActivity(Activity.listening(title));
                 event.replySuccess("**" + event.getSelfUser().getName() + "** は、現在`" + title + "`を聴いています。");
             } catch (Exception e) {
-                event.reply(event.getClient().getError() + " The game could not be set!");
+                event.reply(event.getClient().getError() + " ゲームを設定できませんでした。");
             }
         }
     }
@@ -117,7 +117,7 @@ public class SetgameCmd extends OwnerCommand {
             }
             String title = event.getArgs();
             try {
-                event.getJDA().getPresence().setGame(Game.watching(title));
+                event.getJDA().getPresence().setActivity(Activity.watching(title));
                 event.replySuccess("**" + event.getSelfUser().getName() + "** は、現在`" + title + "`を見ています。");
             } catch (Exception e) {
                 event.reply(event.getClient().getError() + " ゲームを設定できませんでした。");

@@ -53,15 +53,13 @@ public class Prompt {
         if (nogui) {
             Logger log = LoggerFactory.getLogger(context);
             switch (level) {
-                case INFO:
-                    log.info(message);
-                    break;
                 case WARNING:
                     log.warn(message);
                     break;
                 case ERROR:
                     log.error(message);
                     break;
+                case INFO:
                 default:
                     log.info(message);
                     break;
@@ -77,7 +75,6 @@ public class Prompt {
                         option = JOptionPane.WARNING_MESSAGE;
                         break;
                     case ERROR:
-                        option = JOptionPane.ERROR_MESSAGE;
                         break;
                     default:
                         option = JOptionPane.PLAIN_MESSAGE;
