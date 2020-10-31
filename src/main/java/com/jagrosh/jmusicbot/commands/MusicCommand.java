@@ -18,12 +18,17 @@ package com.jagrosh.jmusicbot.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
-import net.dv8tion.jda.core.entities.GuildVoiceState;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import dev.cosgy.JMusicBot.util.MaintenanceInfo;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+
+import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -43,6 +48,13 @@ public abstract class MusicCommand extends Command {
     protected void execute(CommandEvent event) {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
+        if(bot.getConfig().getCosgyDevHost()) {
+            try {
+                MaintenanceInfo.CommandInfo(event);
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
         if (tchannel != null && !event.getTextChannel().equals(tchannel)) {
             try {
                 event.getMessage().delete().queue();

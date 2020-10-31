@@ -22,8 +22,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
@@ -52,10 +52,10 @@ public class BotConfig {
     private String nicoEmail;
     private String nicoPass;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers
-    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots;
+    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost;
     private long owner, maxSeconds;
     private OnlineStatus status;
-    private Game game;
+    private Activity game;
     private Config aliases;
 
     private boolean valid = false;
@@ -105,6 +105,8 @@ public class BotConfig {
             publistFolder = config.getString("publistfolder");
             aliases = config.getConfig("aliases");
             dbots = owner == 113156185389092864L;
+            cosgyDevHost = false;
+
 
             // [JMusicBot-JP] new function: support niconico play
             useNicoNico = config.getBoolean("useniconico");
@@ -221,7 +223,7 @@ public class BotConfig {
         return searchingEmoji;
     }
 
-    public Game getGame() {
+    public Activity getGame() {
         return game;
     }
 
@@ -314,6 +316,10 @@ public class BotConfig {
 
     public String getNicoNicoPassword() {
         return nicoPass;
+    }
+
+    public boolean getCosgyDevHost(){
+        return cosgyDevHost;
     }
     // [JMusicBot-JP] End
 }

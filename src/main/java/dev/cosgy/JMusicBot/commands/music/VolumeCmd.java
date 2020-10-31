@@ -47,20 +47,7 @@ public class VolumeCmd extends MusicCommand {
         if (event.getArgs().isEmpty()) {
             event.reply(FormatUtil.volumeIcon(volume) + " 現在の音量は`" + volume + "`です。");
         } else {
-            int nvolume;
-            try {
-                nvolume = Integer.parseInt(event.getArgs());
-            } catch (NumberFormatException e) {
-                nvolume = -1;
-            }
-            if (nvolume < 0 || nvolume > 150)
-                event.reply(event.getClient().getError() + " 音量は0から150までの整数でないといけません。");
-            else {
-                handler.getPlayer().setVolume(nvolume);
-                settings.setVolume(nvolume);
-                event.reply(FormatUtil.volumeIcon(nvolume) + " 音量を`" + volume + "`から`" + nvolume + "`に変更しました。");
-                log.info(event.getGuild().getName() + "での音量が" + volume + "から" + nvolume + "に変更されました。");
-            }
+            com.jagrosh.jmusicbot.commands.dj.VolumeCmd.Volume(event, handler, settings, volume, log);
         }
     }
 

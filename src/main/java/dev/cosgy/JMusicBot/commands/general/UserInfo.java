@@ -3,9 +3,9 @@ package dev.cosgy.JMusicBot.commands.general;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.time.format.DateTimeFormatter;
 
@@ -40,8 +40,8 @@ public class UserInfo extends Command {
         EmbedBuilder eb = new EmbedBuilder().setColor(memb.getColor());
         String NAME = memb.getEffectiveName();
         String TAG = "#" + memb.getUser().getDiscriminator();
-        String GUILD_JOIN_DATE = memb.getJoinDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-        String DISCORD_JOINED_DATE = memb.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        String GUILD_JOIN_DATE = memb.getTimeJoined().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        String DISCORD_JOINED_DATE = memb.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
         String ID = memb.getUser().getId();
         String STATUS = memb.getOnlineStatus().getKey().replace("offline", ":x: オフライン").replace("dnd", ":red_circle: 起こさないで").replace("idle", "退席中").replace("online", ":white_check_mark: オンライン");
         String UserURL = null;
@@ -50,7 +50,7 @@ public class UserInfo extends Command {
         String AVATAR = memb.getUser().getAvatarUrl();
 
         try {
-            GAME = memb.getGame().getName();
+            GAME = memb.getActivities().toString();
         } catch (Exception e) {
             GAME = "-/-";
         }

@@ -13,8 +13,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.cosgy.niconicoSearchAPI.nicoSearchAPI;
 import dev.cosgy.niconicoSearchAPI.nicoVideoSearchResult;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;

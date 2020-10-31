@@ -18,7 +18,7 @@ package com.jagrosh.jmusicbot.audio;
 import com.jagrosh.jmusicbot.queue.Queueable;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -26,7 +26,8 @@ import net.dv8tion.jda.core.entities.User;
 public class QueuedTrack implements Queueable {
     private final AudioTrack track;
 
-    public QueuedTrack(AudioTrack track, User owner) {
+    public QueuedTrack(AudioTrack track, User owner)
+    {
         this(track, owner.getIdLong());
     }
 

@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.cosgy.JMusicBot.playlist.MylistLoader;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -85,7 +86,6 @@ public class PlaylistLoader {
         Files.write(Paths.get(config.getPlaylistsFolder() + File.separator + guildId + File.separator + name + ".txt"), text.trim().getBytes());
     }
 
-    @Nullable
     public Playlist getPlaylist(String guildId, String name) {
         if (!getPlaylistNames(guildId).contains(name))
             return null;
@@ -96,15 +96,7 @@ public class PlaylistLoader {
                     List<String> list = new ArrayList<>();
                     Files.readAllLines(Paths.get(config.getPlaylistsFolder() + File.separator + guildId + File.separator + name + ".txt")).forEach(str ->
                     {
-                        String s = str.trim();
-                        if (s.isEmpty())
-                            return;
-                        if (s.startsWith("#") || s.startsWith("//")) {
-                            s = s.replaceAll("\\s+", "");
-                            if (s.equalsIgnoreCase("#shuffle") || s.equalsIgnoreCase("//shuffle"))
-                                shuffle[0] = true;
-                        } else
-                            list.add(s);
+                        MylistLoader.Trim(shuffle, list, str);
                     });
                     if (shuffle[0])
                         shuffle(list);

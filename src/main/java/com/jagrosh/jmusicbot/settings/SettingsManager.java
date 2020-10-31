@@ -18,7 +18,7 @@ package com.jagrosh.jmusicbot.settings;
 import com.jagrosh.jdautilities.command.GuildSettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import dev.cosgy.JMusicBot.settings.RepeatMode;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
@@ -47,6 +47,10 @@ public class SettingsManager implements GuildSettingsManager {
                     } else {
                         o.put("repeat", RepeatMode.OFF);
                     }
+                    //バグで誤った値を入れていたのでその数値を正しいものに変更するため
+                    if (o.getInt("announce") == 50){
+                        o.put("announce", 0);
+                    }
                 } catch (JSONException ignored) { /* ignored */ }
 
                 settings.put(Long.parseLong(id), new Settings(this,
@@ -57,7 +61,8 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("default_playlist") ? o.getString("default_playlist") : null,
                         o.has("repeat") ? o.getEnum(RepeatMode.class, "repeat") : RepeatMode.OFF,
                         o.has("prefix") ? o.getString("prefix") : null,
-                        o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied")));
+                        o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied"),
+                        o.has("announce") ? o.getInt("announce"): 0));
             });
         } catch (IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("サーバー設定を読み込めませんでした(まだ設定がない場合は正常です): " + e);
@@ -80,7 +85,7 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     private Settings createDefaultSettings() {
-        return new Settings(this, 0, 0, 0, 50, null, RepeatMode.OFF, null, false);
+        return new Settings(this, 0, 0, 0, 50, null, RepeatMode.OFF, null, false, 0);
     }
 
     protected void writeSettings() {
@@ -102,6 +107,8 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("repeat", s.getRepeatMode());
             if (s.getPrefix() != null)
                 o.put("prefix", s.getPrefix());
+            if (s.getAnnounce() != 0)
+                o.put("announce", s.getAnnounce());
             obj.put(Long.toString(key), o);
         });
         try {

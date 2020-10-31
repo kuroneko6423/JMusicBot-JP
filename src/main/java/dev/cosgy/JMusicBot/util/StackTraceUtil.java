@@ -1,6 +1,6 @@
 package dev.cosgy.JMusicBot.util;
 
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

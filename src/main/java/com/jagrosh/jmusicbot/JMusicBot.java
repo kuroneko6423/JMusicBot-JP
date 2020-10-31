@@ -26,18 +26,23 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import dev.cosgy.JMusicBot.commands.dj.RepeatCmd;
 import dev.cosgy.JMusicBot.commands.general.*;
 import dev.cosgy.JMusicBot.commands.listeners.CommandAudit;
 import dev.cosgy.JMusicBot.commands.music.MylistCmd;
 import dev.cosgy.JMusicBot.commands.music.NicoSearchCmd;
+import dev.cosgy.JMusicBot.commands.music.QueueCmd;
 import dev.cosgy.JMusicBot.commands.owner.PublistCmd;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * @author John Grosh (jagrosh)
@@ -46,9 +51,10 @@ public class JMusicBot {
     public final static String PLAY_EMOJI = "\u25B6"; // ▶
     public final static String PAUSE_EMOJI = "\u23F8"; // ⏸
     public final static String STOP_EMOJI = "\u23F9"; // ⏹
-    public final static Permission[] RECOMMENDED_PERMS = new Permission[]{Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
+    public final static Permission[] RECOMMENDED_PERMS = {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
             Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI,
             Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES};
     public static boolean CHECK_UPDATE = true;
     public static boolean COMMAND_AUDIT_ENABLED = false;
 
@@ -107,60 +113,115 @@ public class JMusicBot {
                 .setHelpWord(config.getHelp())
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
-                .setListener(new CommandAudit())
-                .addCommands(
-                        //その他
-                        aboutCommand,
-                        new PingCommand(),
-                        new SettingsCmd(bot),
-                        // General
-                        new ServerInfo(),
-                        new UserInfo(),
-                        new InviteCommand(),
-                        // Music
-                        new LyricsCmd(bot),
-                        new NowplayingCmd(bot),
-                        new PlayCmd(bot),
-                        new PlaylistsCmd(bot),
-                        new MylistCmd(bot),
-                        //new QueueCmd(bot),
-                        new dev.cosgy.JMusicBot.commands.music.QueueCmd(bot),
-                        new RemoveCmd(bot),
-                        new SearchCmd(bot),
-                        new SCSearchCmd(bot),
-                        new NicoSearchCmd(bot),
-                        new ShuffleCmd(bot),
-                        new SkipCmd(bot),
-                        new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot),
-                        // DJ
-                        new ForceRemoveCmd(bot),
-                        new ForceskipCmd(bot),
-                        new MoveTrackCmd(bot),
-                        new PauseCmd(bot),
-                        new PlaynextCmd(bot),
-                        //new RepeatCmd(bot),
-                        new dev.cosgy.JMusicBot.commands.dj.RepeatCmd(bot),
-                        new SkiptoCmd(bot),
-                        new PlaylistCmd(bot),
-                        new StopCmd(bot),
-                        //new VolumeCmd(bot),
-                        // Admin
-                        new PrefixCmd(bot),
-                        new SetdjCmd(bot),
-                        new SettcCmd(bot),
-                        new SetvcCmd(bot),
-                        new AutoplaylistCmd(bot),
-                        // Owner
-                        new DebugCmd(bot),
-                        new SetavatarCmd(bot),
-                        new SetgameCmd(bot),
-                        new SetnameCmd(bot),
-                        new SetstatusCmd(bot),
-                        new PublistCmd(bot),
-                        new ShutdownCmd(bot)
+                .setListener(new CommandAudit());
 
+        if(config.getCosgyDevHost()){
+            cb.addCommands(
+                    //その他
+                    aboutCommand,
+                    new PingCommand(),
+                    new SettingsCmd(bot),
+                    new InfoCommand(bot),
+                    // General
+                    new ServerInfo(),
+                    new UserInfo(),
+                    new InviteCommand(),
+                    // Music
+                    new LyricsCmd(bot),
+                    new NowplayingCmd(bot),
+                    new PlayCmd(bot),
+                    new PlaylistsCmd(bot),
+                    new MylistCmd(bot),
+                    //new QueueCmd(bot),
+                    new QueueCmd(bot),
+                    new RemoveCmd(bot),
+                    new SearchCmd(bot),
+                    new SCSearchCmd(bot),
+                    new NicoSearchCmd(bot),
+                    new ShuffleCmd(bot),
+                    new SkipCmd(bot),
+                    new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot),
+                    // DJ
+                    new ForceRemoveCmd(bot),
+                    new ForceskipCmd(bot),
+                    new MoveTrackCmd(bot),
+                    new PauseCmd(bot),
+                    new PlaynextCmd(bot),
+                    //new RepeatCmd(bot),
+                    new RepeatCmd(bot),
+                    new SkipToCmd(bot),
+                    new PlaylistCmd(bot),
+                    new StopCmd(bot),
+                    //new VolumeCmd(bot),
+                    // Admin
+                    new PrefixCmd(bot),
+                    new SetdjCmd(bot),
+                    new SettcCmd(bot),
+                    new SetvcCmd(bot),
+                    new AutoplaylistCmd(bot),
+                    // Owner
+                    new DebugCmd(bot),
+                    new SetavatarCmd(bot),
+                    new SetgameCmd(bot),
+                    new SetnameCmd(bot),
+                    new SetstatusCmd(bot),
+                    new PublistCmd(bot),
+                    new ShutdownCmd(bot)
+            );
+        } else {
+            cb.addCommands(
+                    //その他
+                    aboutCommand,
+                    new PingCommand(),
+                    new SettingsCmd(bot),
+                    // General
+                    new ServerInfo(),
+                    new UserInfo(),
+                    new InviteCommand(),
+                    // Music
+                    new LyricsCmd(bot),
+                    new NowplayingCmd(bot),
+                    new PlayCmd(bot),
+                    new PlaylistsCmd(bot),
+                    new MylistCmd(bot),
+                    //new QueueCmd(bot),
+                    new QueueCmd(bot),
+                    new RemoveCmd(bot),
+                    new SearchCmd(bot),
+                    new SCSearchCmd(bot),
+                    new NicoSearchCmd(bot),
+                    new ShuffleCmd(bot),
+                    new SkipCmd(bot),
+                    new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot),
+                    // DJ
+                    new ForceRemoveCmd(bot),
+                    new ForceskipCmd(bot),
+                    new MoveTrackCmd(bot),
+                    new PauseCmd(bot),
+                    new PlaynextCmd(bot),
+                    //new RepeatCmd(bot),
+                    new RepeatCmd(bot),
+                    new SkipToCmd(bot),
+                    new PlaylistCmd(bot),
+                    new StopCmd(bot),
+                    //new VolumeCmd(bot),
+                    // Admin
+                    new PrefixCmd(bot),
+                    new SetdjCmd(bot),
+                    new SettcCmd(bot),
+                    new SetvcCmd(bot),
+                    new AutoplaylistCmd(bot),
+                    // Owner
+                    new DebugCmd(bot),
+                    new SetavatarCmd(bot),
+                    new SetgameCmd(bot),
+                    new SetnameCmd(bot),
+                    new SetstatusCmd(bot),
+                    new PublistCmd(bot),
+                    new ShutdownCmd(bot)
+            );
+        }
 
-                );
         if (config.useEval())
             cb.addCommand(new EvalCmd(bot));
         boolean nogame = false;
@@ -169,10 +230,10 @@ public class JMusicBot {
         if (config.getGame() == null)
             cb.useDefaultGame();
         else if (config.getGame().getName().toLowerCase().matches("(none|なし)")) {
-            cb.setGame(null);
+            cb.setActivity(null);
             nogame = true;
         } else
-            cb.setGame(config.getGame());
+            cb.setActivity(config.getGame());
         CommandClient client = cb.build();
 
         if (!prompt.isNoGUI()) {
@@ -192,13 +253,13 @@ public class JMusicBot {
 
         // attempt to log in and start
         try {
-            JDA jda = new JDABuilder(AccountType.BOT)
-                    .setToken(config.getToken())
-                    .setAudioEnabled(true)
-                    .setGame(nogame ? null : Game.playing("ロード中..."))
-                    .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
+            JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
+                    .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                    .disableCache(CacheFlag.ACTIVITY,CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
+                    .setActivity(nogame ? null : Activity.playing("ロード中..."))
+                    .setStatus(config.getStatus()==OnlineStatus.INVISIBLE || config.getStatus()==OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)
-                    .addEventListener(cb.build(), waiter, new Listener(bot))
+                    .addEventListeners(cb.build(),waiter,new Listener(bot))
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);

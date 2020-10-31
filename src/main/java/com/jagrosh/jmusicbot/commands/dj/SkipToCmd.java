@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SkiptoCmd extends DJCommand {
+public class SkipToCmd extends DJCommand {
     Logger log = LoggerFactory.getLogger("Skip");
 
-    public SkiptoCmd(Bot bot) {
+    public SkipToCmd(Bot bot) {
         super(bot);
         this.name = "skipto";
         this.help = "指定された曲にスキップします";

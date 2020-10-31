@@ -24,11 +24,11 @@ import com.jagrosh.jmusicbot.playlist.PlaylistLoader;
 import dev.cosgy.JMusicBot.playlist.MylistLoader;
 import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
@@ -89,7 +89,7 @@ public class Bot {
                 break;
         }
 
-        guild.getController().setNickname(selfMember, name).queue();
+        guild.modifyNickname(selfMember, name).queue();
     }
 
     public BotConfig getConfig() {
@@ -139,9 +139,9 @@ public class Bot {
     }
 
     public void resetGame() {
-        Game game = config.getGame() == null || config.getGame().getName().toLowerCase().matches("(none|なし)") ? null : config.getGame();
-        if (!Objects.equals(jda.getPresence().getGame(), game))
-            jda.getPresence().setGame(game);
+        Activity game = config.getGame() == null || config.getGame().getName().toLowerCase().matches("(none|なし)") ? null : config.getGame();
+        if (!Objects.equals(jda.getPresence().getActivity(), game))
+            jda.getPresence().setActivity(game);
     }
 
     public void shutdown() {

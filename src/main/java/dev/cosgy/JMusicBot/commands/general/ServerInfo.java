@@ -2,7 +2,7 @@ package dev.cosgy.JMusicBot.commands.general;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.format.DateTimeFormatter;
 
@@ -20,7 +20,7 @@ public class ServerInfo extends Command {
         String GuildIconURL = event.getGuild().getIconUrl();
         String GuildId = event.getGuild().getId();
         String GuildOwner = event.getGuild().getOwner().getUser().getName() + "#" + event.getGuild().getOwner().getUser().getDiscriminator();
-        String GuildCreatedDate = event.getGuild().getCreationTime().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        String GuildCreatedDate = event.getGuild().getTimeCreated().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
 
         String GuildRolesCount = String.valueOf(event.getGuild().getRoles().size());
         String GuildMember = String.valueOf(event.getGuild().getMembers().size());

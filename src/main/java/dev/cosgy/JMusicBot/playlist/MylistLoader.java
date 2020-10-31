@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author kosugi_kun
@@ -27,12 +28,12 @@ public class MylistLoader {
     }
 
     private static <T> void shuffle(List<T> list) {
-        for (int first = 0; first < list.size(); first++) {
+        IntStream.range(0, list.size()).forEach(first -> {
             int second = (int) (Math.random() * list.size());
             T tmp = list.get(first);
             list.set(first, list.get(second));
             list.set(second, tmp);
-        }
+        });
     }
 
     public List<String> getPlaylistNames(String userId) {
@@ -97,17 +98,7 @@ public class MylistLoader {
                     boolean[] shuffle = {false};
                     List<String> list = new ArrayList<>();
                     Files.readAllLines(Paths.get(config.getMylistfolder() + File.separator + userId + File.separator + name + ".txt"))
-                            .forEach(str -> {
-                                String s = str.trim();
-                                if (s.isEmpty())
-                                    return;
-                                if (s.startsWith("#") || s.startsWith("//")) {
-                                    s = s.replaceAll("\\s+", "");
-                                    if (s.equalsIgnoreCase("#shuffle") || s.equalsIgnoreCase("//shuffle"))
-                                        shuffle[0] = true;
-                                } else
-                                    list.add(s);
-                            });
+                            .forEach((String str) -> Trim(shuffle, list, str));
                     if (shuffle[0])
                         shuffle(list);
                     return new Playlist(name, list, shuffle[0]);
@@ -123,6 +114,18 @@ public class MylistLoader {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static void Trim(boolean[] shuffle, List<String> list, String str) {
+        String s = str.trim();
+        if (s.isEmpty())
+            return;
+        if (s.startsWith("#") || s.startsWith("//")) {
+            s = s.replaceAll("\\s+", "");
+            if (s.equalsIgnoreCase("#shuffle") || s.equalsIgnoreCase("//shuffle"))
+                shuffle[0] = true;
+        } else
+            list.add(s);
     }
 
     public class Playlist {

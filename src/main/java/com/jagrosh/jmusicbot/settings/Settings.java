@@ -17,10 +17,10 @@ package com.jagrosh.jmusicbot.settings;
 
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
 import dev.cosgy.JMusicBot.settings.RepeatMode;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -33,14 +33,14 @@ public class Settings implements GuildSettingsProvider {
     protected long textId;
     protected long voiceId;
     protected long roleId;
-    private int volume;
+    private int volume, announce;
     private String defaultPlaylist;
     private RepeatMode repeatMode;
     private String prefix;
     private boolean bitrateWarningReaded;
 
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded) {
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce) {
         this.manager = manager;
         try {
             this.textId = Long.parseLong(textId);
@@ -62,9 +62,10 @@ public class Settings implements GuildSettingsProvider {
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.bitrateWarningReaded = bitrateWarningReaded;
+        this.announce = announce;
     }
 
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded) {
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, boolean bitrateWarningReaded, int announce) {
         this.manager = manager;
         this.textId = textId;
         this.voiceId = voiceId;
@@ -74,6 +75,7 @@ public class Settings implements GuildSettingsProvider {
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.bitrateWarningReaded = bitrateWarningReaded;
+        this.announce = announce;
     }
 
     // Getters
@@ -122,6 +124,15 @@ public class Settings implements GuildSettingsProvider {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+        this.manager.writeSettings();
+    }
+
+    public int getAnnounce() {
+        return announce;
+    }
+
+    public void setAnnounce(int announce){
+        this.announce = announce;
         this.manager.writeSettings();
     }
 
