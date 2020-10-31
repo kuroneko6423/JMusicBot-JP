@@ -85,6 +85,9 @@ public class JMusicBot {
         // get and check latest version
         String version = OtherUtil.checkVersion(prompt);
 
+        if(!System.getProperty("java.vm.name").contains("64"))
+            prompt.alert(Prompt.Level.WARNING, "Java Version", "サポートされていないJavaバージョンを使用しています。64ビット版のJavaを使用してください。");
+
         // load config
         BotConfig config = new BotConfig(prompt);
         config.load();

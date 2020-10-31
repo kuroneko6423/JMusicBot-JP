@@ -27,6 +27,8 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
+import java.util.Objects;
+
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
  */
@@ -58,11 +60,10 @@ public class SettingsCmd extends Command {
                         + "\nリピート: **" + (s.getRepeatMode() == RepeatMode.ALL ? "有効(全曲リピート)" : (s.getRepeatMode() == RepeatMode.SINGLE ? "有効(1曲リピート)" : "無効")) + "**"
                         + "\nデフォルトプレイリスト: " + (s.getDefaultPlaylist() == null ? "なし" : "**" + s.getDefaultPlaylist() + "**")
                 )
-                //TODO ここの日本語訳を変更する予定
                 .setFooter(String.format(
                         "%s 個のサーバーに参加 | %s 個のボイスチャンネルに接続",
                         event.getJDA().getGuilds().size(),
-                        event.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()),
+                        event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count()),
                         null);
         event.getChannel().sendMessage(builder.setEmbed(ebuilder.build()).build()).queue();
     }
