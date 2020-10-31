@@ -1,3 +1,4 @@
+  
 /*
  * Copyright 2018-2020 Cosgy Dev
  *
@@ -53,11 +54,15 @@ public class OtherUtil {
      * @param path the string path
      * @return the Path object
      */
-    public static Path getPath(String path) throws URISyntaxException {
+    public static Path getPath(String path) {
         // special logic to prevent trying to access system32
         if (path.toLowerCase().startsWith(WINDOWS_INVALID_PATH)) {
             String filename = path.substring(WINDOWS_INVALID_PATH.length());
-            path = new File(JMusicBot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + filename;
+            try {
+                path = new File(JMusicBot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + filename;
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
         }
         return Paths.get(path);
     }
