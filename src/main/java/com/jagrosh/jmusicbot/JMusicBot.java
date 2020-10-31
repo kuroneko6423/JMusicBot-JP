@@ -38,11 +38,13 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.slf4j.LoggerFactory.*;
 
 /**
  * @author John Grosh (jagrosh)
@@ -63,7 +65,7 @@ public class JMusicBot {
      */
     public static void main(String[] args) {
         // startup log
-        Logger log = LoggerFactory.getLogger("Startup");
+        Logger log = getLogger("Startup");
 
         // create prompt to handle startup
         Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。",

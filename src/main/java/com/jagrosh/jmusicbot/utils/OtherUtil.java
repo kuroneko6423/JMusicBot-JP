@@ -53,14 +53,11 @@ public class OtherUtil {
      * @param path the string path
      * @return the Path object
      */
-    public static Path getPath(String path) {
+    public static Path getPath(String path) throws URISyntaxException {
         // special logic to prevent trying to access system32
         if (path.toLowerCase().startsWith(WINDOWS_INVALID_PATH)) {
             String filename = path.substring(WINDOWS_INVALID_PATH.length());
-            try {
-                path = new File(JMusicBot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + filename;
-            } catch (URISyntaxException ex) {
-            }
+            path = new File(JMusicBot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + filename;
         }
         return Paths.get(path);
     }

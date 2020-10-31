@@ -87,6 +87,7 @@ public class Bot {
             case STOPPED:
                 name = "⏹ " + name;
                 break;
+            default:
         }
 
         guild.modifyNickname(selfMember, name).queue();

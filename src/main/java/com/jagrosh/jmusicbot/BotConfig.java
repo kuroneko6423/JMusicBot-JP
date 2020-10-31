@@ -27,8 +27,10 @@ import net.dv8tion.jda.api.entities.Activity;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BotConfig {
     private final static String CONTEXT = "Config";
@@ -174,7 +176,7 @@ public class BotConfig {
 
             // if we get through the whole config, it's good to go
             valid = true;
-        } catch (ConfigException | IOException ex) {
+        } catch (ConfigException | IOException | URISyntaxException ex) {
             prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n設定ファイルの場所: " + path.toAbsolutePath().toString());
         }
     }
