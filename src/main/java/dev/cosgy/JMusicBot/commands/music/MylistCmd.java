@@ -11,6 +11,9 @@ import dev.cosgy.JMusicBot.util.StackTraceUtil;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author kosugikun
+ */
 public class MylistCmd extends MusicCommand {
     private final Bot bot;
 

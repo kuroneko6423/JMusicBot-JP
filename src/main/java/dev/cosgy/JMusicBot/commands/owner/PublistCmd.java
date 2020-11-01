@@ -10,6 +10,9 @@ import dev.cosgy.JMusicBot.playlist.PubliclistLoader.Playlist;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author kosugikun
+ */
 public class PublistCmd extends OwnerCommand {
     private final Bot bot;
 
