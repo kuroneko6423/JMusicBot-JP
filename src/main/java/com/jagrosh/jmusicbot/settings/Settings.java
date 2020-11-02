@@ -131,7 +131,7 @@ public class Settings implements GuildSettingsProvider {
         return announce;
     }
 
-    public void setAnnounce(int announce){
+    public void setAnnounce(int announce) {
         this.announce = announce;
         this.manager.writeSettings();
     }

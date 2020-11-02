@@ -36,6 +36,18 @@ public class MylistLoader {
         });
     }
 
+    public static void Trim(boolean[] shuffle, List<String> list, String str) {
+        String s = str.trim();
+        if (s.isEmpty())
+            return;
+        if (s.startsWith("#") || s.startsWith("//")) {
+            s = s.replaceAll("\\s+", "");
+            if (s.equalsIgnoreCase("#shuffle") || s.equalsIgnoreCase("//shuffle"))
+                shuffle[0] = true;
+        } else
+            list.add(s);
+    }
+
     public List<String> getPlaylistNames(String userId) {
         if (folderExists()) {
             if (folderUserExists(userId)) {
@@ -116,16 +128,28 @@ public class MylistLoader {
         }
     }
 
-    public static void Trim(boolean[] shuffle, List<String> list, String str) {
-        String s = str.trim();
-        if (s.isEmpty())
-            return;
-        if (s.startsWith("#") || s.startsWith("//")) {
-            s = s.replaceAll("\\s+", "");
-            if (s.equalsIgnoreCase("#shuffle") || s.equalsIgnoreCase("//shuffle"))
-                shuffle[0] = true;
-        } else
-            list.add(s);
+    public static class PlaylistLoadError {
+        private final int number;
+        private final String item;
+        private final String reason;
+
+        private PlaylistLoadError(int number, String item, String reason) {
+            this.number = number;
+            this.item = item;
+            this.reason = reason;
+        }
+
+        public int getIndex() {
+            return number;
+        }
+
+        public String getItem() {
+            return item;
+        }
+
+        public String getReason() {
+            return reason;
+        }
     }
 
     public class Playlist {
@@ -227,30 +251,6 @@ public class MylistLoader {
 
         public List<PlaylistLoadError> getErrors() {
             return errors;
-        }
-    }
-
-    public static class PlaylistLoadError {
-        private final int number;
-        private final String item;
-        private final String reason;
-
-        private PlaylistLoadError(int number, String item, String reason) {
-            this.number = number;
-            this.item = item;
-            this.reason = reason;
-        }
-
-        public int getIndex() {
-            return number;
-        }
-
-        public String getItem() {
-            return item;
-        }
-
-        public String getReason() {
-            return reason;
         }
     }
 }

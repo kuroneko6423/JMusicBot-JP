@@ -25,6 +25,6 @@ public class Sample {
         results_1.forEach(result -> System.out.println(result.getTitle() + ": " + result.getWatchUrl()));
 
         System.out.println("Third: " + (end_3 - start_3));
-        results_2.forEach(result -> System.out.println(result.getTitle() + ": " +result.getWatchUrl()));
+        results_2.forEach(result -> System.out.println(result.getTitle() + ": " + result.getWatchUrl()));
     }
 }

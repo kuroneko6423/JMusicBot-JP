@@ -89,7 +89,7 @@ public class OtherUtil {
             into.write(buf, 0, n);
         }
         into.close();
-        return new String(into.toByteArray(), StandardCharsets.UTF_8);
+        return into.toString(StandardCharsets.UTF_8);
     }
 
     /**

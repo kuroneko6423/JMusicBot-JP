@@ -35,7 +35,7 @@ public class MaintenanceInfo {
         return root.get("setting").get(0).get("Announce").asBoolean();
     }
 
-    public static MaintenanceInfo GetInfo() throws IOException{
+    public static MaintenanceInfo GetInfo() throws IOException {
         Logger log = LoggerFactory.getLogger("GetInfo");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -44,12 +44,12 @@ public class MaintenanceInfo {
         MaintenanceInfo Info = new MaintenanceInfo();
 
         //臨時メンテナンスか確認
-        if(root.get("setting").get(0).get("emergency").asBoolean()){
+        if (root.get("setting").get(0).get("emergency").asBoolean()) {
             Info.Title = root.get("emergencyInfo").get(0).get("Title").asText();
             Info.Content = root.get("emergencyInfo").get(0).get("Content").asText();
             Info.StartTime = root.get("emergencyInfo").get(0).get("StartTime").asText();
             Info.EndTime = root.get("emergencyInfo").get(0).get("StartTime").asText();
-        }else{
+        } else {
             int InfoID = root.get("setting").get(0).get("InfoID").asInt();
             Info.Title = root.get("Normal").get(InfoID).get("Title").asText();
             Info.Content = root.get("Normal").get(InfoID).get("Content").asText();
@@ -89,7 +89,7 @@ public class MaintenanceInfo {
         Settings s = event.getClient().getSettingsFor(event.getGuild());
         log.info("Saved AutoAnnounceID: " + s.getAnnounce());
         log.info("Announce Server ID: " + AnnounceID);
-        if(Announce && AnnounceID > s.getAnnounce() && StartBoolean && EndBoolean){
+        if (Announce && AnnounceID > s.getAnnounce() && StartBoolean && EndBoolean) {
             //event.getChannel().sendMessage("テストメッセージ").complete();
             MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
@@ -97,10 +97,10 @@ public class MaintenanceInfo {
             EmbedBuilder ebuilder = new EmbedBuilder()
                     .setColor(Color.orange)
                     .setDescription(InfoResult.Content);
-            if(!InfoResult.StartTime.equals("")){
+            if (!InfoResult.StartTime.equals("")) {
                 ebuilder.addField("開始時刻:", InfoResult.StartTime, false);
             }
-            if(!InfoResult.EndTime.equals("")){
+            if (!InfoResult.EndTime.equals("")) {
                 ebuilder.addField("終了時刻:", InfoResult.EndTime, false);
             }
             ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)

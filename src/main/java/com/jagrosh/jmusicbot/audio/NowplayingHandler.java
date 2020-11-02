@@ -107,7 +107,8 @@ public class NowplayingHandler {
             if (!text.equals(tchan.getTopic())) {
                 try {
                     tchan.getManager().setTopic(text).complete(wait);
-                } catch (PermissionException | RateLimitedException ignore) { }
+                } catch (PermissionException | RateLimitedException ignore) {
+                }
             }
         }
     }

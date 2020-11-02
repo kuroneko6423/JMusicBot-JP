@@ -49,7 +49,7 @@ public class SearchCmd extends MusicCommand {
         this.help = "指定した文字列を使用してYouTube上の動画を検索します。";
         this.beListening = true;
         this.bePlaying = false;
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
         builder = new OrderedMenu.Builder()
                 .allowTextInput(true)
                 .useNumbers()

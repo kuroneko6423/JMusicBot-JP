@@ -30,7 +30,7 @@ public class NicoSearchCmd extends MusicCommand {
         this.bePlaying = false;
         this.arguments = "<検索語句>";
         this.help = "指定した文字列を使用してニコニコ動画上の動画を検索します。";
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
     }
 
     @Override

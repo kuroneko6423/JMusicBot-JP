@@ -34,22 +34,10 @@ public class VolumeCmd extends DJCommand {
     public VolumeCmd(Bot bot) {
         super(bot);
         this.name = "volume";
-        this.aliases = new String[]{"vol"};
+        this.aliases = new String[] {"vol"};
         this.help = "音量を設定または表示します";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.arguments = "[0-150]";
-    }
-
-    @Override
-    public void doCommand(CommandEvent event) {
-        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        int volume = handler.getPlayer().getVolume();
-        if (event.getArgs().isEmpty()) {
-            event.reply(FormatUtil.volumeIcon(volume) + " 現在の音量は `" + volume + "です  `");
-        } else {
-            Volume(event, handler, settings, volume, log);
-        }
     }
 
     public static void Volume(CommandEvent event, AudioHandler handler, Settings settings, int volume, Logger log) {
@@ -66,6 +54,18 @@ public class VolumeCmd extends DJCommand {
             settings.setVolume(nvolume);
             event.reply(FormatUtil.volumeIcon(nvolume) + " 音量を`" + volume + "`から`" + nvolume + "`に変更しました。");
             log.info(event.getGuild().getName() + "での音量が" + volume + "から" + nvolume + "に変更されました。");
+        }
+    }
+
+    @Override
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        Settings settings = event.getClient().getSettingsFor(event.getGuild());
+        int volume = handler.getPlayer().getVolume();
+        if (event.getArgs().isEmpty()) {
+            event.reply(FormatUtil.volumeIcon(volume) + " 現在の音量は `" + volume + "です  `");
+        } else {
+            Volume(event, handler, settings, volume, log);
         }
     }
 

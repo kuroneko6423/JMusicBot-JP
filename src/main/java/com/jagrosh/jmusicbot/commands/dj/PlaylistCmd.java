@@ -39,7 +39,7 @@ public class PlaylistCmd extends DJCommand {
         this.arguments = "<append|delete|make|setdefault>";
         this.help = "再生リスト管理";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.children = new DJCommand[]{
+        this.children = new DJCommand[] {
                 new ListCmd(bot),
                 new AppendlistCmd(bot),
                 new DeletelistCmd(bot),
@@ -61,7 +61,7 @@ public class PlaylistCmd extends DJCommand {
         public DefaultPlaylistCmd(Bot bot) {
             super(bot);
             this.name = "setdefault";
-            this.aliases = new String[]{"default"};
+            this.aliases = new String[] {"default"};
             this.arguments = "<playlistname|NONE>";
             this.guildOnly = true;
             this.ownerCommand = false;
@@ -72,7 +72,7 @@ public class PlaylistCmd extends DJCommand {
         public MakelistCmd(Bot bot) {
             super(bot);
             this.name = "make";
-            this.aliases = new String[]{"create"};
+            this.aliases = new String[] {"create"};
             this.help = "再生リストを新規作成";
             this.arguments = "<name>";
             this.guildOnly = true;
@@ -114,7 +114,7 @@ public class PlaylistCmd extends DJCommand {
         public DeletelistCmd(Bot bot) {
             super(bot);
             this.name = "delete";
-            this.aliases = new String[]{"remove"};
+            this.aliases = new String[] {"remove"};
             this.help = "既存の再生リストを削除";
             this.arguments = "<name>";
             this.guildOnly = true;
@@ -147,7 +147,7 @@ public class PlaylistCmd extends DJCommand {
         public AppendlistCmd(Bot bot) {
             super(bot);
             this.name = "append";
-            this.aliases = new String[]{"add"};
+            this.aliases = new String[] {"add"};
             this.help = "既存の再生リストに曲を追加";
             this.arguments = "<name> <URL> | <URL> | ...";
             this.guildOnly = true;
@@ -191,7 +191,7 @@ public class PlaylistCmd extends DJCommand {
         public ListCmd(Bot bot) {
             super(bot);
             this.name = "all";
-            this.aliases = new String[]{"available", "list"};
+            this.aliases = new String[] {"available", "list"};
             this.help = "利用可能なすべての再生リストを表示";
             this.guildOnly = true;
             this.ownerCommand = false;

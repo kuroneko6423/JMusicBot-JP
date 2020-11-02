@@ -49,7 +49,7 @@ public class QueueCmd extends MusicCommand {
         this.arguments = "[ページ]";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
-        this.botPermissions = new Permission[]{Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
         builder = new Paginator.Builder()
                 .setColumns(1)
                 .setFinalAction(m -> {

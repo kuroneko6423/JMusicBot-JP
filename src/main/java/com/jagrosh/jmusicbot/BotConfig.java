@@ -27,10 +27,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class BotConfig {
     private final static String CONTEXT = "Config";
@@ -265,9 +263,13 @@ public class BotConfig {
         return playlistsFolder;
     }
 
-    public String getMylistfolder() { return mylistfolder; }
+    public String getMylistfolder() {
+        return mylistfolder;
+    }
 
-    public String getPublistFolder() { return publistFolder; }
+    public String getPublistFolder() {
+        return publistFolder;
+    }
 
     public boolean getDBots() {
         return dbots;
@@ -320,7 +322,7 @@ public class BotConfig {
         return nicoPass;
     }
 
-    public boolean getCosgyDevHost(){
+    public boolean getCosgyDevHost() {
         return cosgyDevHost;
     }
     // [JMusicBot-JP] End

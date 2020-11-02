@@ -23,7 +23,7 @@ public class PublistCmd extends OwnerCommand {
         this.arguments = "<append|delete|make|all>";
         this.help = "再生リスト管理";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.children = new OwnerCommand[]{
+        this.children = new OwnerCommand[] {
                 new ListCmd(),
                 new AppendlistCmd(),
                 new DeletelistCmd(),
@@ -43,7 +43,7 @@ public class PublistCmd extends OwnerCommand {
     public class MakelistCmd extends OwnerCommand {
         public MakelistCmd() {
             this.name = "make";
-            this.aliases = new String[]{"create"};
+            this.aliases = new String[] {"create"};
             this.help = "新しい再生リストを作る";
             this.arguments = "<name>";
             this.guildOnly = false;
@@ -67,7 +67,7 @@ public class PublistCmd extends OwnerCommand {
     public class DeletelistCmd extends OwnerCommand {
         public DeletelistCmd() {
             this.name = "delete";
-            this.aliases = new String[]{"remove"};
+            this.aliases = new String[] {"remove"};
             this.help = "既存の再生リストを削除します";
             this.arguments = "<name>";
             this.guildOnly = false;
@@ -92,7 +92,7 @@ public class PublistCmd extends OwnerCommand {
     public class AppendlistCmd extends OwnerCommand {
         public AppendlistCmd() {
             this.name = "append";
-            this.aliases = new String[]{"add"};
+            this.aliases = new String[] {"add"};
             this.help = "既存の再生リストに曲を追加します";
             this.arguments = "<name> <URL> | <URL> | ...";
             this.guildOnly = false;
@@ -133,7 +133,7 @@ public class PublistCmd extends OwnerCommand {
         public DefaultlistCmd(Bot bot) {
             super(bot);
             this.name = "setdefault";
-            this.aliases = new String[]{"default"};
+            this.aliases = new String[] {"default"};
             this.arguments = "<playlistname|NONE>";
             this.guildOnly = true;
         }
@@ -142,7 +142,7 @@ public class PublistCmd extends OwnerCommand {
     public class ListCmd extends OwnerCommand {
         public ListCmd() {
             this.name = "all";
-            this.aliases = new String[]{"available", "list"};
+            this.aliases = new String[] {"available", "list"};
             this.help = "利用可能なすべての再生リストを表示します。";
             this.guildOnly = true;
         }

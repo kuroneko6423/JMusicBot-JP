@@ -31,7 +31,7 @@ public class NowplayingCmd extends MusicCommand {
         this.name = "nowplaying";
         this.help = "現在再生中の曲を表示します";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
     }
 
     @Override

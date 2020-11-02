@@ -21,9 +21,9 @@ import com.jagrosh.jmusicbot.audio.NowplayingHandler;
 import com.jagrosh.jmusicbot.audio.PlayerManager;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader;
+import com.jagrosh.jmusicbot.settings.SettingsManager;
 import dev.cosgy.JMusicBot.playlist.MylistLoader;
 import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
-import com.jagrosh.jmusicbot.settings.SettingsManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
@@ -117,9 +117,13 @@ public class Bot {
         return playlists;
     }
 
-    public MylistLoader getMylistLoader() { return mylists; }
+    public MylistLoader getMylistLoader() {
+        return mylists;
+    }
 
-    public PubliclistLoader getPublistLoader() { return publist; }
+    public PubliclistLoader getPublistLoader() {
+        return publist;
+    }
 
     public NowplayingHandler getNowplayingHandler() {
         return nowplaying;
