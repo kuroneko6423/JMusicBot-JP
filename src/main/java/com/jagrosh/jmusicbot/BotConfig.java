@@ -263,9 +263,13 @@ public class BotConfig {
         return playlistsFolder;
     }
 
-    public String getMylistfolder() { return mylistfolder; }
+    public String getMylistfolder() {
+        return mylistfolder;
+    }
 
-    public String getPublistFolder() { return publistFolder; }
+    public String getPublistFolder() {
+        return publistFolder;
+    }
 
     public boolean getDBots() {
         return dbots;
@@ -318,7 +322,7 @@ public class BotConfig {
         return nicoPass;
     }
 
-    public boolean getCosgyDevHost(){
+    public boolean getCosgyDevHost() {
         return cosgyDevHost;
     }
     // [JMusicBot-JP] End

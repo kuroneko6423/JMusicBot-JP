@@ -30,7 +30,7 @@ public class InfoCommand extends Command {
         Date NowTime = Now.getTime();
         Message m = event.getChannel().sendMessage("お知らせを受信中...").complete();
         try {
-            if(MaintenanceInfo.Verification()){
+            if (MaintenanceInfo.Verification()) {
                 MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
                 MessageBuilder builder = new MessageBuilder()
@@ -38,10 +38,10 @@ public class InfoCommand extends Command {
                 EmbedBuilder ebuilder = new EmbedBuilder()
                         .setColor(Color.orange)
                         .setDescription(InfoResult.Content);
-                if(InfoResult.StartTime != ""){
+                if (InfoResult.StartTime != "") {
                     ebuilder.addField("開始時刻:", InfoResult.StartTime, false);
                 }
-                if(InfoResult.EndTime != ""){
+                if (InfoResult.EndTime != "") {
                     ebuilder.addField("終了時刻:", InfoResult.EndTime, false);
                 }
                 ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
@@ -49,7 +49,7 @@ public class InfoCommand extends Command {
                         .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
                 m.editMessage(builder.setEmbed(ebuilder.build()).build()).queue();
 
-            }else{
+            } else {
                 m.editMessage("お知らせはありません。").queue();
             }
         } catch (IOException e) {

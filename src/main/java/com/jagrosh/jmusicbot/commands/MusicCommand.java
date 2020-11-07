@@ -18,7 +18,6 @@ package com.jagrosh.jmusicbot.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.JMusicBot.util.MaintenanceInfo;
@@ -48,7 +47,7 @@ public abstract class MusicCommand extends Command {
     protected void execute(CommandEvent event) {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
-        if(bot.getConfig().getCosgyDevHost()) {
+        if (bot.getConfig().getCosgyDevHost()) {
             try {
                 MaintenanceInfo.CommandInfo(event);
             } catch (IOException | ParseException e) {

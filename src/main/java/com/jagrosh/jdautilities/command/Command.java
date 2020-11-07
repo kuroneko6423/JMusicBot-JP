@@ -15,15 +15,15 @@
  */
 package com.jagrosh.jdautilities.command;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 /**
  * <h1><b>Commands In JDA-Utilities</b></h1>
@@ -51,7 +51,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
  *      }
  *
  * }</code></pre>
- *
+ * <p>
  * Execution is with the provision of a MessageReceivedEvent-CommandClient wrapper called a
  * {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} and is performed in two steps:
  * <ul>
@@ -65,83 +65,71 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
  *
  * @author John Grosh (jagrosh)
  */
-public abstract class Command
-{
+public abstract class Command {
+    private final static String BOT_PERM = "%s I need the %s permission in this %s!";
+    private final static String USER_PERM = "%s You must have the %s permission in this %s to use that!";
     /**
      * The name of the command, allows the command to be called the format: {@code [prefix]<command name>}.
      */
     protected String name = "null";
-
     /**
      * A small help String that summarizes the function of the command, used in the default help builder.
      */
     protected String help = "no help available";
-
     /**
      * The {@link com.jagrosh.jdautilities.command.Command.Category Category} of the command.
      * <br>This can perform any other checks not completed by the default conditional fields.
      */
     protected Category category = null;
-
     /**
      * An arguments format String for the command, used in the default help builder.
      */
     protected String arguments = null;
-
     /**
      * {@code true} if the command may only be used in a {@link net.dv8tion.jda.api.entities.Guild Guild},
      * {@code false} if it may be used in both a Guild and a DM.
      * <br>Default {@code true}.
      */
     protected boolean guildOnly = true;
-
     /**
      * A String name of a role required to use this command.
      */
     protected String requiredRole = null;
-
     /**
      * {@code true} if the command may only be used by a User with an ID matching the
      * Owners or any of the CoOwners.
      * <br>Default {@code false}.
      */
     protected boolean ownerCommand = false;
-
     /**
      * An {@code int} number of seconds users must wait before using this command again.
      */
     protected int cooldown = 0;
-
     /**
      * Any {@link net.dv8tion.jda.api.Permission Permission}s a Member must have to use this command.
      * <br>These are only checked in a {@link net.dv8tion.jda.api.entities.Guild Guild} environment.
      */
     protected Permission[] userPermissions = new Permission[0];
-
     /**
      * Any {@link net.dv8tion.jda.api.Permission Permission}s the bot must have to use a command.
      * <br>These are only checked in a {@link net.dv8tion.jda.api.entities.Guild Guild} environment.
      */
     protected Permission[] botPermissions = new Permission[0];
-
     /**
      * The aliases of the command, when calling a command these function identically to calling the
      * {@link com.jagrosh.jdautilities.command.Command#name Command.name}.
      */
     protected String[] aliases = new String[0];
-
     /**
      * The child commands of the command. These are used in the format {@code [prefix]<parent name>
      * <child name>}.
      */
     protected Command[] children = new Command[0];
-
     /**
      * The {@link java.util.function.BiConsumer BiConsumer} for creating a help response to the format
      * {@code [prefix]<command name> help}.
      */
     protected BiConsumer<CommandEvent, Command> helpBiConsumer = null;
-
     /**
      * {@code true} if this command checks a channel topic for topic-tags.
      * <br>This means that putting {@code {-commandname}}, {@code {-command category}}, {@code {-all}} in a channel topic
@@ -149,13 +137,11 @@ public abstract class Command
      * <br>Default {@code true}.
      */
     protected boolean usesTopicTags = true;
-
     /**
      * {@code true} if this command should be hidden from the help.
      * <br>Default {@code false}
      */
     protected boolean hidden = false;
-
     /**
      * The {@link com.jagrosh.jdautilities.command.Command.CooldownScope CooldownScope}
      * of the command. This defines how far of a scope cooldowns have.
@@ -163,17 +149,13 @@ public abstract class Command
      */
     protected CooldownScope cooldownScope = CooldownScope.USER;
 
-    private final static String BOT_PERM = "%s I need the %s permission in this %s!";
-    private final static String USER_PERM = "%s You must have the %s permission in this %s to use that!";
-
     /**
      * The main body method of a {@link com.jagrosh.jdautilities.command.Command Command}.
      * <br>This is the "response" for a successful
      * {@link com.jagrosh.jdautilities.command.Command#run(CommandEvent) #run(CommandEvent)}.
      *
-     * @param  event
-     *         The {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} that
-     *         triggered this Command
+     * @param event The {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} that
+     *              triggered this Command
      */
     protected abstract void execute(CommandEvent event);
 
@@ -182,25 +164,19 @@ public abstract class Command
      * given {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} that called it.
      * <br>Will terminate, and possibly respond with a failure message, if any checks fail.
      *
-     * @param  event
-     *         The CommandEvent that triggered this Command
+     * @param event The CommandEvent that triggered this Command
      */
-    public final void run(CommandEvent event)
-    {
+    public final void run(CommandEvent event) {
         // child check
-        if(!event.getArgs().isEmpty())
-        {
-            String[] parts = Arrays.copyOf(event.getArgs().split("\\s+",2), 2);
-            if(helpBiConsumer!=null && parts[0].equalsIgnoreCase(event.getClient().getHelpWord()))
-            {
+        if (!event.getArgs().isEmpty()) {
+            String[] parts = Arrays.copyOf(event.getArgs().split("\\s+", 2), 2);
+            if (helpBiConsumer != null && parts[0].equalsIgnoreCase(event.getClient().getHelpWord())) {
                 helpBiConsumer.accept(event, this);
                 return;
             }
-            for(Command cmd: children)
-            {
-                if(cmd.isCommandFor(parts[0]))
-                {
-                    event.setArgs(parts[1]==null ? "" : parts[1]);
+            for (Command cmd : children) {
+                if (cmd.isCommandFor(parts[0])) {
+                    event.setArgs(parts[1] == null ? "" : parts[1]);
                     cmd.run(event);
                     return;
                 }
@@ -208,69 +184,52 @@ public abstract class Command
         }
 
         // owner check
-        if(ownerCommand && !(event.isOwner()))
-        {
-            terminate(event,null);
+        if (ownerCommand && !(event.isOwner())) {
+            terminate(event, null);
             return;
         }
 
         // category check
-        if(category!=null && !category.test(event))
-        {
+        if (category != null && !category.test(event)) {
             terminate(event, category.getFailureResponse());
             return;
         }
 
         // is allowed check
-        if(event.isFromType(ChannelType.TEXT) && !isAllowed(event.getTextChannel()))
-        {
+        if (event.isFromType(ChannelType.TEXT) && !isAllowed(event.getTextChannel())) {
             terminate(event, "That command cannot be used in this channel!");
             return;
         }
 
         // required role check
-        if(requiredRole!=null)
-            if(!event.isFromType(ChannelType.TEXT) || event.getMember().getRoles().stream().noneMatch(r -> r.getName().equalsIgnoreCase(requiredRole)))
-            {
-                terminate(event, event.getClient().getError()+" You must have a role called `"+requiredRole+"` to use that!");
+        if (requiredRole != null)
+            if (!event.isFromType(ChannelType.TEXT) || event.getMember().getRoles().stream().noneMatch(r -> r.getName().equalsIgnoreCase(requiredRole))) {
+                terminate(event, event.getClient().getError() + " You must have a role called `" + requiredRole + "` to use that!");
                 return;
             }
 
         // availability check
-        if(event.getChannelType()==ChannelType.TEXT)
-        {
+        if (event.getChannelType() == ChannelType.TEXT) {
             // bot perms
-            for(Permission p: botPermissions)
-            {
-                if(p.isChannel())
-                {
-                    if(p.name().startsWith("VOICE"))
-                    {
+            for (Permission p : botPermissions) {
+                if (p.isChannel()) {
+                    if (p.name().startsWith("VOICE")) {
                         VoiceChannel vc = event.getMember().getVoiceState().getChannel();
-                        if(vc==null)
-                        {
-                            terminate(event, event.getClient().getError()+" You must be in a voice channel to use that!");
+                        if (vc == null) {
+                            terminate(event, event.getClient().getError() + " You must be in a voice channel to use that!");
                             return;
-                        }
-                        else if(!event.getSelfMember().hasPermission(vc, p))
-                        {
+                        } else if (!event.getSelfMember().hasPermission(vc, p)) {
                             terminate(event, String.format(BOT_PERM, event.getClient().getError(), p.getName(), "Voice Channel"));
                             return;
                         }
-                    }
-                    else
-                    {
-                        if(!event.getSelfMember().hasPermission(event.getTextChannel(), p))
-                        {
+                    } else {
+                        if (!event.getSelfMember().hasPermission(event.getTextChannel(), p)) {
                             terminate(event, String.format(BOT_PERM, event.getClient().getError(), p.getName(), "Channel"));
                             return;
                         }
                     }
-                }
-                else
-                {
-                    if(!event.getSelfMember().hasPermission(p))
-                    {
+                } else {
+                    if (!event.getSelfMember().hasPermission(p)) {
                         terminate(event, String.format(BOT_PERM, event.getClient().getError(), p.getName(), "Guild"));
                         return;
                     }
@@ -278,55 +237,42 @@ public abstract class Command
             }
 
             //user perms
-            for(Permission p: userPermissions)
-            {
-                if(p.isChannel())
-                {
-                    if(!event.getMember().hasPermission(event.getTextChannel(), p))
-                    {
+            for (Permission p : userPermissions) {
+                if (p.isChannel()) {
+                    if (!event.getMember().hasPermission(event.getTextChannel(), p)) {
                         terminate(event, String.format(USER_PERM, event.getClient().getError(), p.getName(), "Channel"));
                         return;
                     }
-                }
-                else
-                {
-                    if(!event.getMember().hasPermission(p))
-                    {
+                } else {
+                    if (!event.getMember().hasPermission(p)) {
                         terminate(event, String.format(USER_PERM, event.getClient().getError(), p.getName(), "Guild"));
                         return;
                     }
                 }
             }
-        }
-        else if(guildOnly)
-        {
-            terminate(event, event.getClient().getError()+" This command cannot be used in Direct messages");
+        } else if (guildOnly) {
+            terminate(event, event.getClient().getError() + " This command cannot be used in Direct messages");
             return;
         }
 
         //cooldown check
-        if(cooldown>0)
-        {
+        if (cooldown > 0) {
             String key = getCooldownKey(event);
             int remaining = event.getClient().getRemainingCooldown(key);
-            if(remaining>0)
-            {
+            if (remaining > 0) {
                 String error = getCooldownError(event, remaining);
-                if(error!=null)
-                {
+                if (error != null) {
                     terminate(event, error);
                     return;
                 }
-            }
-            else event.getClient().applyCooldown(key, cooldown);
+            } else event.getClient().applyCooldown(key, cooldown);
         }
 
         // run
         try {
             execute(event);
-        } catch(Throwable t) {
-            if(event.getClient().getListener() != null)
-            {
+        } catch (Throwable t) {
+            if (event.getClient().getListener() != null) {
                 event.getClient().getListener().onCommandException(event, this, t);
                 return;
             }
@@ -334,24 +280,21 @@ public abstract class Command
             throw t;
         }
 
-        if(event.getClient().getListener() != null)
+        if (event.getClient().getListener() != null)
             event.getClient().getListener().onCompletedCommand(event, this);
     }
 
     /**
      * Checks if the given input represents this Command
      *
-     * @param  input
-     *         The input to check
-     *
+     * @param input The input to check
      * @return {@code true} if the input is the name or an alias of the Command
      */
-    public boolean isCommandFor(String input)
-    {
-        if(name.equalsIgnoreCase(input))
+    public boolean isCommandFor(String input) {
+        if (name.equalsIgnoreCase(input))
             return true;
-        for(String alias: aliases)
-            if(alias.equalsIgnoreCase(input))
+        for (String alias : aliases)
+            if (alias.equalsIgnoreCase(input))
                 return true;
         return false;
     }
@@ -369,33 +312,29 @@ public abstract class Command
      * to {@code false} will cause this method to always return {@code true}, as the feature would not be applicable
      * in the first place.
      *
-     * @param  channel
-     *         The TextChannel to test.
-     *
+     * @param channel The TextChannel to test.
      * @return {@code true} if the channel topic doesn't specify any topic-tags that would cause this command
-     *         to be cancelled, or if {@code usesTopicTags} has been set to {@code false}.
+     * to be cancelled, or if {@code usesTopicTags} has been set to {@code false}.
      */
-    public boolean isAllowed(TextChannel channel)
-    {
-        if(!usesTopicTags)
+    public boolean isAllowed(TextChannel channel) {
+        if (!usesTopicTags)
             return true;
-        if(channel==null)
+        if (channel == null)
             return true;
         String topic = channel.getTopic();
-        if(topic==null || topic.isEmpty())
+        if (topic == null || topic.isEmpty())
             return true;
         topic = topic.toLowerCase();
         String lowerName = name.toLowerCase();
-        if(topic.contains("{"+lowerName+"}"))
+        if (topic.contains("{" + lowerName + "}"))
             return true;
-        if(topic.contains("{-"+lowerName+"}"))
+        if (topic.contains("{-" + lowerName + "}"))
             return false;
-        String lowerCat = category==null ? null : category.getName().toLowerCase();
-        if(lowerCat!=null)
-        {
-            if(topic.contains("{"+lowerCat+"}"))
+        String lowerCat = category == null ? null : category.getName().toLowerCase();
+        if (lowerCat != null) {
+            if (topic.contains("{" + lowerCat + "}"))
                 return true;
-            if(topic.contains("{-"+lowerCat+"}"))
+            if (topic.contains("{-" + lowerCat + "}"))
                 return false;
         }
         return !topic.contains("{-all}");
@@ -406,8 +345,7 @@ public abstract class Command
      *
      * @return The name for the Command
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -416,8 +354,7 @@ public abstract class Command
      *
      * @return The help for the Command
      */
-    public String getHelp()
-    {
+    public String getHelp() {
         return help;
     }
 
@@ -426,8 +363,7 @@ public abstract class Command
      *
      * @return The category for the Command
      */
-    public Category getCategory()
-    {
+    public Category getCategory() {
         return category;
     }
 
@@ -436,8 +372,7 @@ public abstract class Command
      *
      * @return The arguments for the Command
      */
-    public String getArguments()
-    {
+    public String getArguments() {
         return arguments;
     }
 
@@ -445,10 +380,9 @@ public abstract class Command
      * Checks if this Command can only be used in a {@link net.dv8tion.jda.api.entities.Guild Guild}.
      *
      * @return {@code true} if this Command can only be used in a Guild, else {@code false} if it can
-     *         be used outside of one
+     * be used outside of one
      */
-    public boolean isGuildOnly()
-    {
+    public boolean isGuildOnly() {
         return guildOnly;
     }
 
@@ -457,8 +391,7 @@ public abstract class Command
      *
      * @return The requiredRole for the Command
      */
-    public String getRequiredRole()
-    {
+    public String getRequiredRole() {
         return requiredRole;
     }
 
@@ -467,8 +400,7 @@ public abstract class Command
      *
      * @return The cooldown for the Command
      */
-    public int getCooldown()
-    {
+    public int getCooldown() {
         return cooldown;
     }
 
@@ -477,8 +409,7 @@ public abstract class Command
      *
      * @return The userPermissions for the Command
      */
-    public Permission[] getUserPermissions()
-    {
+    public Permission[] getUserPermissions() {
         return userPermissions;
     }
 
@@ -487,8 +418,7 @@ public abstract class Command
      *
      * @return The botPermissions for the Command
      */
-    public Permission[] getBotPermissions()
-    {
+    public Permission[] getBotPermissions() {
         return botPermissions;
     }
 
@@ -497,8 +427,7 @@ public abstract class Command
      *
      * @return The aliases for the Command
      */
-    public String[] getAliases()
-    {
+    public String[] getAliases() {
         return aliases;
     }
 
@@ -507,8 +436,7 @@ public abstract class Command
      *
      * @return The children for the Command
      */
-    public Command[] getChildren()
-    {
+    public Command[] getChildren() {
         return children;
     }
 
@@ -517,8 +445,7 @@ public abstract class Command
      *
      * @return {@code true} if the command is an owner command, otherwise {@code false} if it is not
      */
-    public boolean isOwnerCommand()
-    {
+    public boolean isOwnerCommand() {
         return ownerCommand;
     }
 
@@ -527,16 +454,14 @@ public abstract class Command
      *
      * @return {@code true} if the command should be hidden, otherwise {@code false}
      */
-    public boolean isHidden()
-    {
+    public boolean isHidden() {
         return hidden;
     }
 
-    private void terminate(CommandEvent event, String message)
-    {
-        if(message!=null)
+    private void terminate(CommandEvent event, String message) {
+        if (message != null)
             event.reply(message);
-        if(event.getClient().getListener()!=null)
+        if (event.getClient().getListener() != null)
             event.getClient().getListener().onTerminatedCommand(event, this);
     }
 
@@ -544,28 +469,33 @@ public abstract class Command
      * Gets the proper cooldown key for this Command under the provided
      * {@link com.jagrosh.jdautilities.command.CommandEvent CommanEvent}.
      *
-     * @param  event
-     *         The CommandEvent to generate the cooldown for.
-     *
+     * @param event The CommandEvent to generate the cooldown for.
      * @return A String key to use when applying a cooldown.
      */
-    public String getCooldownKey(CommandEvent event)
-    {
-        switch (cooldownScope)
-        {
-            case USER:         return cooldownScope.genKey(name,event.getAuthor().getIdLong());
-            case USER_GUILD:   return event.getGuild()!=null ? cooldownScope.genKey(name,event.getAuthor().getIdLong(),event.getGuild().getIdLong()) :
-                    CooldownScope.USER_CHANNEL.genKey(name,event.getAuthor().getIdLong(), event.getChannel().getIdLong());
-            case USER_CHANNEL: return cooldownScope.genKey(name,event.getAuthor().getIdLong(),event.getChannel().getIdLong());
-            case GUILD:        return event.getGuild()!=null ? cooldownScope.genKey(name,event.getGuild().getIdLong()) :
-                    CooldownScope.CHANNEL.genKey(name,event.getChannel().getIdLong());
-            case CHANNEL:      return cooldownScope.genKey(name,event.getChannel().getIdLong());
-            case SHARD:        return event.getJDA().getShardInfo()!=null ? cooldownScope.genKey(name, event.getJDA().getShardInfo().getShardId()) :
-                    CooldownScope.GLOBAL.genKey(name, 0);
-            case USER_SHARD:   return event.getJDA().getShardInfo()!=null ? cooldownScope.genKey(name,event.getAuthor().getIdLong(),event.getJDA().getShardInfo().getShardId()) :
-                    CooldownScope.USER.genKey(name, event.getAuthor().getIdLong());
-            case GLOBAL:       return cooldownScope.genKey(name, 0);
-            default:           return "";
+    public String getCooldownKey(CommandEvent event) {
+        switch (cooldownScope) {
+            case USER:
+                return cooldownScope.genKey(name, event.getAuthor().getIdLong());
+            case USER_GUILD:
+                return event.getGuild() != null ? cooldownScope.genKey(name, event.getAuthor().getIdLong(), event.getGuild().getIdLong()) :
+                        CooldownScope.USER_CHANNEL.genKey(name, event.getAuthor().getIdLong(), event.getChannel().getIdLong());
+            case USER_CHANNEL:
+                return cooldownScope.genKey(name, event.getAuthor().getIdLong(), event.getChannel().getIdLong());
+            case GUILD:
+                return event.getGuild() != null ? cooldownScope.genKey(name, event.getGuild().getIdLong()) :
+                        CooldownScope.CHANNEL.genKey(name, event.getChannel().getIdLong());
+            case CHANNEL:
+                return cooldownScope.genKey(name, event.getChannel().getIdLong());
+            case SHARD:
+                return event.getJDA().getShardInfo() != null ? cooldownScope.genKey(name, event.getJDA().getShardInfo().getShardId()) :
+                        CooldownScope.GLOBAL.genKey(name, 0);
+            case USER_SHARD:
+                return event.getJDA().getShardInfo() != null ? cooldownScope.genKey(name, event.getAuthor().getIdLong(), event.getJDA().getShardInfo().getShardId()) :
+                        CooldownScope.USER.genKey(name, event.getAuthor().getIdLong());
+            case GLOBAL:
+                return cooldownScope.genKey(name, 0);
+            default:
+                return "";
         }
     }
 
@@ -573,150 +503,23 @@ public abstract class Command
      * Gets an error message for this Command under the provided
      * {@link com.jagrosh.jdautilities.command.CommandEvent CommanEvent}.
      *
-     * @param  event
-     *         The CommandEvent to generate the error message for.
-     * @param  remaining
-     *         The remaining number of seconds a command is on cooldown for.
-     *
+     * @param event     The CommandEvent to generate the error message for.
+     * @param remaining The remaining number of seconds a command is on cooldown for.
      * @return A String error message for this command if {@code remaining > 0},
-     *         else {@code null}.
+     * else {@code null}.
      */
-    public String getCooldownError(CommandEvent event, int remaining)
-    {
-        if(remaining<=0)
+    public String getCooldownError(CommandEvent event, int remaining) {
+        if (remaining <= 0)
             return null;
-        String front = event.getClient().getWarning()+" That command is on cooldown for "+remaining+" more seconds";
-        if(cooldownScope.equals(CooldownScope.USER))
-            return front+"!";
-        else if(cooldownScope.equals(CooldownScope.USER_GUILD) && event.getGuild()==null)
-            return front+" "+CooldownScope.USER_CHANNEL.errorSpecification+"!";
-        else if(cooldownScope.equals(CooldownScope.GUILD) && event.getGuild()==null)
-            return front+" "+CooldownScope.CHANNEL.errorSpecification+"!";
+        String front = event.getClient().getWarning() + " That command is on cooldown for " + remaining + " more seconds";
+        if (cooldownScope.equals(CooldownScope.USER))
+            return front + "!";
+        else if (cooldownScope.equals(CooldownScope.USER_GUILD) && event.getGuild() == null)
+            return front + " " + CooldownScope.USER_CHANNEL.errorSpecification + "!";
+        else if (cooldownScope.equals(CooldownScope.GUILD) && event.getGuild() == null)
+            return front + " " + CooldownScope.CHANNEL.errorSpecification + "!";
         else
-            return front+" "+cooldownScope.errorSpecification+"!";
-    }
-
-    /**
-     * To be used in {@link com.jagrosh.jdautilities.command.Command Command}s as a means of
-     * organizing commands into "Categories" as well as terminate command usage when the calling
-     * {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} doesn't meet
-     * certain requirements.
-     *
-     * @author John Grosh (jagrosh)
-     */
-    public static class Category
-    {
-        private final String name;
-        private final String failResponse;
-        private final Predicate<CommandEvent> predicate;
-
-        /**
-         * A Command Category containing a name.
-         *
-         * @param  name
-         *         The name of the Category
-         */
-        public Category(String name)
-        {
-            this.name = name;
-            this.failResponse = null;
-            this.predicate = null;
-        }
-
-        /**
-         * A Command Category containing a name and a {@link java.util.function.Predicate}.
-         *
-         * <p>The command will be terminated if
-         * {@link com.jagrosh.jdautilities.command.Command.Category#test(com.jagrosh.jdautilities.command.CommandEvent)}
-         * returns {@code false}.
-         *
-         * @param  name
-         *         The name of the Category
-         * @param  predicate
-         *         The Category predicate to test
-         */
-        public Category(String name, Predicate<CommandEvent> predicate)
-        {
-            this.name = name;
-            this.failResponse = null;
-            this.predicate = predicate;
-        }
-
-        /**
-         * A Command Category containing a name, a {@link java.util.function.Predicate},
-         * and a failure response.
-         *
-         * <p>The command will be terminated if
-         * {@link com.jagrosh.jdautilities.command.Command.Category#test(com.jagrosh.jdautilities.command.CommandEvent)}
-         * returns {@code false}, and the failure response will be sent.
-         *
-         * @param  name
-         *         The name of the Category
-         * @param  failResponse
-         *         The response if the test fails
-         * @param  predicate
-         *         The Category predicate to test
-         */
-        public Category(String name, String failResponse, Predicate<CommandEvent> predicate)
-        {
-            this.name = name;
-            this.failResponse = failResponse;
-            this.predicate = predicate;
-        }
-
-        /**
-         * Gets the name of the Category.
-         *
-         * @return The name of the Category
-         */
-        public String getName()
-        {
-            return name;
-        }
-
-        /**
-         * Gets the failure response of the Category.
-         *
-         * @return The failure response of the Category
-         */
-        public String getFailureResponse()
-        {
-            return failResponse;
-        }
-
-        /**
-         * Runs a test of the provided {@link java.util.function.Predicate}.
-         *
-         * @param  event
-         *         The {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent}
-         *         that was called when this method is invoked
-         *
-         * @return {@code true} if the Predicate was not set, was set as null, or was
-         *         tested and returned true, otherwise returns {@code false}
-         */
-        public boolean test(CommandEvent event)
-        {
-            return predicate==null || predicate.test(event);
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if(!(obj instanceof Category))
-                return false;
-            Category other = (Category)obj;
-            return Objects.equals(name, other.name) && Objects.equals(predicate, other.predicate) && Objects.equals(failResponse, other.failResponse);
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 7;
-            hash = 17 * hash + Objects.hashCode(this.name);
-            hash = 17 * hash + Objects.hashCode(this.failResponse);
-            hash = 17 * hash + Objects.hashCode(this.predicate);
-            return hash;
-        }
+            return front + " " + cooldownScope.errorSpecification + "!";
     }
 
     /**
@@ -726,7 +529,7 @@ public abstract class Command
      * <p>The purpose for these values is to allow easy, refined, and generally convenient keys
      * for cooldown scopes, allowing a command to remain on cooldown for more than just the user
      * calling it, with no unnecessary abstraction or developer input.
-     *
+     * <p>
      * Cooldown keys are generated via {@link com.jagrosh.jdautilities.command.Command#getCooldownKey(CommandEvent)
      * Command#getCooldownKey(CommandEvent)} using 1-2 Snowflake ID's corresponding to the name
      * (IE: {@code USER_CHANNEL} uses the ID's of the User and the Channel from the CommandEvent).
@@ -742,7 +545,7 @@ public abstract class Command
      *     <li>{@link com.jagrosh.jdautilities.command.Command.CooldownScope#USER_GUILD USER_GUILD} defaults to
      *     {@link com.jagrosh.jdautilities.command.Command.CooldownScope#USER_CHANNEL USER_CHANNEL}.</li>
      * </ul>
-     *
+     * <p>
      * These are effective across a single instance of JDA, and not multiple
      * ones, save when multiple shards run on a single JVM and under a
      * {@link net.dv8tion.jda.api.sharding.ShardManager ShardManager}.
@@ -750,13 +553,11 @@ public abstract class Command
      * cooldown, unless all shards of the bot run under the same ShardManager,
      * and/or via some external system unrelated to JDA-Utilities.
      *
-     * @since  1.3
      * @author Kaidan Gustave
-     *
-     * @see    com.jagrosh.jdautilities.command.Command#cooldownScope Command.cooldownScope
+     * @see com.jagrosh.jdautilities.command.Command#cooldownScope Command.cooldownScope
+     * @since 1.3
      */
-    public enum CooldownScope
-    {
+    public enum CooldownScope {
         /**
          * Applies the cooldown to the calling {@link net.dv8tion.jda.api.entities.User User} across all
          * locations on this instance (IE: TextChannels, PrivateChannels, etc).
@@ -766,7 +567,7 @@ public abstract class Command
          *     {@code <command-name>|U:<userID>}
          * </ul>
          */
-        USER("U:%d",""),
+        USER("U:%d", ""),
 
         /**
          * Applies the cooldown to the {@link net.dv8tion.jda.api.entities.MessageChannel MessageChannel} the
@@ -777,7 +578,7 @@ public abstract class Command
          *     {@code <command-name>|C:<channelID>}
          * </ul>
          */
-        CHANNEL("C:%d","in this channel"),
+        CHANNEL("C:%d", "in this channel"),
 
         /**
          * Applies the cooldown to the calling {@link net.dv8tion.jda.api.entities.User User} local to the
@@ -860,27 +661,130 @@ public abstract class Command
          */
         GLOBAL("Global", "globally");
 
-        private final String format;
         final String errorSpecification;
+        private final String format;
 
-        CooldownScope(String format, String errorSpecification)
-        {
+        CooldownScope(String format, String errorSpecification) {
             this.format = format;
             this.errorSpecification = errorSpecification;
         }
 
-        String genKey(String name, long id)
-        {
+        String genKey(String name, long id) {
             return genKey(name, id, -1);
         }
 
-        String genKey(String name, long idOne, long idTwo)
-        {
-            if(this.equals(GLOBAL))
-                return name+"|"+format;
-            else if(idTwo==-1)
-                return name+"|"+String.format(format,idOne);
-            else return name+"|"+String.format(format,idOne,idTwo);
+        String genKey(String name, long idOne, long idTwo) {
+            if (this.equals(GLOBAL))
+                return name + "|" + format;
+            else if (idTwo == -1)
+                return name + "|" + String.format(format, idOne);
+            else return name + "|" + String.format(format, idOne, idTwo);
+        }
+    }
+
+    /**
+     * To be used in {@link com.jagrosh.jdautilities.command.Command Command}s as a means of
+     * organizing commands into "Categories" as well as terminate command usage when the calling
+     * {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent} doesn't meet
+     * certain requirements.
+     *
+     * @author John Grosh (jagrosh)
+     */
+    public static class Category {
+        private final String name;
+        private final String failResponse;
+        private final Predicate<CommandEvent> predicate;
+
+        /**
+         * A Command Category containing a name.
+         *
+         * @param name The name of the Category
+         */
+        public Category(String name) {
+            this.name = name;
+            this.failResponse = null;
+            this.predicate = null;
+        }
+
+        /**
+         * A Command Category containing a name and a {@link java.util.function.Predicate}.
+         *
+         * <p>The command will be terminated if
+         * {@link com.jagrosh.jdautilities.command.Command.Category#test(com.jagrosh.jdautilities.command.CommandEvent)}
+         * returns {@code false}.
+         *
+         * @param name      The name of the Category
+         * @param predicate The Category predicate to test
+         */
+        public Category(String name, Predicate<CommandEvent> predicate) {
+            this.name = name;
+            this.failResponse = null;
+            this.predicate = predicate;
+        }
+
+        /**
+         * A Command Category containing a name, a {@link java.util.function.Predicate},
+         * and a failure response.
+         *
+         * <p>The command will be terminated if
+         * {@link com.jagrosh.jdautilities.command.Command.Category#test(com.jagrosh.jdautilities.command.CommandEvent)}
+         * returns {@code false}, and the failure response will be sent.
+         *
+         * @param name         The name of the Category
+         * @param failResponse The response if the test fails
+         * @param predicate    The Category predicate to test
+         */
+        public Category(String name, String failResponse, Predicate<CommandEvent> predicate) {
+            this.name = name;
+            this.failResponse = failResponse;
+            this.predicate = predicate;
+        }
+
+        /**
+         * Gets the name of the Category.
+         *
+         * @return The name of the Category
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Gets the failure response of the Category.
+         *
+         * @return The failure response of the Category
+         */
+        public String getFailureResponse() {
+            return failResponse;
+        }
+
+        /**
+         * Runs a test of the provided {@link java.util.function.Predicate}.
+         *
+         * @param event The {@link com.jagrosh.jdautilities.command.CommandEvent CommandEvent}
+         *              that was called when this method is invoked
+         * @return {@code true} if the Predicate was not set, was set as null, or was
+         * tested and returned true, otherwise returns {@code false}
+         */
+        public boolean test(CommandEvent event) {
+            return predicate == null || predicate.test(event);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Category))
+                return false;
+            Category other = (Category) obj;
+            return Objects.equals(name, other.name) && Objects.equals(predicate, other.predicate) && Objects.equals(failResponse, other.failResponse);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 17 * hash + Objects.hashCode(this.name);
+            hash = 17 * hash + Objects.hashCode(this.failResponse);
+            hash = 17 * hash + Objects.hashCode(this.predicate);
+            return hash;
         }
     }
 }

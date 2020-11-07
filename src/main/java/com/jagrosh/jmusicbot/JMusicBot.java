@@ -15,7 +15,7 @@
  */
 package com.jagrosh.jmusicbot;
 
-import com.jagrosh.jdautilities.command.CommandClient;
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jmusicbot.commands.admin.*;
@@ -26,23 +26,22 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import dev.cosgy.JMusicBot.commands.dj.RepeatCmd;
-import dev.cosgy.JMusicBot.commands.general.*;
-import dev.cosgy.JMusicBot.commands.listeners.CommandAudit;
-import dev.cosgy.JMusicBot.commands.music.MylistCmd;
-import dev.cosgy.JMusicBot.commands.music.NicoSearchCmd;
-import dev.cosgy.JMusicBot.commands.music.QueueCmd;
-import dev.cosgy.JMusicBot.commands.owner.PublistCmd;
-import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author John Grosh (jagrosh)
@@ -63,7 +62,7 @@ public class JMusicBot {
      */
     public static void main(String[] args) {
         // startup log
-        Logger log = LoggerFactory.getLogger("Startup");
+        Logger log = getLogger("Startup");
 
         // create prompt to handle startup
         Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。",
@@ -85,6 +84,9 @@ public class JMusicBot {
         // get and check latest version
         String version = OtherUtil.checkVersion(prompt);
 
+        if (!System.getProperty("java.vm.name").contains("64"))
+            prompt.alert(Prompt.Level.WARNING, "Java Version", "サポートされていないJavaバージョンを使用しています。64ビット版のJavaを使用してください。");
+
         // load config
         BotConfig config = new BotConfig(prompt);
         config.load();
@@ -97,9 +99,9 @@ public class JMusicBot {
         Bot bot = new Bot(waiter, config, settings);
         Bot.INSTANCE = bot;
 
-        AboutCommand aboutCommand = new AboutCommand(Color.BLUE.brighter(),
+        dev.cosgy.JMusicBot.commands.general.AboutCommand aboutCommand = new dev.cosgy.JMusicBot.commands.general.AboutCommand(Color.BLUE.brighter(),
                 "[簡単にホストできる！](https://github.com/Cosgy-Dev/MusicBot-JP-java)JMusicBot JP(v" + version + ")",
-                new String[]{"高品質の音楽再生", "FairQueue™テクノロジー", "自分で簡単にホスト"},
+                new String[] {"高品質の音楽再生", "FairQueue™テクノロジー", "自分で簡単にホスト"},
                 RECOMMENDED_PERMS);
         aboutCommand.setIsAuthor(false);
         aboutCommand.setReplacementCharacter("\uD83C\uDFB6"); // 🎶
@@ -113,114 +115,62 @@ public class JMusicBot {
                 .setHelpWord(config.getHelp())
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
-                .setListener(new CommandAudit());
+                .setListener(new dev.cosgy.JMusicBot.commands.listeners.CommandAudit());
 
-        if(config.getCosgyDevHost()){
-            cb.addCommands(
-                    //その他
-                    aboutCommand,
-                    new PingCommand(),
-                    new SettingsCmd(bot),
-                    new InfoCommand(bot),
-                    // General
-                    new ServerInfo(),
-                    new UserInfo(),
-                    new InviteCommand(),
-                    // Music
-                    new LyricsCmd(bot),
-                    new NowplayingCmd(bot),
-                    new PlayCmd(bot),
-                    new PlaylistsCmd(bot),
-                    new MylistCmd(bot),
-                    //new QueueCmd(bot),
-                    new QueueCmd(bot),
-                    new RemoveCmd(bot),
-                    new SearchCmd(bot),
-                    new SCSearchCmd(bot),
-                    new NicoSearchCmd(bot),
-                    new ShuffleCmd(bot),
-                    new SkipCmd(bot),
-                    new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot),
-                    // DJ
-                    new ForceRemoveCmd(bot),
-                    new ForceskipCmd(bot),
-                    new MoveTrackCmd(bot),
-                    new PauseCmd(bot),
-                    new PlaynextCmd(bot),
-                    //new RepeatCmd(bot),
-                    new RepeatCmd(bot),
-                    new SkipToCmd(bot),
-                    new PlaylistCmd(bot),
-                    new StopCmd(bot),
-                    //new VolumeCmd(bot),
-                    // Admin
-                    new PrefixCmd(bot),
-                    new SetdjCmd(bot),
-                    new SettcCmd(bot),
-                    new SetvcCmd(bot),
-                    new AutoplaylistCmd(bot),
-                    // Owner
-                    new DebugCmd(bot),
-                    new SetavatarCmd(bot),
-                    new SetgameCmd(bot),
-                    new SetnameCmd(bot),
-                    new SetstatusCmd(bot),
-                    new PublistCmd(bot),
-                    new ShutdownCmd(bot)
-            );
-        } else {
-            cb.addCommands(
-                    //その他
-                    aboutCommand,
-                    new PingCommand(),
-                    new SettingsCmd(bot),
-                    // General
-                    new ServerInfo(),
-                    new UserInfo(),
-                    new InviteCommand(),
-                    // Music
-                    new LyricsCmd(bot),
-                    new NowplayingCmd(bot),
-                    new PlayCmd(bot),
-                    new PlaylistsCmd(bot),
-                    new MylistCmd(bot),
-                    //new QueueCmd(bot),
-                    new QueueCmd(bot),
-                    new RemoveCmd(bot),
-                    new SearchCmd(bot),
-                    new SCSearchCmd(bot),
-                    new NicoSearchCmd(bot),
-                    new ShuffleCmd(bot),
-                    new SkipCmd(bot),
-                    new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot),
-                    // DJ
-                    new ForceRemoveCmd(bot),
-                    new ForceskipCmd(bot),
-                    new MoveTrackCmd(bot),
-                    new PauseCmd(bot),
-                    new PlaynextCmd(bot),
-                    //new RepeatCmd(bot),
-                    new RepeatCmd(bot),
-                    new SkipToCmd(bot),
-                    new PlaylistCmd(bot),
-                    new StopCmd(bot),
-                    //new VolumeCmd(bot),
-                    // Admin
-                    new PrefixCmd(bot),
-                    new SetdjCmd(bot),
-                    new SettcCmd(bot),
-                    new SetvcCmd(bot),
-                    new AutoplaylistCmd(bot),
-                    // Owner
-                    new DebugCmd(bot),
-                    new SetavatarCmd(bot),
-                    new SetgameCmd(bot),
-                    new SetnameCmd(bot),
-                    new SetstatusCmd(bot),
-                    new PublistCmd(bot),
-                    new ShutdownCmd(bot)
-            );
-        }
+        List<Command> commandList = new ArrayList<Command>() {{
+            //その他
+            add(aboutCommand);
+            add(new dev.cosgy.JMusicBot.commands.general.InviteCommand());
+            add(new dev.cosgy.JMusicBot.commands.general.PingCommand());
+            add(new dev.cosgy.JMusicBot.commands.general.SettingsCmd(bot));
+            if (config.getCosgyDevHost()) add(new dev.cosgy.JMusicBot.commands.general.InfoCommand(bot));
+            // General
+            add(new dev.cosgy.JMusicBot.commands.general.ServerInfo());
+            add(new dev.cosgy.JMusicBot.commands.general.UserInfo());
+            // Music
+            add(new LyricsCmd(bot));
+            add(new NowplayingCmd(bot));
+            add(new PlayCmd(bot));
+            add(new PlaylistsCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.music.MylistCmd(bot));
+            //add(new QueueCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.music.QueueCmd(bot));
+            add(new RemoveCmd(bot));
+            add(new SearchCmd(bot));
+            add(new SCSearchCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.music.NicoSearchCmd(bot));
+            add(new ShuffleCmd(bot));
+            add(new SkipCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot));
+            // DJ
+            add(new ForceRemoveCmd(bot));
+            add(new ForceskipCmd(bot));
+            add(new MoveTrackCmd(bot));
+            add(new PauseCmd(bot));
+            add(new PlaynextCmd(bot));
+            //add(new RepeatCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.dj.RepeatCmd(bot));
+            add(new SkipToCmd(bot));
+            add(new PlaylistCmd(bot));
+            add(new StopCmd(bot));
+            //add(new VolumeCmd(bot));
+            // Admin
+            add(new PrefixCmd(bot));
+            add(new SetdjCmd(bot));
+            add(new SettcCmd(bot));
+            add(new SetvcCmd(bot));
+            add(new AutoplaylistCmd(bot));
+            // Owner
+            add(new DebugCmd(bot));
+            add(new SetavatarCmd(bot));
+            add(new SetgameCmd(bot));
+            add(new SetnameCmd(bot));
+            add(new SetstatusCmd(bot));
+            add(new dev.cosgy.JMusicBot.commands.owner.PublistCmd(bot));
+            add(new ShutdownCmd(bot));
+        }};
+
+        cb.addCommands(commandList.toArray(new Command[0]));
 
         if (config.useEval())
             cb.addCommand(new EvalCmd(bot));
@@ -234,7 +184,6 @@ public class JMusicBot {
             nogame = true;
         } else
             cb.setActivity(config.getGame());
-        CommandClient client = cb.build();
 
         if (!prompt.isNoGUI()) {
             try {
@@ -242,9 +191,9 @@ public class JMusicBot {
                 bot.setGUI(gui);
                 gui.init();
             } catch (Exception e) {
-                log.error("GUIを開くことができませんでした。次の要因が考えられます:"
-                        + "サーバー上で実行している"
-                        + "画面がない環境下で実行している"
+                log.error("GUIを開くことができませんでした。次の要因が考えられます:\n"
+                        + "サーバー上で実行している\n"
+                        + "画面がない環境下で実行している\n"
                         + "このエラーを非表示にするには、 -Dnogui=true フラグを使用してGUIなしモードで実行してください。");
             }
         }
@@ -255,11 +204,11 @@ public class JMusicBot {
         try {
             JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
                     .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                    .disableCache(CacheFlag.ACTIVITY,CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
+                    .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
                     .setActivity(nogame ? null : Activity.playing("ロード中..."))
-                    .setStatus(config.getStatus()==OnlineStatus.INVISIBLE || config.getStatus()==OnlineStatus.OFFLINE
+                    .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)
-                    .addEventListeners(cb.build(),waiter,new Listener(bot))
+                    .addEventListeners(cb.build(), waiter, new Listener(bot))
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);

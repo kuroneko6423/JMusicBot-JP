@@ -48,7 +48,7 @@ public class SettingsManager implements GuildSettingsManager {
                         o.put("repeat", RepeatMode.OFF);
                     }
                     //バグで誤った値を入れていたのでその数値を正しいものに変更するため
-                    if (o.getInt("announce") == 50){
+                    if (o.getInt("announce") == 50) {
                         o.put("announce", 0);
                     }
                 } catch (JSONException ignored) { /* ignored */ }
@@ -62,7 +62,7 @@ public class SettingsManager implements GuildSettingsManager {
                         o.has("repeat") ? o.getEnum(RepeatMode.class, "repeat") : RepeatMode.OFF,
                         o.has("prefix") ? o.getString("prefix") : null,
                         o.has("bitrate_warnings_readied") && o.getBoolean("bitrate_warnings_readied"),
-                        o.has("announce") ? o.getInt("announce"): 0));
+                        o.has("announce") ? o.getInt("announce") : 0));
             });
         } catch (IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("サーバー設定を読み込めませんでした(まだ設定がない場合は正常です): " + e);

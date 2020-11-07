@@ -33,7 +33,7 @@ public class VolumeCmd extends MusicCommand {
     public VolumeCmd(Bot bot) {
         super(bot);
         this.name = "volume";
-        this.aliases = new String[]{"vol"};
+        this.aliases = new String[] {"vol"};
         this.help = "音量を設定または表示します";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.arguments = "[0-150]";

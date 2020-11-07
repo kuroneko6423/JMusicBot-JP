@@ -20,8 +20,8 @@ import com.jagrosh.jlyrics.LyricsClient;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -34,7 +34,7 @@ public class LyricsCmd extends MusicCommand {
         this.name = "lyrics";
         this.arguments = "[曲名]";
         this.help = "現在再生中の曲または指定した曲名の歌詞を表示します";
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
     }

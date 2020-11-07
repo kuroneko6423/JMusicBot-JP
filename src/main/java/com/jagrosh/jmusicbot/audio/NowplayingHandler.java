@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -72,7 +73,7 @@ public class NowplayingHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            Message msg = handler.getNowPlaying(bot.getJDA());
+            Message msg = Objects.requireNonNull(handler).getNowPlaying(bot.getJDA());
             if (msg == null) {
                 msg = handler.getNoMusicPlaying(bot.getJDA());
                 toRemove.add(guildId);
@@ -95,12 +96,13 @@ public class NowplayingHandler {
         TextChannel tchan = settings.getTextChannel(guild);
         if (tchan != null && guild.getSelfMember().hasPermission(tchan, Permission.MANAGE_CHANNEL)) {
             String otherText;
-            if (tchan.getTopic() == null || tchan.getTopic().isEmpty())
+            String topic = tchan.getTopic();
+            if (topic == null || topic.isEmpty())
                 otherText = "\u200B";
-            else if (tchan.getTopic().contains("\u200B"))
-                otherText = tchan.getTopic().substring(tchan.getTopic().lastIndexOf("\u200B"));
+            else if (topic.contains("\u200B"))
+                otherText = topic.substring(topic.lastIndexOf("\u200B"));
             else
-                otherText = "\u200B\n " + tchan.getTopic();
+                otherText = "\u200B\n " + topic;
             String text = handler.getTopicFormat(bot.getJDA()) + otherText;
             if (!text.equals(tchan.getTopic())) {
                 try {
@@ -115,7 +117,7 @@ public class NowplayingHandler {
     public void onTrackUpdate(long guildId, AudioTrack track, AudioHandler handler) {
         // update bot status if applicable
         if (bot.getConfig().getSongInStatus()) {
-            if (track != null && bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count() <= 1)
+            if (track != null && bot.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count() <= 1)
                 bot.getJDA().getPresence().setActivity(Activity.listening(track.getInfo().title));
             else
                 bot.resetGame();

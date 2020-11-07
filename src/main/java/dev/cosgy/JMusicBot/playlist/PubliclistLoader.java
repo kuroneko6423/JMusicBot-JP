@@ -78,9 +78,7 @@ public class PubliclistLoader {
                 boolean[] shuffle = {false};
                 List<String> list = new ArrayList<>();
                 Files.readAllLines(OtherUtil.getPath(config.getPublistFolder() + File.separator + name + ".txt")).forEach(str ->
-                {
-                    MylistLoader.Trim(shuffle, list, str);
-                });
+                        MylistLoader.Trim(shuffle, list, str));
                 if (shuffle[0])
                     shuffle(list);
                 return new Playlist(name, list, shuffle[0]);
@@ -151,10 +149,10 @@ public class PubliclistLoader {
                                     loaded.set(first, loaded.get(second));
                                     loaded.set(second, tmp);
                                 }
-                            loaded.removeIf(track -> config.isTooLong(track));
+                            loaded.removeIf(config::isTooLong);
                             loaded.forEach(at -> at.setUserData(0L));
                             tracks.addAll(loaded);
-                            loaded.forEach(at -> consumer.accept(at));
+                            loaded.forEach(consumer);
                         }
                         done();
                     }

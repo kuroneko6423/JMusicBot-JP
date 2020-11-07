@@ -11,6 +11,9 @@ import dev.cosgy.JMusicBot.util.StackTraceUtil;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author kosugikun
+ */
 public class MylistCmd extends MusicCommand {
     private final Bot bot;
 
@@ -22,7 +25,7 @@ public class MylistCmd extends MusicCommand {
         this.arguments = "<append|delete|make|all>";
         this.help = "自分専用の再生リストを管理";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.children = new MusicCommand[]{
+        this.children = new MusicCommand[] {
                 new MakelistCmd(bot),
                 new DeletelistCmd(bot),
                 new AppendlistCmd(bot),
@@ -44,7 +47,7 @@ public class MylistCmd extends MusicCommand {
         public MakelistCmd(Bot bot) {
             super(bot);
             this.name = "make";
-            this.aliases = new String[]{"create"};
+            this.aliases = new String[] {"create"};
             this.help = "再生リストを新規作成";
             this.arguments = "<name>";
             this.guildOnly = true;
@@ -86,7 +89,7 @@ public class MylistCmd extends MusicCommand {
         public DeletelistCmd(Bot bot) {
             super(bot);
             this.name = "delete";
-            this.aliases = new String[]{"remove"};
+            this.aliases = new String[] {"remove"};
             this.help = "既存のマイリストを削除";
             this.arguments = "<name>";
             this.guildOnly = true;
@@ -119,7 +122,7 @@ public class MylistCmd extends MusicCommand {
         public AppendlistCmd(Bot bot) {
             super(bot);
             this.name = "append";
-            this.aliases = new String[]{"add"};
+            this.aliases = new String[] {"add"};
             this.help = "既存のマイリストに曲を追加";
             this.arguments = "<name> <URL> | <URL> | ...";
             this.guildOnly = true;
@@ -163,7 +166,7 @@ public class MylistCmd extends MusicCommand {
         public ListCmd(Bot bot) {
             super(bot);
             this.name = "all";
-            this.aliases = new String[]{"available", "list"};
+            this.aliases = new String[] {"available", "list"};
             this.help = "利用可能なすべてのマイリストを表示";
             this.guildOnly = true;
             this.ownerCommand = false;

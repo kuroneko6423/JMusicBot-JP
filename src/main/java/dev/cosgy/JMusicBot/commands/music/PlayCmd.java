@@ -14,7 +14,7 @@ public class PlayCmd {
         public MylistCmd(Bot bot) {
             super(bot);
             this.name = "mylist";
-            this.aliases = new String[]{"ml"};
+            this.aliases = new String[] {"ml"};
             this.arguments = "<name>";
             this.help = "マイリストを再生します";
             this.beListening = true;
@@ -56,7 +56,7 @@ public class PlayCmd {
         public PublistCmd(Bot bot) {
             super(bot);
             this.name = "publist";
-            this.aliases = new String[]{"pul"};
+            this.aliases = new String[] {"pul"};
             this.arguments = "<name>";
             this.help = "マイリストを再生します";
             this.beListening = true;

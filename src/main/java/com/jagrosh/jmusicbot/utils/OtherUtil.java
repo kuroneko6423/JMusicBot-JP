@@ -1,3 +1,4 @@
+  
 /*
  * Copyright 2018-2020 Cosgy Dev
  *
@@ -60,6 +61,7 @@ public class OtherUtil {
             try {
                 path = new File(JMusicBot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + filename;
             } catch (URISyntaxException ex) {
+                ex.printStackTrace();
             }
         }
         return Paths.get(path);
@@ -87,7 +89,7 @@ public class OtherUtil {
             into.write(buf, 0, n);
         }
         into.close();
-        return new String(into.toByteArray(), StandardCharsets.UTF_8);
+        return into.toString("utf-8");
     }
 
     /**

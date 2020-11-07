@@ -36,7 +36,7 @@ public class PingCommand extends Command {
         this.name = "ping";
         this.help = "ボットのレイテンシをチェックします";
         this.guildOnly = false;
-        this.aliases = new String[]{"pong"};
+        this.aliases = new String[] {"pong"};
     }
 
     @Override

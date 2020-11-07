@@ -15,15 +15,15 @@
  */
 package dev.cosgy.JMusicBot.commands.general;
 
-import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
-import net.dv8tion.jda.api.entities.ApplicationInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ApplicationInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class AboutCommand extends Command {
         this.help = "ボットに関する情報を表示します";
         this.guildOnly = false;
         this.perms = perms;
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+        this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
     }
 
     public void setIsAuthor(boolean value) {
@@ -69,7 +69,7 @@ public class AboutCommand extends Command {
     protected void execute(CommandEvent event) {
         if (oauthLink == null) {
             try {
-                ApplicationInfo info =  event.getJDA().retrieveApplicationInfo().complete();
+                ApplicationInfo info = event.getJDA().retrieveApplicationInfo().complete();
                 oauthLink = info.isBotPublic() ? info.getInviteUrl(0L, perms) : "";
             } catch (Exception e) {
                 Logger log = LoggerFactory.getLogger("OAuth2");

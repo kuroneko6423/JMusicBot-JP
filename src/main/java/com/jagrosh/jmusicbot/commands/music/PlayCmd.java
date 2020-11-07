@@ -15,28 +15,28 @@
  */
 package com.jagrosh.jmusicbot.commands.music;
 
-import com.jagrosh.jmusicbot.PlayStatus;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.ButtonMenu;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.PlayStatus;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader.Playlist;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import java.util.concurrent.TimeUnit;
-
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.cosgy.JMusicBot.util.StackTraceUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -57,7 +57,7 @@ public class PlayCmd extends MusicCommand {
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = false;
-        this.children = new Command[]{new PlaylistCmd(bot), new dev.cosgy.JMusicBot.commands.music.PlayCmd.MylistCmd(bot), new dev.cosgy.JMusicBot.commands.music.PlayCmd.PublistCmd(bot)};
+        this.children = new Command[] {new PlaylistCmd(bot), new dev.cosgy.JMusicBot.commands.music.PlayCmd.MylistCmd(bot), new dev.cosgy.JMusicBot.commands.music.PlayCmd.PublistCmd(bot)};
     }
 
     @Override
@@ -206,7 +206,7 @@ public class PlayCmd extends MusicCommand {
         public PlaylistCmd(Bot bot) {
             super(bot);
             this.name = "playlist";
-            this.aliases = new String[]{"pl"};
+            this.aliases = new String[] {"pl"};
             this.arguments = "<name>";
             this.help = "提供された再生リストを再生します";
             this.beListening = true;
