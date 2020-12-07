@@ -26,9 +26,13 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,8 +55,8 @@ public class Listener extends ListenerAdapter {
         event.getJDA().getGuilds().forEach((guild) ->
         {
             try {
-                String defpl = bot.getSettingsManager().getSettings(guild).getDefaultPlaylist();
-                VoiceChannel vc = bot.getSettingsManager().getSettings(guild).getVoiceChannel(guild);
+                String defpl = Objects.requireNonNull(bot.getSettingsManager().getSettings(guild)).getDefaultPlaylist();
+                VoiceChannel vc = Objects.requireNonNull(bot.getSettingsManager().getSettings(guild)).getVoiceChannel(guild);
                 if (defpl != null && vc != null && bot.getPlayerManager().setUpHandler(guild).playFromDefault()) {
                     guild.getAudioManager().openAudioConnection(vc);
                 }
@@ -81,7 +85,7 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
         //NUP = true -> GO
@@ -100,37 +104,51 @@ public class Listener extends ListenerAdapter {
                 log.info("プレイヤーを一時停止");
 
                 // プレイヤーを一時停止する
-                handler.getPlayer().setPaused(true);
+                Objects.requireNonNull(handler).getPlayer().setPaused(true);
 
                 Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PAUSED);
+
+                if(bot.getConfig().getWaitSeconds() != 0){
+                    TimerTask task = new TimerTask() {
+                        public void run() {
+                            if(handler.getPlayer().isPaused()&& event.getChannelLeft().getMembers().size() == 1 && event.getChannelLeft().getMembers().contains(botMember)) {
+                                handler.stopAndClear();
+                                event.getGuild().getAudioManager().closeAudioConnection();
+                            }
+                        }
+                    };
+                    Timer timer = new Timer(event.getGuild().getId());
+                    timer.schedule(task, bot.getConfig().getWaitSeconds()* 1000L);
+                }
                 return;
             }
 
             if (bot.getConfig().getNoUserStop()) {
                 //⏹
-                handler.stopAndClear();
+                Objects.requireNonNull(handler).stopAndClear();
                 event.getGuild().getAudioManager().closeAudioConnection();
             }
         }
     }
 
     @Override
-    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+    public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
         if (!bot.getConfig().getResumeJoined()) return;
         //▶
         Member botMember = event.getGuild().getSelfMember();
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
         //ボイチャにいる人数が1人以上、botがボイチャにいるか、再生が一時停止されているか
-        if ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && handler.getPlayer().isPaused()) {
+        if ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()) {
             handler.getPlayer().setPaused(false);
 
             Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PLAYING);
+
         }
     }
 
     @Override
-    public void onShutdown(ShutdownEvent event) {
+    public void onShutdown(@NotNull ShutdownEvent event) {
         bot.shutdown();
     }
 }
