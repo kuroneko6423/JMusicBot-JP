@@ -2,10 +2,13 @@ package com.sedmelluq.discord.lavaplayer.source.youtube;
 
 import com.sedmelluq.discord.lavaplayer.tools.DataFormatTools;
 import com.sedmelluq.discord.lavaplayer.tools.DataFormatTools.TextRange;
+import com.sedmelluq.discord.lavaplayer.tools.ExceptionTools;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.JsonBrowser;
 import com.sedmelluq.discord.lavaplayer.tools.io.HttpClientTools;
 import com.sedmelluq.discord.lavaplayer.tools.io.HttpInterface;
+import java.io.IOException;
+import java.net.URLEncoder;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,11 +17,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-
 import static com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeTrackJsonData.fromEmbedParts;
-import static com.sedmelluq.discord.lavaplayer.tools.ExceptionTools.throwWithLoggedPayload;
+import static com.sedmelluq.discord.lavaplayer.tools.ExceptionTools.throwWithDebugInfo;
 import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.COMMON;
 import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.SUSPICIOUS;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -27,6 +27,10 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
     private static final Logger log = LoggerFactory.getLogger(DefaultYoutubeTrackDetailsLoader.class);
 
     private static final TextRange[] EMBED_CONFIG_RANGES = new TextRange[] {
+            new TextRange("'WEB_PLAYER_CONTEXT_CONFIGS':", "});writeEmbed();"),
+            new TextRange("'WEB_PLAYER_CONTEXT_CONFIGS':", "});yt.setConfig"),
+            new TextRange("\"WEB_PLAYER_CONTEXT_CONFIGS\":", "});writeEmbed();"),
+            new TextRange("\"WEB_PLAYER_CONTEXT_CONFIGS\":", "});yt.setConfig"),
             new TextRange("'PLAYER_CONFIG':", "});writeEmbed();"),
             new TextRange("'PLAYER_CONFIG':", "});yt.setConfig"),
             new TextRange("\"PLAYER_CONFIG\":", "});writeEmbed();"),
@@ -40,7 +44,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         try {
             return load(httpInterface, videoId, requireFormats);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw ExceptionTools.toRuntimeException(e);
         }
     }
 
@@ -63,7 +67,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         } catch (FriendlyException e) {
             throw e;
         } catch (Exception e) {
-            throw throwWithLoggedPayload(log, e, "Error when extracting data", "mainJson", mainInfo.format());
+            throw throwWithDebugInfo(log, e, "Error when extracting data", "mainJson", mainInfo.format());
         }
     }
 
@@ -133,6 +137,12 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         }
     }
 
+    protected enum InfoStatus {
+        INFO_PRESENT,
+        REQUIRES_LOGIN,
+        DOES_NOT_EXIST
+    }
+
     protected String getUnplayableReason(JsonBrowser statusBlock) {
         JsonBrowser playerErrorMessage = statusBlock.get("errorScreen").get("playerErrorMessageRenderer");
         String unplayableReason = statusBlock.get("reason").text();
@@ -155,14 +165,10 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
     }
 
     protected JsonBrowser loadTrackInfoFromMainPage(HttpInterface httpInterface, String videoId) throws IOException {
-        String url = "https://www.youtube.com/watch?v=" + videoId + "&pbj=1&hl=ja";
+        String url = "https://www.youtube.com/watch?v=" + videoId + "&pbj=1&hl=en";
 
         try (CloseableHttpResponse response = httpInterface.execute(new HttpGet(url))) {
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (!HttpClientTools.isSuccessWithContent(statusCode)) {
-                throw new IOException("Invalid status code for video page response: " + statusCode);
-            }
+            HttpClientTools.assertSuccessWithContent(response, "video page response");
 
             String responseText = EntityUtils.toString(response.getEntity(), UTF_8);
 
@@ -199,7 +205,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         String videoApiUrl = "https://youtube.googleapis.com/v/" + videoId;
         String encodedApiUrl = URLEncoder.encode(videoApiUrl, UTF_8.name());
         String url = "https://www.youtube.com/get_video_info?video_id=" + videoId + "&eurl=" + encodedApiUrl +
-                "hl=ja_JP";
+                "hl=en_GB";
 
         if (sts != null) {
             url += "&sts=" + sts;
@@ -245,7 +251,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
             String encodedUrl = DataFormatTools.extractBetween(responseText, "\"PLAYER_JS_URL\":\"", "\"");
 
             if (encodedUrl == null) {
-                throw throwWithLoggedPayload(log, null, "no PLAYER_JS_URL in youtube root", "html", responseText);
+                throw throwWithDebugInfo(log, null, "no PLAYER_JS_URL in youtube root", "html", responseText);
             }
 
             String fetchedPlayerScript = JsonBrowser.parse("{\"url\":\"" + encodedUrl + "\"}").get("url").text();
@@ -253,12 +259,6 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
 
             return data.withPlayerScriptUrl(fetchedPlayerScript);
         }
-    }
-
-    protected enum InfoStatus {
-        INFO_PRESENT,
-        REQUIRES_LOGIN,
-        DOES_NOT_EXIST
     }
 
     protected static class CachedPlayerScript {
