@@ -54,6 +54,7 @@ public class BotConfig {
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers
     private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost;
     private long owner, maxSeconds;
+    private int waitSeconds;
     private OnlineStatus status;
     private Activity game;
     private Config aliases;
@@ -117,6 +118,8 @@ public class BotConfig {
             pauseNoUsers = config.getBoolean("pausenousers");
             resumeJoined = config.getBoolean("resumejoined");
             stopNoUsers = config.getBoolean("stopnousers");
+
+            waitSeconds = config.getInt("waitseconds");
 
             changeNickName = config.getBoolean("changenickname");
             // [JMusicBot-JP] End
@@ -250,6 +253,8 @@ public class BotConfig {
     public boolean getNoUserStop() {
         return stopNoUsers;
     }
+
+    public int getWaitSeconds() { return waitSeconds; }
 
     public boolean getChangeNickName() {
         return changeNickName;
