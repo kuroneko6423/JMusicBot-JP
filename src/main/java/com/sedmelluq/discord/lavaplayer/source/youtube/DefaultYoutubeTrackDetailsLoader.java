@@ -165,7 +165,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
     }
 
     protected JsonBrowser loadTrackInfoFromMainPage(HttpInterface httpInterface, String videoId) throws IOException {
-        String url = "https://www.youtube.com/watch?v=" + videoId + "&pbj=1&hl=en";
+        String url = "https://www.youtube.com/watch?v=" + videoId + "&pbj=1&hl=ja";
 
         try (CloseableHttpResponse response = httpInterface.execute(new HttpGet(url))) {
             HttpClientTools.assertSuccessWithContent(response, "video page response");
@@ -205,7 +205,7 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         String videoApiUrl = "https://youtube.googleapis.com/v/" + videoId;
         String encodedApiUrl = URLEncoder.encode(videoApiUrl, UTF_8.name());
         String url = "https://www.youtube.com/get_video_info?video_id=" + videoId + "&eurl=" + encodedApiUrl +
-                "hl=en_GB";
+                "hl=ja_JP";
 
         if (sts != null) {
             url += "&sts=" + sts;
