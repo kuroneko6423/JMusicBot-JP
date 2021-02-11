@@ -53,8 +53,7 @@ public class BotConfig {
     private String nicoPass;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers
     private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost;
-    private long owner, maxSeconds;
-    private int waitSeconds;
+    private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
     private Config aliases;
@@ -101,6 +100,7 @@ public class BotConfig {
             updatealerts = config.getBoolean("updatealerts");
             useEval = config.getBoolean("eval");
             maxSeconds = config.getLong("maxtime");
+            aloneTimeUntilStop = config.getLong("alonetimeuntilstop");
             playlistsFolder = config.getString("playlistsfolder");
             mylistfolder = config.getString("mylistfolder");
             publistFolder = config.getString("publistfolder");
@@ -118,8 +118,6 @@ public class BotConfig {
             pauseNoUsers = config.getBoolean("pausenousers");
             resumeJoined = config.getBoolean("resumejoined");
             stopNoUsers = config.getBoolean("stopnousers");
-
-            waitSeconds = config.getInt("waitseconds");
 
             changeNickName = config.getBoolean("changenickname");
             // [JMusicBot-JP] End
@@ -254,7 +252,10 @@ public class BotConfig {
         return stopNoUsers;
     }
 
-    public int getWaitSeconds() { return waitSeconds; }
+    public long getAloneTimeUntilStop()
+    {
+        return aloneTimeUntilStop;
+    }
 
     public boolean getChangeNickName() {
         return changeNickName;

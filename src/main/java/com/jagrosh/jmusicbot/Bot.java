@@ -24,6 +24,7 @@ import com.jagrosh.jmusicbot.playlist.PlaylistLoader;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import dev.cosgy.JMusicBot.playlist.MylistLoader;
 import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
+import com.jagrosh.jmusicbot.audio.AloneInVoiceHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
@@ -50,6 +51,7 @@ public class Bot {
     private final MylistLoader mylists;
     private final PubliclistLoader publist;
     private final NowplayingHandler nowplaying;
+    private final AloneInVoiceHandler aloneInVoiceHandler;
 
     private boolean shuttingDown = false;
     private JDA jda;
@@ -67,6 +69,8 @@ public class Bot {
         this.players.init();
         this.nowplaying = new NowplayingHandler(this);
         this.nowplaying.init();
+        this.aloneInVoiceHandler = new AloneInVoiceHandler(this);
+        this.aloneInVoiceHandler.init();
     }
 
     public static void updatePlayStatus(@Nonnull Guild guild, @Nonnull Member selfMember, @Nonnull PlayStatus status) {
@@ -127,6 +131,11 @@ public class Bot {
 
     public NowplayingHandler getNowplayingHandler() {
         return nowplaying;
+    }
+
+    public AloneInVoiceHandler getAloneInVoiceHandler()
+    {
+        return aloneInVoiceHandler;
     }
 
     public JDA getJDA() {
