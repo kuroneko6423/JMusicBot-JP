@@ -120,6 +120,9 @@ public class Listener extends ListenerAdapter {
 
             if (bot.getConfig().getNoUserStop()) {
                 //⏹
+                if(bot.getConfig().getAutoStopQueueSave()){
+                    bot.getCacheLoader().Save(event.getGuild().toString(), handler.getQueue());
+                }
                 Objects.requireNonNull(handler).stopAndClear();
                 event.getGuild().getAudioManager().closeAudioConnection();
             }

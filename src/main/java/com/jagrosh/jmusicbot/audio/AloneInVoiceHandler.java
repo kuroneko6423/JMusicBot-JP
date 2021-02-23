@@ -16,6 +16,7 @@
 package com.jagrosh.jmusicbot.audio;
 
 import com.jagrosh.jmusicbot.Bot;
+import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 
@@ -62,8 +63,13 @@ public class AloneInVoiceHandler
                 toRemove.add(entrySet.getKey());
                 continue;
             }
+            AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
+            if(bot.getConfig().getAutoStopQueueSave()){
+                CacheLoader cache = bot.getCacheLoader();
+                cache.Save(guild.toString(), handler.getQueue());
+            }
 
-            ((AudioHandler) guild.getAudioManager().getSendingHandler()).stopAndClear();
+            handler.stopAndClear();
             guild.getAudioManager().closeAudioConnection();
 
             toRemove.add(entrySet.getKey());

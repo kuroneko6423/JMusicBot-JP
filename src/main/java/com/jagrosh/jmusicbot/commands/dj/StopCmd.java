@@ -15,10 +15,12 @@
  */
 package com.jagrosh.jmusicbot.commands.dj;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.DJCommand;
+import dev.cosgy.JMusicBot.commands.dj.StopCmd.SaveCmd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +33,10 @@ public class StopCmd extends DJCommand {
     public StopCmd(Bot bot) {
         super(bot);
         this.name = "stop";
-        this.help = "現在の曲を停止して再生待ちを削除します";
+        this.help = "現在の曲を停止して再生待ちを削除します。";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = false;
+        this.children = new Command[] {new SaveCmd(bot)};
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.jagrosh.jmusicbot.playlist.PlaylistLoader;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import dev.cosgy.JMusicBot.playlist.MylistLoader;
 import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
+import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import com.jagrosh.jmusicbot.audio.AloneInVoiceHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -50,6 +51,7 @@ public class Bot {
     private final PlaylistLoader playlists;
     private final MylistLoader mylists;
     private final PubliclistLoader publist;
+    private final CacheLoader cache;
     private final NowplayingHandler nowplaying;
     private final AloneInVoiceHandler aloneInVoiceHandler;
 
@@ -64,6 +66,7 @@ public class Bot {
         this.playlists = new PlaylistLoader(config);
         this.mylists = new MylistLoader(config);
         this.publist = new PubliclistLoader(config);
+        this.cache = new CacheLoader(config);
         this.threadpool = Executors.newSingleThreadScheduledExecutor();
         this.players = new PlayerManager(this);
         this.players.init();
@@ -128,6 +131,8 @@ public class Bot {
     public PubliclistLoader getPublistLoader() {
         return publist;
     }
+
+    public CacheLoader getCacheLoader() { return cache; }
 
     public NowplayingHandler getNowplayingHandler() {
         return nowplaying;
