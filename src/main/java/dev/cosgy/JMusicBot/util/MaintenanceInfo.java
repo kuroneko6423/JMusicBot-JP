@@ -31,7 +31,7 @@ public class MaintenanceInfo {
     public static boolean Verification() throws IOException {
         //アナウンスを行うか確認
         ObjectMapper mapper = new ObjectMapper();
-        root = mapper.readTree(new URL("https://cosgy.tokyo/botinfo/info.json"));
+        root = mapper.readTree(new URL("https://cosgy.dev/botinfo/info.json"));
         return root.get("setting").get(0).get("Announce").asBoolean();
     }
 
@@ -39,7 +39,7 @@ public class MaintenanceInfo {
         Logger log = LoggerFactory.getLogger("GetInfo");
 
         ObjectMapper mapper = new ObjectMapper();
-        root = mapper.readTree(new URL("https://cosgy.tokyo/botinfo/info.json"));
+        root = mapper.readTree(new URL("https://cosgy.dev/botinfo/info.json"));
 
         MaintenanceInfo Info = new MaintenanceInfo();
 
@@ -64,7 +64,7 @@ public class MaintenanceInfo {
     public static void CommandInfo(CommandEvent event) throws IOException, ParseException {
         Logger log = LoggerFactory.getLogger("AutoInfo");
         ObjectMapper mapper = new ObjectMapper();
-        root = mapper.readTree(new URL("https://cosgy.tokyo/botinfo/info.json"));
+        root = mapper.readTree(new URL("https://cosgy.dev/botinfo/info.json"));
         String Start1 = root.get("setting").get(0).get("AutoAnnounceStart").asText();
         String End1 = root.get("setting").get(0).get("AutoAnnounceEnd").asText();
         boolean Announce = root.get("setting").get(0).get("AutoAnnounce").asBoolean();
