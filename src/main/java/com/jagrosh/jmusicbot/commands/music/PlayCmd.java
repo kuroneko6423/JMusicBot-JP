@@ -169,7 +169,7 @@ public class PlayCmd extends MusicCommand {
                             + "**) ") + "は、許可された最大長より長いです。(`" + bot.getConfig().getMaxTime() + "`)")).queue();
                 } else {
                     m.editMessage(FormatUtil.filter(event.getClient().getSuccess()
-                            + (playlist.getName() == null ? "再生リスト" : "再生リスト **" + playlist.getName() + "**") + " と `"
+                            + (playlist.getName() == null ? "再生リスト" : "再生リスト **" + playlist.getName() + "**") + " の `"
                             + playlist.getTracks().size() + "` 曲を再生待ちに追加しました。"
                             + (count < playlist.getTracks().size() ? "\n" + event.getClient().getWarning() + " 許可されている最大長より長いトラック (`"
                             + bot.getConfig().getMaxTime() + "`) 省略されています。" : ""))).queue();
