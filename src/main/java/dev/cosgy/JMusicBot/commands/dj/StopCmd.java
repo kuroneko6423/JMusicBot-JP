@@ -27,15 +27,17 @@ public class StopCmd {
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             CacheLoader cache = bot.getCacheLoader();
             FairQueue<QueuedTrack> queue = handler.getQueue();
-            handler.stopAndClear();
-            event.getGuild().getAudioManager().closeAudioConnection();
 
+            log.debug("再生待ちのサイズ："+queue.size());
             if(!queue.isEmpty()) {
                 cache.Save(event.getGuild().toString(), handler.getQueue());
                 event.reply(event.getClient().getSuccess() + " 再生待ちの"+ queue.size() +"曲を保存して再生を停止しました。");
             }else{
                 event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。");
             }
+
+            handler.stopAndClear();
+            event.getGuild().getAudioManager().closeAudioConnection();
             log.info(event.getGuild().getName()+"で再生待ちを保存してボイスチャンネルから切断しました。");
         }
     }
