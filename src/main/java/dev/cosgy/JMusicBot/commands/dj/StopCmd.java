@@ -38,7 +38,7 @@ public class StopCmd {
 
             handler.stopAndClear();
             event.getGuild().getAudioManager().closeAudioConnection();
-            log.info(event.getGuild().getName()+"で再生待ちを保存してボイスチャンネルから切断しました。");
+            log.info(event.getGuild().getName()+"で再生待ちを保存して,ボイスチャンネルから切断しました。");
         }
     }
 }

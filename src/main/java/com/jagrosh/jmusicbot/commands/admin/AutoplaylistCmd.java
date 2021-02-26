@@ -42,13 +42,13 @@ public class AutoplaylistCmd extends AdminCommand {
         String guildid = event.getGuild().getId();
 
         if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + " 再生リスト名またはNONEを含めてください");
+            event.reply(event.getClient().getError() + " 再生リスト名、またはNONEを含めてください。");
             return;
         }
         if (event.getArgs().toLowerCase().matches("(none|なし)")) {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(null);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストをなしに設定しました");
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。");
             return;
         }
         String pname = event.getArgs().replaceAll("\\s+", "_");
@@ -57,7 +57,7 @@ public class AutoplaylistCmd extends AdminCommand {
         } else {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(pname);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを`" + pname + "`に設定しました。\n"
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pname + "`に設定しました。\n"
                     + "再生待ちに曲がないときは、自動再生リストの曲が再生されます。");
         }
     }

@@ -134,7 +134,7 @@ public class CacheLoader
                     @Override
                     public void trackLoaded(AudioTrack at) {
                         if (config.isTooLong(at))
-                            errors.add(new CacheLoadError(index, items.get(index), "このトラックは許可された最大長を超えています"));
+                            errors.add(new CacheLoadError(index, items.get(index), "このトラックは許可された最大長を超えています。"));
                         else {
                             at.setUserData(0L);
                             tracks.add(at);

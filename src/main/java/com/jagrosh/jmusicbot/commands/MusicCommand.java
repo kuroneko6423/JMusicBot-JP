@@ -98,7 +98,7 @@ public abstract class MusicCommand extends Command {
                             finalCache.loadTracks(bot.getPlayerManager(), (at) -> handler.addTrack(new QueuedTrack(at, event.getAuthor())), () -> {
                                 StringBuilder builder = new StringBuilder(finalCache.getTracks().isEmpty()
                                         ? event.getClient().getWarning() + " 楽曲がロードされていません。"
-                                        : event.getClient().getSuccess() + " キャッシュファイルから**" + finalCache.getTracks().size() + "**曲、読み込みました。");
+                                        : event.getClient().getSuccess() + " キャッシュファイルから," + "**" + finalCache.getTracks().size() + "**曲読み込みました。");
                                 if (!finalCache.getErrors().isEmpty())
                                     builder.append("\n以下の楽曲をロードできませんでした:");
                                 finalCache.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));

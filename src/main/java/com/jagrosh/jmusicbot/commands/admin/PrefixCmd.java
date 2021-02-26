@@ -35,7 +35,7 @@ public class PrefixCmd extends AdminCommand {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs().isEmpty()) {
-            event.replyError("プレフィックスまたはNONEを含めてください");
+            event.replyError("プレフィックスまたはNONEを含めてください。");
             return;
         }
 
@@ -45,7 +45,7 @@ public class PrefixCmd extends AdminCommand {
             event.replySuccess("プレフィックスがクリアされました。");
         } else {
             s.setPrefix(event.getArgs());
-            event.replySuccess("*" + event.getGuild().getName() + "* でのプレフィックスを `" + event.getArgs() + "`に設定しました。");
+            event.replySuccess("*" + event.getGuild().getName() + "* でのプレフィックスを、 `" + event.getArgs() + "`に設定しました。");
         }
     }
 }
