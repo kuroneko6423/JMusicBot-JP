@@ -89,7 +89,7 @@ public abstract class MusicCommand extends Command {
                     // キャッシュファイルがあった場合は自動的に読み込んで再生リストに追加します。
                     // Javaができる人に怒られそうなコードを書いたような気がする...
                     if(bot.getCacheLoader().cacheExists(event.getGuild().toString())) {
-                        CacheLoader.Cache cache = null;
+                        CacheLoader.Cache cache;
                         cache = bot.getCacheLoader().GetCache(event.getGuild().toString());
                         CacheLoader.Cache finalCache = cache;
                         event.getChannel().sendMessage(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m ->

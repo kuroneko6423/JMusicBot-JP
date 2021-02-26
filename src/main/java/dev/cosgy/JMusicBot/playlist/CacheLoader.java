@@ -39,7 +39,11 @@ public class CacheLoader
         if (!folderExists()) {
             createFolder();
         }
-        createCache(guildId);
+        try {
+            createCache(guildId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             writeCache(guildId, builder.toString());
@@ -86,11 +90,8 @@ public class CacheLoader
         return Files.exists(Paths.get("cache"+ File.separator + serverId + ".txt"));
     }
 
-    public void createCache(String serverId){
-        try {
-            Files.createFile(Paths.get("cache" + File.separator + serverId + ".txt"));
-        } catch (IOException e) {
-        }
+    public void createCache(String serverId)throws IOException {
+        Files.createFile(Paths.get("cache" + File.separator + serverId + ".txt"));
     }
 
     public void writeCache(String serverId, String text) throws IOException {
@@ -160,7 +161,7 @@ public class CacheLoader
                             loaded.removeIf(config::isTooLong);
                             loaded.forEach(at -> at.setUserData(0L));
                             tracks.addAll(loaded);
-                            loaded.forEach(consumer::accept);
+                            loaded.forEach(consumer);
                         }
                         done();
                     }
@@ -197,7 +198,7 @@ public class CacheLoader
         }
     }
 
-    public class CacheLoadError {
+    public static class CacheLoadError {
         private final int number;
         private final String item;
         private final String reason;
