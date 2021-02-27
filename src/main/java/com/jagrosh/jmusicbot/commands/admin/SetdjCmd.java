@@ -42,7 +42,7 @@ public class SetdjCmd extends AdminCommand {
     protected void execute(CommandEvent event) {
         Logger log = LoggerFactory.getLogger("SetdjCmd");
         if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + "役割の名前、またはNONEなどを付けてください");
+            event.reply(event.getClient().getError() + "役割の名前、またはNONEなどを付けてください。");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());

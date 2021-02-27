@@ -92,6 +92,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
     private final ScheduledExecutorService executor;
     private final AnnotatedModuleCompiler compiler;
     private final GuildSettingsManager manager;
+    private final boolean helpToDm;
 
     private String textPrefix;
     private CommandListener listener = null;
@@ -100,7 +101,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
     public CommandClientImpl(String ownerId, String[] coOwnerIds, String prefix, String altprefix, Activity game, OnlineStatus status, String serverInvite,
                              String success, String warning, String error, String carbonKey, String botsKey, ArrayList<Command> commands,
                              boolean useHelp, boolean shutdownAutomatically, Consumer<CommandEvent> helpConsumer, String helpWord, ScheduledExecutorService executor,
-                             int linkedCacheSize, AnnotatedModuleCompiler compiler, GuildSettingsManager manager) {
+                             int linkedCacheSize, AnnotatedModuleCompiler compiler, GuildSettingsManager manager, boolean helpToDm) {
         Checks.check(ownerId != null, "所有者IDがnull、または設定されていません！ 所有者として登録するには、ユーザーIDを入力してください！");
 
         if (!SafeIdUtil.checkId(ownerId))
@@ -139,6 +140,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
         this.executor = executor == null ? Executors.newSingleThreadScheduledExecutor() : executor;
         this.compiler = compiler;
         this.manager = manager;
+        this.helpToDm = helpToDm;
         this.helpConsumer = helpConsumer == null ? (event) -> {
             StringBuilder builder = new StringBuilder("**" + event.getSelfUser().getName() + "** コマンド一覧:\n");
             Category category = null;
@@ -155,15 +157,19 @@ public class CommandClientImpl implements CommandClient, EventListener {
             }
             User owner = event.getJDA().getUserById(ownerId);
             if (owner != null) {
-                builder.append("\n\nほかのコマンドや使い方は **").append(owner.getName()).append("**#").append(owner.getDiscriminator() + " までお知らせ下さい");
+                //builder.append("\n\nほかのコマンドや使い方は **").append(owner.getName()).append("**#").append(owner.getDiscriminator() + " までお知らせ下さい");
                 if (serverInvite != null)
-                    builder.append(" または公式サーバーに参加することもできます: ").append(serverInvite);
+                    builder.append(" 公式サーバーに参加することもできます: ").append(serverInvite);
             }
-            event.replyInDm(builder.toString(), unused ->
-            {
-                if (event.isFromType(ChannelType.TEXT))
-                    event.reactSuccess();
-            }, t -> event.replyWarning("ヘルプを送信できませんでした: フレンド以外/サーバー内のメンバーからDMを受信しない設定になっていませんか？"));
+            if(helpToDm) {
+                event.replyInDm(builder.toString(), unused ->
+                {
+                    if (event.isFromType(ChannelType.TEXT))
+                        event.reactSuccess();
+                }, t -> event.replyWarning("ヘルプを送信できませんでした: フレンド以外/サーバー内のメンバーからDMを受信しない設定になっていませんか？"));
+            }else{
+                event.reply(builder.toString());
+            }
         } : helpConsumer;
 
         // Load commands

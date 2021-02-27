@@ -51,10 +51,9 @@ public class BotConfig {
     private String searchingEmoji;
     private String nicoEmail;
     private String nicoPass;
-    // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers
-    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost;
-    private long owner, maxSeconds;
-    private int waitSeconds;
+    // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm
+    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave;
+    private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
     private Config aliases;
@@ -101,6 +100,7 @@ public class BotConfig {
             updatealerts = config.getBoolean("updatealerts");
             useEval = config.getBoolean("eval");
             maxSeconds = config.getLong("maxtime");
+            aloneTimeUntilStop = config.getLong("alonetimeuntilstop");
             playlistsFolder = config.getString("playlistsfolder");
             mylistfolder = config.getString("mylistfolder");
             publistFolder = config.getString("publistfolder");
@@ -119,10 +119,10 @@ public class BotConfig {
             resumeJoined = config.getBoolean("resumejoined");
             stopNoUsers = config.getBoolean("stopnousers");
 
-            waitSeconds = config.getInt("waitseconds");
-
             changeNickName = config.getBoolean("changenickname");
             // [JMusicBot-JP] End
+            helpToDm = config.getBoolean("helptodm");
+            autoStopQueueSave = config.getBoolean("autostopqueuesave");
 
             // we may need to write a new config file
             boolean write = false;
@@ -254,7 +254,10 @@ public class BotConfig {
         return stopNoUsers;
     }
 
-    public int getWaitSeconds() { return waitSeconds; }
+    public long getAloneTimeUntilStop()
+    {
+        return aloneTimeUntilStop;
+    }
 
     public boolean getChangeNickName() {
         return changeNickName;
@@ -326,9 +329,15 @@ public class BotConfig {
     public String getNicoNicoPassword() {
         return nicoPass;
     }
+    // [JMusicBot-JP] End
 
     public boolean getCosgyDevHost() {
         return cosgyDevHost;
     }
-    // [JMusicBot-JP] End
+
+    public boolean getHelpToDm(){
+        return helpToDm;
+    }
+
+    public boolean getAutoStopQueueSave() {return autoStopQueueSave; }
 }

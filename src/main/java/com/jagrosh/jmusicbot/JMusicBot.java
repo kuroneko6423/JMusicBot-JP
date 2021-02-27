@@ -115,7 +115,8 @@ public class JMusicBot {
                 .setHelpWord(config.getHelp())
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
-                .setListener(new dev.cosgy.JMusicBot.commands.listeners.CommandAudit());
+                .setListener(new dev.cosgy.JMusicBot.commands.listeners.CommandAudit())
+                .setHelpToDm(config.getHelpToDm());
 
         List<Command> commandList = new ArrayList<Command>() {{
             //その他

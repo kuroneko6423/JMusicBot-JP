@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +86,12 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
+    public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event)
+    {
+        bot.getAloneInVoiceHandler().onVoiceUpdate(event);
+    }
+
+    @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
         //NUP = false -> NUS = false -> return
         //NUP = false -> NUS = true -> GO
@@ -108,23 +115,14 @@ public class Listener extends ListenerAdapter {
 
                 Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PAUSED);
 
-                if(bot.getConfig().getWaitSeconds() != 0){
-                    TimerTask task = new TimerTask() {
-                        public void run() {
-                            if(handler.getPlayer().isPaused()&& event.getChannelLeft().getMembers().size() == 1 && event.getChannelLeft().getMembers().contains(botMember)) {
-                                handler.stopAndClear();
-                                event.getGuild().getAudioManager().closeAudioConnection();
-                            }
-                        }
-                    };
-                    Timer timer = new Timer(event.getGuild().getId());
-                    timer.schedule(task, bot.getConfig().getWaitSeconds()* 1000L);
-                }
                 return;
             }
 
             if (bot.getConfig().getNoUserStop()) {
                 //⏹
+                if(bot.getConfig().getAutoStopQueueSave()){
+                    bot.getCacheLoader().Save(event.getGuild().toString(), handler.getQueue());
+                }
                 Objects.requireNonNull(handler).stopAndClear();
                 event.getGuild().getAudioManager().closeAudioConnection();
             }

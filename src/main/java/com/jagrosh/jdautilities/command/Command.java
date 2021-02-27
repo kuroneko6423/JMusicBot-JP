@@ -66,8 +66,8 @@ import java.util.function.Predicate;
  * @author John Grosh (jagrosh)
  */
 public abstract class Command {
-    private final static String BOT_PERM = "%s I need the %s permission in this %s!";
-    private final static String USER_PERM = "%s You must have the %s permission in this %s to use that!";
+    private final static String BOT_PERM = "%s この %s には %s 権限が必要です！";
+    private final static String USER_PERM = "%sこれを使用するには、この%sで%s権限が必要です。";
     /**
      * The name of the command, allows the command to be called the format: {@code [prefix]<command name>}.
      */
@@ -75,7 +75,7 @@ public abstract class Command {
     /**
      * A small help String that summarizes the function of the command, used in the default help builder.
      */
-    protected String help = "no help available";
+    protected String help = "ヘルプはありません";
     /**
      * The {@link com.jagrosh.jdautilities.command.Command.Category Category} of the command.
      * <br>This can perform any other checks not completed by the default conditional fields.
@@ -197,14 +197,14 @@ public abstract class Command {
 
         // is allowed check
         if (event.isFromType(ChannelType.TEXT) && !isAllowed(event.getTextChannel())) {
-            terminate(event, "That command cannot be used in this channel!");
+            terminate(event, "そのコマンドはこのチャネルでは使用できません！");
             return;
         }
 
         // required role check
         if (requiredRole != null)
             if (!event.isFromType(ChannelType.TEXT) || event.getMember().getRoles().stream().noneMatch(r -> r.getName().equalsIgnoreCase(requiredRole))) {
-                terminate(event, event.getClient().getError() + " You must have a role called `" + requiredRole + "` to use that!");
+                terminate(event, event.getClient().getError() + " これを使用するには、 `" + requiredRole + "`というロールが必要です。");
                 return;
             }
 
@@ -216,7 +216,7 @@ public abstract class Command {
                     if (p.name().startsWith("VOICE")) {
                         VoiceChannel vc = event.getMember().getVoiceState().getChannel();
                         if (vc == null) {
-                            terminate(event, event.getClient().getError() + " You must be in a voice channel to use that!");
+                            terminate(event, event.getClient().getError() + " それを使用するには、音声チャネルにいる必要があります。");
                             return;
                         } else if (!event.getSelfMember().hasPermission(vc, p)) {
                             terminate(event, String.format(BOT_PERM, event.getClient().getError(), p.getName(), "Voice Channel"));
@@ -251,7 +251,7 @@ public abstract class Command {
                 }
             }
         } else if (guildOnly) {
-            terminate(event, event.getClient().getError() + " This command cannot be used in Direct messages");
+            terminate(event, event.getClient().getError() + " このコマンドはダイレクトメッセージで使用できません");
             return;
         }
 
