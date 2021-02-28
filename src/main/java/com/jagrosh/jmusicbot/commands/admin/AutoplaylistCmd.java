@@ -39,7 +39,7 @@ public class AutoplaylistCmd extends AdminCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!event.isOwner() || !event.getMember().isOwner()) return;
-        String guildid = event.getGuild().getId();
+        String guildId = event.getGuild().getId();
 
         if (event.getArgs().isEmpty()) {
             event.reply(event.getClient().getError() + " 再生リスト名、またはNONEを含めてください。");
@@ -51,13 +51,13 @@ public class AutoplaylistCmd extends AdminCommand {
             event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。");
             return;
         }
-        String pname = event.getArgs().replaceAll("\\s+", "_");
-        if (bot.getPlaylistLoader().getPlaylist(guildid, pname) == null) {
-            event.reply(event.getClient().getError() + "`" + pname + "`を見つけることができませんでした!");
+        String pName = event.getArgs().replaceAll("\\s+", "_");
+        if (bot.getPlaylistLoader().getPlaylist(guildId, pName) == null) {
+            event.reply(event.getClient().getError() + "`" + pName + "`を見つけることができませんでした!");
         } else {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
-            settings.setDefaultPlaylist(pname);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pname + "`に設定しました。\n"
+            settings.setDefaultPlaylist(pName);
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pName + "`に設定しました。\n"
                     + "再生待ちに曲がないときは、自動再生リストの曲が再生されます。");
         }
     }

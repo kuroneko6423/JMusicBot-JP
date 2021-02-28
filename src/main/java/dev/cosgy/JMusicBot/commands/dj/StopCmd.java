@@ -10,6 +10,9 @@ import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Kosugi_kun
+ */
 public class StopCmd {
     public static class SaveCmd extends DJCommand {
         Logger log = LoggerFactory.getLogger("Stop");

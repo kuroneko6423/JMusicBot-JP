@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * @author Cosgy Dev (info@cosgy.jp)
+ * @author Cosgy Dev (info@cosgy.dev)
  */
 public class Bot {
     public static Bot INSTANCE;

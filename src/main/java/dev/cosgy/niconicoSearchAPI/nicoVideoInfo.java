@@ -50,9 +50,8 @@ public class nicoVideoInfo {
         return videoId;
     }
 
-    public nicoVideoInfo setVideoId(String videoId) {
+    public void setVideoId(String videoId) {
         this.videoId = videoId;
-        return this;
     }
 
     public String getTitle() {

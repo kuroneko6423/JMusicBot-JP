@@ -40,7 +40,7 @@ public class SetdjCmd extends AdminCommand {
 
     @Override
     protected void execute(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("SetdjCmd");
+        Logger log = LoggerFactory.getLogger("SetDjCmd");
         if (event.getArgs().isEmpty()) {
             event.reply(event.getClient().getError() + "役割の名前、またはNONEなどを付けてください。");
             return;

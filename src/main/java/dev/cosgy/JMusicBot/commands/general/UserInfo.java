@@ -45,7 +45,7 @@ public class UserInfo extends Command {
         String ID = memb.getUser().getId();
         String STATUS = memb.getOnlineStatus().getKey().replace("offline", ":x: オフライン").replace("dnd", ":red_circle: 起こさないで").replace("idle", "退席中").replace("online", ":white_check_mark: オンライン");
         String UserURL = null;
-        String ROLES = "";
+        String ROLES;
         String GAME;
         String AVATAR = memb.getUser().getAvatarUrl();
 
@@ -55,9 +55,11 @@ public class UserInfo extends Command {
             GAME = "-/-";
         }
 
+        StringBuilder ROLESBuilder = new StringBuilder();
         for (Role r : memb.getRoles()) {
-            ROLES += r.getName() + ", ";
+            ROLESBuilder.append(r.getName()).append(", ");
         }
+        ROLES = ROLESBuilder.toString();
         if (ROLES.length() > 0)
             ROLES = ROLES.substring(0, ROLES.length() - 2);
         else

@@ -98,12 +98,21 @@ public class AboutCommand extends Command {
             descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ").append(feature);
         descr.append(" ```");
         builder.setDescription(descr);
-        event.getJDA().getShardInfo();
-        builder.addField("ステータス", (event.getClient()).getTotalGuilds() + " サーバー\nシャード " + (event.getJDA().getShardInfo().getShardId() + 1)
-                + "/" + event.getJDA().getShardInfo().getShardTotal(), true);
-        builder.addField("", event.getJDA().getUsers().size() + " ユーザーのシャード\n" + event.getJDA().getGuilds().size() + " サーバー", true);
-        builder.addField("", event.getJDA().getTextChannels().size() + " テキストチャンネル\n" + event.getJDA().getVoiceChannels().size() + " ボイスチャンネル", true);
-        builder.setFooter("再起動が行われた時間：", "https://www.cosgy.tokyo/wp-content/uploads/2020/03/restart.jpg");
+
+        if (event.getJDA().getShardInfo().getShardTotal() == 1)
+        {
+            builder.addField("ステータス", event.getJDA().getGuilds().size() + " サーバー\n1 シャード", true);
+            builder.addField("ユーザー", event.getJDA().getUsers().size() + " ユニーク\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " 合計", true);
+            builder.addField("チャンネル", event.getJDA().getTextChannels().size() + " テキスト\n" + event.getJDA().getVoiceChannels().size() + " ボイス", true);
+        }
+        else
+        {
+            builder.addField("ステータス", (event.getClient()).getTotalGuilds() + " サーバー\nシャード " + (event.getJDA().getShardInfo().getShardId() + 1)
+                    + "/" + event.getJDA().getShardInfo().getShardTotal(), true);
+            builder.addField("", event.getJDA().getUsers().size() + " ユーザーのシャード\n" + event.getJDA().getGuilds().size() + " サーバー", true);
+            builder.addField("", event.getJDA().getTextChannels().size() + " テキストチャンネル\n" + event.getJDA().getVoiceChannels().size() + " ボイスチャンネル", true);
+        }
+        builder.setFooter("再起動が行われた時間：", "https://www.cosgy.dev/wp-content/uploads/2020/03/restart.jpg");
         builder.setTimestamp(event.getClient().getStartTime());
         event.reply(builder.build());
     }

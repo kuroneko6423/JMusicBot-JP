@@ -96,8 +96,8 @@ public class QueueCmd extends MusicCommand {
             songs[i] = list.get(i).toString();
         }
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        long fintotal = total;
-        builder.setText((i1, i2) -> getQueueTitle(ah, event.getClient().getSuccess(), songs.length, fintotal, settings.getRepeatMode()))
+        long finTotal = total;
+        builder.setText((i1, i2) -> getQueueTitle(ah, event.getClient().getSuccess(), songs.length, finTotal, settings.getRepeatMode()))
                 .setItems(songs)
                 .setUsers(event.getAuthor())
                 .setColor(event.getSelfMember().getColor())

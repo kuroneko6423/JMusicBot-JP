@@ -39,23 +39,20 @@ public class HTTPUtil {
         return method;
     }
 
-    public HTTPUtil setMethod(String method) {
+    public void setMethod(String method) {
         this.method = method;
-        return this;
     }
 
     public String getTargetAddress() {
         return targetAddress;
     }
 
-    public HTTPUtil setTargetAddress(String targetAddress) {
+    public void setTargetAddress(String targetAddress) {
         this.targetAddress = targetAddress;
-        return this;
     }
 
-    public HTTPUtil setQueryMap(Map<String, String> query) {
+    public void setQueryMap(Map<String, String> query) {
         this.query = query;
-        return this;
     }
 
     public HTTPUtil addQuery(String key, Object value) {
