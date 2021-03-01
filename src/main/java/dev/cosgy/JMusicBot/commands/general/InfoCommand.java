@@ -22,7 +22,6 @@ public class InfoCommand extends Command {
     public InfoCommand(Bot bot) {
         this.name = "info";
         this.help = "メンテナンス情報をお知らせします。";
-        //this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
     }
 

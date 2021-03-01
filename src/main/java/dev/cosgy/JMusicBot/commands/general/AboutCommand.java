@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * @author Cosgy Dev
@@ -81,12 +82,8 @@ public class AboutCommand extends Command {
         builder.setColor(event.getGuild() == null ? color : event.getGuild().getSelfMember().getColor());
         builder.setAuthor("" + event.getSelfUser().getName() + "について!", null, event.getSelfUser().getAvatarUrl());
         String CosgyOwner = "Cosgy Devが運営、開発をしています。";
-        /*boolean join = !(event.getClient().getServerInvite() == null || event.getClient().getServerInvite().isEmpty());
-        boolean inv = !oauthLink.isEmpty();
-        String invline = "\n"+ (join ? "Cosgy Dev公式チャンネル [`こちら`](https://discord.gg/RBpkHxf)" : (inv ? "へお願いします。 " : ""));
-                + (inv ? (join ? ", または " : "") + "あなたのサーバーに[`招待リンク`](" + oauthLink + ") " : "で招待することができます。") + "!"*/
         String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">"
-                : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
+                : Objects.requireNonNull(event.getJDA().getUserById(event.getClient().getOwnerId())).getName();
         StringBuilder descr = new StringBuilder().append("こんにちは！ **").append(event.getSelfUser().getName()).append("**です。 ")
                 .append(description).append("は、").append(JDAUtilitiesInfo.AUTHOR + "の[コマンド拡張](" + JDAUtilitiesInfo.GITHUB + ") (")
                 .append(JDAUtilitiesInfo.VERSION).append(")と[JDAライブラリ](https://github.com/DV8FromTheWorld/JDA) (")

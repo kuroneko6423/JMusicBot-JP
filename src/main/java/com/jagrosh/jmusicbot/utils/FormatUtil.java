@@ -47,13 +47,13 @@ public class FormatUtil {
     }
 
     public static String progressBar(double percent) {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < 12; i++)
             if (i == (int) (percent * 12))
-                str += "\uD83D\uDD18"; // 🔘
+                str.append("\uD83D\uDD18"); // 🔘
             else
-                str += "▬";
-        return str;
+                str.append("▬");
+        return str.toString();
     }
 
     public static String volumeIcon(int volume) {
@@ -67,27 +67,29 @@ public class FormatUtil {
     }
 
     public static String listOfTChannels(List<TextChannel> list, String query) {
-        String out = " 複数のテキストチャンネルで\"" + query + "\"が一致しました。:";
+        StringBuilder out = new StringBuilder(" 複数のテキストチャンネルで\"" + query + "\"が一致しました。:");
         for (int i = 0; i < 6 && i < list.size(); i++)
-            out += "\n - " + list.get(i).getName() + " (<#" + list.get(i).getId() + ">)";
+            out.append("\n - ").append(list.get(i).getName()).append(" (<#").append(list.get(i).getId()).append(">)");
         if (list.size() > 6)
-            out += "\n**と " + (list.size() - 6) + " など...**";
-        return out;
+            out.append("\n**と ").append(list.size() - 6).append(" など...**");
+        return out.toString();
     }
 
     public static String listOfVChannels(List<VoiceChannel> list, String query) {
-        String out = " 複数のボイスチャンネルで\"" + query + "\"が一致しました。:";
+        StringBuilder outBuilder = new StringBuilder(" 複数のボイスチャンネルで\"" + query + "\"が一致しました。:");
         for (int i = 0; i < 6 && i < list.size(); i++)
-            out += "\n - " + list.get(i).getName() + " (ID:" + list.get(i).getId() + ")";
+            outBuilder.append("\n - ").append(list.get(i).getName()).append(" (ID:").append(list.get(i).getId()).append(")");
+        String out = outBuilder.toString();
         if (list.size() > 6)
             out += "\n**と " + (list.size() - 6) + " など...**";
         return out;
     }
 
     public static String listOfRoles(List<Role> list, String query) {
-        String out = " 複数のテキストチャンネルで \"" + query + "\"が一致しました。:";
+        StringBuilder outBuilder = new StringBuilder(" 複数のテキストチャンネルで \"" + query + "\"が一致しました。:");
         for (int i = 0; i < 6 && i < list.size(); i++)
-            out += "\n - " + list.get(i).getName() + " (ID:" + list.get(i).getId() + ")";
+            outBuilder.append("\n - ").append(list.get(i).getName()).append(" (ID:").append(list.get(i).getId()).append(")");
+        String out = outBuilder.toString();
         if (list.size() > 6)
             out += "\n**と " + (list.size() - 6) + " など...**";
         return out;

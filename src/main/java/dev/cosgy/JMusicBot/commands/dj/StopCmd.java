@@ -33,7 +33,7 @@ public class StopCmd {
 
             log.debug("再生待ちのサイズ："+queue.size());
             if(!queue.isEmpty()) {
-                cache.Save(event.getGuild().toString(), handler.getQueue());
+                cache.Save(event.getGuild().getId(), handler.getQueue());
                 event.reply(event.getClient().getSuccess() + " 再生待ちの"+ queue.size() +"曲を保存して再生を停止しました。");
             }else{
                 event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。");

@@ -107,8 +107,9 @@ public class FairQueue<T extends Queueable> {
     }
 
     public void skip(int number) {
-        for (int i = 0; i < number; i++)
-            list.remove(0);
+        if (number > 0) {
+            list.subList(0, number).clear();
+        }
     }
 
     /**

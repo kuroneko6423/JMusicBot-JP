@@ -8,18 +8,23 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class CacheLoader
 {
+    Logger log = LoggerFactory.getLogger("CacheLoader");
     private final BotConfig config;
 
     public CacheLoader(BotConfig config) {
@@ -54,23 +59,30 @@ public class CacheLoader
     }
 
 
-    public static void Trim(List<String> list, String str) {
+    public void Trim(List<String> list, String str) {
+        log.debug("Trimを実行: " + str);
         String s = str.trim();
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return;
+        }
         list.add(s);
     }
 
     public Cache GetCache(String serverId) {
+
         try {
             List<String> list = new ArrayList<>();
-
+            log.debug("キャッシュの読み込み開始: "+ "cache" + File.separator + serverId + ".txt");
             Files.readAllLines(Paths.get("cache" + File.separator + serverId + ".txt"))
                     .forEach((String str) -> Trim(list, str));
+            log.debug("キャッシュの読み込み完了");
+            log.debug("キャッシュの削除開始");
             deleteCache(serverId);
-            return new Cache("キャッシュ", list, false);
+            log.debug("キャッシュの削除完了");
+            return new Cache(list, false);
         } catch (IOException e) {
-            createFolder();
+            log.debug("キャッシュの読み込み中にエラーが発生しました。");
+            e.printStackTrace();
             return null;
         }
     }
@@ -87,6 +99,7 @@ public class CacheLoader
     }
 
     public boolean cacheExists(String serverId){
+        log.debug("確認するファイル名："+ serverId + ".txt");
         return Files.exists(Paths.get("cache"+ File.separator + serverId + ".txt"));
     }
 
@@ -95,23 +108,22 @@ public class CacheLoader
     }
 
     public void writeCache(String serverId, String text) throws IOException {
-        Files.write(Paths.get("cache" + File.separator + serverId + ".txt"), text.trim().getBytes());
+        Files.write(Paths.get("cache" + File.separator + serverId + ".txt"), text.trim().getBytes(StandardCharsets.UTF_8));
     }
 
-    public void deleteCache(String serverId) throws IOException {
+    public CacheLoader deleteCache(String serverId) throws IOException {
         Files.delete(Paths.get("cache" + File.separator + serverId + ".txt"));
+        return null;
     }
 
     public class Cache {
-        private final String name;
         private final List<String> items;
         private final boolean shuffle;
         private final List<AudioTrack> tracks = new LinkedList<>();
         private final List<CacheLoadError> errors = new LinkedList<>();
         private boolean loaded = false;
 
-        public Cache(String name, List<String> items, boolean shuffle) {
-            this.name = name;
+        public Cache(List<String> items, boolean shuffle) {
             this.items = items;
             this.shuffle = shuffle;
         }
@@ -123,7 +135,7 @@ public class CacheLoader
             for (int i = 0; i < items.size(); i++) {
                 boolean last = i + 1 == items.size();
                 int index = i;
-                manager.loadItemOrdered(name, items.get(i), new AudioLoadResultHandler() {
+                manager.loadItemOrdered("キャッシュ", items.get(i), new AudioLoadResultHandler() {
                     private void done() {
                         if (last) {
                             if (callback != null)
@@ -179,10 +191,6 @@ public class CacheLoader
                     }
                 });
             }
-        }
-
-        public String getName() {
-            return name;
         }
 
         public List<String> getItems() {
