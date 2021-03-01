@@ -14,12 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * @author Kosugi_kun
+ */
 public class InfoCommand extends Command {
 
     public InfoCommand(Bot bot) {
         this.name = "info";
         this.help = "メンテナンス情報をお知らせします。";
-        //this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
     }
 
@@ -33,15 +35,14 @@ public class InfoCommand extends Command {
             if (MaintenanceInfo.Verification()) {
                 MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
-                MessageBuilder builder = new MessageBuilder()
-                        .append("**" + InfoResult.Title + "**");
+                MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");
                 EmbedBuilder ebuilder = new EmbedBuilder()
                         .setColor(Color.orange)
                         .setDescription(InfoResult.Content);
-                if (InfoResult.StartTime != "") {
+                if (!InfoResult.StartTime.equals("")) {
                     ebuilder.addField("開始時刻:", InfoResult.StartTime, false);
                 }
-                if (InfoResult.EndTime != "") {
+                if (!InfoResult.EndTime.equals("")) {
                     ebuilder.addField("終了時刻:", InfoResult.EndTime, false);
                 }
                 ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)

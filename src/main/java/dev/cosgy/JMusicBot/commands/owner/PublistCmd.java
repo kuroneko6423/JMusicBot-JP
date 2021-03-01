@@ -129,7 +129,7 @@ public class PublistCmd extends OwnerCommand {
         }
     }
 
-    public class DefaultlistCmd extends AutoplaylistCmd {
+    public static class DefaultlistCmd extends AutoplaylistCmd {
         public DefaultlistCmd(Bot bot) {
             super(bot);
             this.name = "setdefault";

@@ -29,11 +29,9 @@ import java.util.List;
  * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class PlaylistCmd extends DJCommand {
-    private final Bot bot;
 
     public PlaylistCmd(Bot bot) {
         super(bot);
-        this.bot = bot;
         this.guildOnly = true;
         this.name = "playlist";
         this.arguments = "<append|delete|make|setdefault>";

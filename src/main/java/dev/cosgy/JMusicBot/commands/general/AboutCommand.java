@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * @author Cosgy Dev
@@ -81,12 +82,8 @@ public class AboutCommand extends Command {
         builder.setColor(event.getGuild() == null ? color : event.getGuild().getSelfMember().getColor());
         builder.setAuthor("" + event.getSelfUser().getName() + "について!", null, event.getSelfUser().getAvatarUrl());
         String CosgyOwner = "Cosgy Devが運営、開発をしています。";
-        /*boolean join = !(event.getClient().getServerInvite() == null || event.getClient().getServerInvite().isEmpty());
-        boolean inv = !oauthLink.isEmpty();
-        String invline = "\n"+ (join ? "Cosgy Dev公式チャンネル [`こちら`](https://discord.gg/RBpkHxf)" : (inv ? "へお願いします。 " : ""));
-                + (inv ? (join ? ", または " : "") + "あなたのサーバーに[`招待リンク`](" + oauthLink + ") " : "で招待することができます。") + "!"*/
         String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">"
-                : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
+                : Objects.requireNonNull(event.getJDA().getUserById(event.getClient().getOwnerId())).getName();
         StringBuilder descr = new StringBuilder().append("こんにちは！ **").append(event.getSelfUser().getName()).append("**です。 ")
                 .append(description).append("は、").append(JDAUtilitiesInfo.AUTHOR + "の[コマンド拡張](" + JDAUtilitiesInfo.GITHUB + ") (")
                 .append(JDAUtilitiesInfo.VERSION).append(")と[JDAライブラリ](https://github.com/DV8FromTheWorld/JDA) (")
@@ -98,12 +95,21 @@ public class AboutCommand extends Command {
             descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ").append(feature);
         descr.append(" ```");
         builder.setDescription(descr);
-        event.getJDA().getShardInfo();
-        builder.addField("ステータス", (event.getClient()).getTotalGuilds() + " サーバー\nシャード " + (event.getJDA().getShardInfo().getShardId() + 1)
-                + "/" + event.getJDA().getShardInfo().getShardTotal(), true);
-        builder.addField("", event.getJDA().getUsers().size() + " ユーザーのシャード\n" + event.getJDA().getGuilds().size() + " サーバー", true);
-        builder.addField("", event.getJDA().getTextChannels().size() + " テキストチャンネル\n" + event.getJDA().getVoiceChannels().size() + " ボイスチャンネル", true);
-        builder.setFooter("再起動が行われた時間：", "https://www.cosgy.tokyo/wp-content/uploads/2020/03/restart.jpg");
+
+        if (event.getJDA().getShardInfo().getShardTotal() == 1)
+        {
+            builder.addField("ステータス", event.getJDA().getGuilds().size() + " サーバー\n1 シャード", true);
+            builder.addField("ユーザー", event.getJDA().getUsers().size() + " ユニーク\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " 合計", true);
+            builder.addField("チャンネル", event.getJDA().getTextChannels().size() + " テキスト\n" + event.getJDA().getVoiceChannels().size() + " ボイス", true);
+        }
+        else
+        {
+            builder.addField("ステータス", (event.getClient()).getTotalGuilds() + " サーバー\nシャード " + (event.getJDA().getShardInfo().getShardId() + 1)
+                    + "/" + event.getJDA().getShardInfo().getShardTotal(), true);
+            builder.addField("", event.getJDA().getUsers().size() + " ユーザーのシャード\n" + event.getJDA().getGuilds().size() + " サーバー", true);
+            builder.addField("", event.getJDA().getTextChannels().size() + " テキストチャンネル\n" + event.getJDA().getVoiceChannels().size() + " ボイスチャンネル", true);
+        }
+        builder.setFooter("再起動が行われた時間：", "https://www.cosgy.dev/wp-content/uploads/2020/03/restart.jpg");
         builder.setTimestamp(event.getClient().getStartTime());
         event.reply(builder.build());
     }

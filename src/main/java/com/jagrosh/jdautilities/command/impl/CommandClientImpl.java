@@ -98,6 +98,31 @@ public class CommandClientImpl implements CommandClient, EventListener {
     private CommandListener listener = null;
     private int totalGuilds;
 
+    /**
+     *　変数が多いのでメモ書きします。
+     * @param ownerId オーナーID
+     * @param coOwnerIds 共同者オーナーID
+     * @param prefix コマンドの接頭語
+     * @param altprefix　サブの接頭語
+     * @param game ゲームステータス情報
+     * @param status オンライン情報
+     * @param serverInvite サーバーへの招待リンク
+     * @param success
+     * @param warning
+     * @param error
+     * @param carbonKey carbonのキー
+     * @param botsKey botsのキー
+     * @param commands コマンド一覧
+     * @param useHelp ヘルプを使うか否か
+     * @param shutdownAutomatically 自動シャットダウン
+     * @param helpConsumer ヘルプコマンドの内容
+     * @param helpWord ヘルプコマンドに使うコマンド名
+     * @param executor
+     * @param linkedCacheSize
+     * @param compiler
+     * @param manager
+     * @param helpToDm ヘルプコマンドをDMに送信するかしないかの設定
+     */
     public CommandClientImpl(String ownerId, String[] coOwnerIds, String prefix, String altprefix, Activity game, OnlineStatus status, String serverInvite,
                              String success, String warning, String error, String carbonKey, String botsKey, ArrayList<Command> commands,
                              boolean useHelp, boolean shutdownAutomatically, Consumer<CommandEvent> helpConsumer, String helpWord, ScheduledExecutorService executor,
@@ -161,7 +186,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
                 if (serverInvite != null)
                     builder.append(" 公式サーバーに参加することもできます: ").append(serverInvite);
             }
-            if(helpToDm) {
+            if(this.helpToDm) {
                 event.replyInDm(builder.toString(), unused ->
                 {
                     if (event.isFromType(ChannelType.TEXT))

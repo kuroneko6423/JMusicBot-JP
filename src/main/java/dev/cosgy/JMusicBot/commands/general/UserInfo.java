@@ -4,12 +4,17 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.format.DateTimeFormatter;
 
 public class UserInfo extends Command {
+    Logger log = LoggerFactory.getLogger("UserInfo");
+
     public UserInfo() {
         this.name = "userinfo";
         this.help = "指定したユーザーに関する情報を表示します";
@@ -44,10 +49,17 @@ public class UserInfo extends Command {
         String DISCORD_JOINED_DATE = memb.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
         String ID = memb.getUser().getId();
         String STATUS = memb.getOnlineStatus().getKey().replace("offline", ":x: オフライン").replace("dnd", ":red_circle: 起こさないで").replace("idle", "退席中").replace("online", ":white_check_mark: オンライン");
-        String UserURL = null;
-        String ROLES = "";
+        String ROLES;
         String GAME;
         String AVATAR = memb.getUser().getAvatarUrl();
+
+        log.debug("\nユーザー名:" + memb.getEffectiveName() + "\n" +
+                "タグ:" + memb.getUser().getDiscriminator() + "\n" +
+                "ギルド参加日時:"
+                + memb.getUser().getTimeCreated()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")) + "\n" +
+                "ユーザーID:" + memb.getUser().getId() + "\n" +
+                "オンライン状態:" + memb.getOnlineStatus());
 
         try {
             GAME = memb.getActivities().toString();
@@ -55,9 +67,11 @@ public class UserInfo extends Command {
             GAME = "-/-";
         }
 
+        StringBuilder ROLESBuilder = new StringBuilder();
         for (Role r : memb.getRoles()) {
-            ROLES += r.getName() + ", ";
+            ROLESBuilder.append(r.getName()).append(", ");
         }
+        ROLES = ROLESBuilder.toString();
         if (ROLES.length() > 0)
             ROLES = ROLES.substring(0, ROLES.length() - 2);
         else
@@ -67,7 +81,7 @@ public class UserInfo extends Command {
             AVATAR = "アイコンなし";
         }
 
-        eb.setAuthor(memb.getUser().getName() + TAG + " のユーザー情報", UserURL, null)
+        eb.setAuthor(memb.getUser().getName() + TAG + " のユーザー情報", null, null)
                 .addField(":pencil2: 名前/ニックネーム", "**" + NAME + "**", true)
                 .addField(":link: DiscordTag", "**" + TAG + "**", true)
                 .addField(":1234: ID", "**" + ID + "**", true)
@@ -82,7 +96,7 @@ public class UserInfo extends Command {
                 .addField(":frame_photo: アイコンURL", AVATAR, false);
 
         if (!AVATAR.equals("アイコンなし")) {
-            eb.setAuthor(memb.getUser().getName() + TAG + " のユーザー情報", UserURL, AVATAR);
+            eb.setAuthor(memb.getUser().getName() + TAG + " のユーザー情報", null, AVATAR);
         }
 
         event.getChannel().sendMessage(eb.build()).queue();

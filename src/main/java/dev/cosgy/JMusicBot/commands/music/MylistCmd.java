@@ -15,11 +15,9 @@ import java.util.List;
  * @author kosugikun
  */
 public class MylistCmd extends MusicCommand {
-    private final Bot bot;
 
     public MylistCmd(Bot bot) {
         super(bot);
-        this.bot = bot;
         this.guildOnly = false;
         this.name = "mylist";
         this.arguments = "<append|delete|make|all>";
@@ -43,7 +41,7 @@ public class MylistCmd extends MusicCommand {
         event.reply(builder.toString());
     }
 
-    public class MakelistCmd extends DJCommand {
+    public static class MakelistCmd extends DJCommand {
         public MakelistCmd(Bot bot) {
             super(bot);
             this.name = "make";
@@ -57,18 +55,18 @@ public class MylistCmd extends MusicCommand {
         @Override
         public void doCommand(CommandEvent event) {
 
-            String pname = event.getArgs().replaceAll("\\s+", "_");
+            String pName = event.getArgs().replaceAll("\\s+", "_");
             String userId = event.getAuthor().getId();
 
-            if (pname.isEmpty()) {
+            if (pName.isEmpty()) {
                 event.replyError("プレイリスト名を指定してください。");
                 return;
             }
 
-            if (bot.getMylistLoader().getPlaylist(userId, pname) == null) {
+            if (bot.getMylistLoader().getPlaylist(userId, pName) == null) {
                 try {
-                    bot.getMylistLoader().createPlaylist(userId, pname);
-                    event.reply(event.getClient().getSuccess() + "マイリスト `" + pname + "` を作成しました");
+                    bot.getMylistLoader().createPlaylist(userId, pName);
+                    event.reply(event.getClient().getSuccess() + "マイリスト `" + pName + "` を作成しました");
                 } catch (IOException e) {
                     if (event.isOwner() || event.getMember().isOwner()) {
                         event.replyError("曲の読み込み中にエラーが発生しました。\n" +
@@ -80,12 +78,12 @@ public class MylistCmd extends MusicCommand {
                     event.reply(event.getClient().getError() + " マイリストを作成できませんでした。:" + e.getLocalizedMessage());
                 }
             } else {
-                event.reply(event.getClient().getError() + " マイリスト `" + pname + "` は既に存在します");
+                event.reply(event.getClient().getError() + " マイリスト `" + pName + "` は既に存在します");
             }
         }
     }
 
-    public class DeletelistCmd extends MusicCommand {
+    public static class DeletelistCmd extends MusicCommand {
         public DeletelistCmd(Bot bot) {
             super(bot);
             this.name = "delete";
@@ -99,15 +97,15 @@ public class MylistCmd extends MusicCommand {
         @Override
         public void doCommand(CommandEvent event) {
 
-            String pname = event.getArgs().replaceAll("\\s+", "_");
+            String pName = event.getArgs().replaceAll("\\s+", "_");
             String userId = event.getAuthor().getId();
-            if (!pname.equals("")) {
-                if (bot.getMylistLoader().getPlaylist(userId, pname) == null)
-                    event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pname + "`");
+            if (!pName.equals("")) {
+                if (bot.getMylistLoader().getPlaylist(userId, pName) == null)
+                    event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pName + "`");
                 else {
                     try {
-                        bot.getMylistLoader().deletePlaylist(userId, pname);
-                        event.reply(event.getClient().getSuccess() + " マイリストを削除しました:`" + pname + "`");
+                        bot.getMylistLoader().deletePlaylist(userId, pName);
+                        event.reply(event.getClient().getSuccess() + " マイリストを削除しました:`" + pName + "`");
                     } catch (IOException e) {
                         event.reply(event.getClient().getError() + " マイリストを削除できませんでした: " + e.getLocalizedMessage());
                     }
@@ -118,7 +116,7 @@ public class MylistCmd extends MusicCommand {
         }
     }
 
-    public class AppendlistCmd extends MusicCommand {
+    public static class AppendlistCmd extends MusicCommand {
         public AppendlistCmd(Bot bot) {
             super(bot);
             this.name = "append";
@@ -138,10 +136,10 @@ public class MylistCmd extends MusicCommand {
                 event.reply(event.getClient().getError() + " 追加先のマイリスト名とURLを含めてください。");
                 return;
             }
-            String pname = parts[0];
-            MylistLoader.Playlist playlist = bot.getMylistLoader().getPlaylist(userId, pname);
+            String pName = parts[0];
+            MylistLoader.Playlist playlist = bot.getMylistLoader().getPlaylist(userId, pName);
             if (playlist == null)
-                event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pname + "`");
+                event.reply(event.getClient().getError() + " マイリストは存在しません:`" + pName + "`");
             else {
                 StringBuilder builder = new StringBuilder();
                 playlist.getItems().forEach(item -> builder.append("\r\n").append(item));
@@ -153,8 +151,8 @@ public class MylistCmd extends MusicCommand {
                     builder.append("\r\n").append(u);
                 }
                 try {
-                    bot.getMylistLoader().writePlaylist(userId, pname, builder.toString());
-                    event.reply(event.getClient().getSuccess() + urls.length + " 項目をマイリストに追加しました:`" + pname + "`");
+                    bot.getMylistLoader().writePlaylist(userId, pName, builder.toString());
+                    event.reply(event.getClient().getSuccess() + urls.length + " 項目をマイリストに追加しました:`" + pName + "`");
                 } catch (IOException e) {
                     event.reply(event.getClient().getError() + " マイリストに追加できませんでした: " + e.getLocalizedMessage());
                 }
@@ -162,7 +160,7 @@ public class MylistCmd extends MusicCommand {
         }
     }
 
-    public class ListCmd extends MusicCommand {
+    public static class ListCmd extends MusicCommand {
         public ListCmd(Bot bot) {
             super(bot);
             this.name = "all";

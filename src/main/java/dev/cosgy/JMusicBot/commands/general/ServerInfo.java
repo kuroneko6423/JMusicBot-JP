@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class ServerInfo extends Command {
     public ServerInfo() {
@@ -19,7 +20,7 @@ public class ServerInfo extends Command {
         String GuildName = event.getGuild().getName();
         String GuildIconURL = event.getGuild().getIconUrl();
         String GuildId = event.getGuild().getId();
-        String GuildOwner = event.getGuild().getOwner().getUser().getName() + "#" + event.getGuild().getOwner().getUser().getDiscriminator();
+        String GuildOwner = Objects.requireNonNull(event.getGuild().getOwner()).getUser().getName() + "#" + event.getGuild().getOwner().getUser().getDiscriminator();
         String GuildCreatedDate = event.getGuild().getTimeCreated().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
 
         String GuildRolesCount = String.valueOf(event.getGuild().getRoles().size());

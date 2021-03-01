@@ -40,7 +40,7 @@ public class SetvcCmd extends AdminCommand {
 
     @Override
     protected void execute(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("SetvcCmd");
+        Logger log = LoggerFactory.getLogger("SetVcCmd");
         if (event.getArgs().isEmpty()) {
             event.reply(event.getClient().getError() + "音声チャンネルまたはNONEを含めてください。");
             return;

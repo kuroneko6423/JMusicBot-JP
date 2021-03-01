@@ -90,7 +90,6 @@ public class MaintenanceInfo {
         log.info("Saved AutoAnnounceID: " + s.getAnnounce());
         log.info("Announce Server ID: " + AnnounceID);
         if (Announce && AnnounceID > s.getAnnounce() && StartBoolean && EndBoolean) {
-            //event.getChannel().sendMessage("テストメッセージ").complete();
             MaintenanceInfo InfoResult = MaintenanceInfo.GetInfo();
 
             MessageBuilder builder = new MessageBuilder().append("**").append(InfoResult.Title).append("**");

@@ -49,13 +49,13 @@ public class SettingsCmd extends Command {
                 .append(EMOJI + " **")
                 .append(FormatUtil.filter(event.getSelfUser().getName()))
                 .append("** の設定:");
-        TextChannel tchan = s.getTextChannel(event.getGuild());
-        VoiceChannel vchan = s.getVoiceChannel(event.getGuild());
+        TextChannel tChan = s.getTextChannel(event.getGuild());
+        VoiceChannel vChan = s.getVoiceChannel(event.getGuild());
         Role role = s.getRole(event.getGuild());
         EmbedBuilder ebuilder = new EmbedBuilder()
                 .setColor(event.getSelfMember().getColor())
-                .setDescription("コマンド実行用チャンネル: " + (tchan == null ? "なし" : "**#" + tchan.getName() + "**")
-                        + "\n専用ボイスチャンネル: " + (vchan == null ? "なし" : "**" + vchan.getName() + "**")
+                .setDescription("コマンド実行用チャンネル: " + (tChan == null ? "なし" : "**#" + tChan.getName() + "**")
+                        + "\n専用ボイスチャンネル: " + (vChan == null ? "なし" : "**" + vChan.getName() + "**")
                         + "\nDJ 権限: " + (role == null ? "未設定" : "**" + role.getName() + "**")
                         + "\nリピート: **" + (s.getRepeatMode() == RepeatMode.ALL ? "有効(全曲リピート)" : (s.getRepeatMode() == RepeatMode.SINGLE ? "有効(1曲リピート)" : "無効")) + "**"
                         + "\nデフォルトプレイリスト: " + (s.getDefaultPlaylist() == null ? "なし" : "**" + s.getDefaultPlaylist() + "**")

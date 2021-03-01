@@ -24,6 +24,10 @@ import com.jagrosh.jmusicbot.utils.FormatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
+import static com.jagrosh.jmusicbot.commands.dj.VolumeCmd.*;
+
 /**
  * @author John Grosh <john.a.grosh@gmail.com> | edit: ryuuta0217
  */
@@ -43,11 +47,11 @@ public class VolumeCmd extends MusicCommand {
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        int volume = handler.getPlayer().getVolume();
+        int volume = Objects.requireNonNull(handler).getPlayer().getVolume();
         if (event.getArgs().isEmpty()) {
             event.reply(FormatUtil.volumeIcon(volume) + " 現在の音量は`" + volume + "`です。");
         } else {
-            com.jagrosh.jmusicbot.commands.dj.VolumeCmd.Volume(event, handler, settings, volume, log);
+            Volume(event, handler, settings, volume, log);
         }
     }
 
