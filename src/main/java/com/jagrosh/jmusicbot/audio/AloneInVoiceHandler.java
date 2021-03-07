@@ -73,8 +73,8 @@ public class AloneInVoiceHandler
                 // キャッシュの保存処理
                 CacheLoader cache = bot.getCacheLoader();
                 cache.Save(guild.getId(), handler.getQueue());
-                log.info(":notes: 再生待ちを保存してボイスチャンネルから退出します。");
-                LastSendTextChannel.SendMessage(guild, "再生待ちを保存してボイスチャンネルから退出しました。");
+                log.info("再生待ちを保存してボイスチャンネルから退出します。");
+                LastSendTextChannel.SendMessage(guild, ":notes: 再生待ちを保存してボイスチャンネルから退出しました。");
             }else{
                 // キャッシュを保存せずに退出する時の処理
                 log.info("再生待ちを削除してボイスチャンネルから退出します。");
