@@ -52,7 +52,6 @@ public class SkipToCmd extends DJCommand {
             return;
         }
         handler.getQueue().skip(index - 1);
-        log.info(event.getGuild().getName() + "で曲を" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。");
         event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。**");
         handler.getPlayer().stopTrack();
     }

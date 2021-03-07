@@ -93,6 +93,11 @@ public class JMusicBot {
         if (!config.isValid())
             return;
 
+        if(config.getAuditCommands()){
+            COMMAND_AUDIT_ENABLED = true;
+            log.info("実行されたコマンドの記録を有効にしました。");
+        }
+
         // set up the listener
         EventWaiter waiter = new EventWaiter();
         SettingsManager settings = new SettingsManager();

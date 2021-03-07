@@ -17,17 +17,11 @@ package com.jagrosh.jmusicbot.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.menu.ButtonMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.settings.Settings;
-import com.jagrosh.jmusicbot.utils.FormatUtil;
-import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import dev.cosgy.JMusicBot.util.MaintenanceInfo;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
@@ -36,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -90,25 +83,6 @@ public abstract class MusicCommand extends Command {
             if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
-                    if(bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
-                        CacheLoader.Cache cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
-                        event.getChannel().sendMessage(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m ->
-                        {
-                            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                            cache.loadTracks(bot.getPlayerManager(), (at) -> handler.addTrack(new QueuedTrack(at, event.getAuthor())), () -> {
-                                StringBuilder builder = new StringBuilder(cache.getTracks().isEmpty()
-                                        ? event.getClient().getWarning() + " 楽曲がロードされていません。"
-                                        : event.getClient().getSuccess() + " キャッシュファイルから," + "**" + cache.getTracks().size() + "**曲読み込みました。");
-                                if (!cache.getErrors().isEmpty())
-                                    builder.append("\n以下の楽曲をロードできませんでした:");
-                                cache.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
-                                String str = builder.toString();
-                                if (str.length() > 2000)
-                                    str = str.substring(0, 1994) + " (以下略)";
-                                m.editMessage(FormatUtil.filter(str)).queue();
-                            });
-                        });
-                    }
                 } catch (PermissionException ex) {
                     event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getName()));
                     return;

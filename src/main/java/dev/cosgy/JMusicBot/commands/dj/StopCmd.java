@@ -35,13 +35,14 @@ public class StopCmd {
             if(!queue.isEmpty()) {
                 cache.Save(event.getGuild().getId(), handler.getQueue());
                 event.reply(event.getClient().getSuccess() + " 再生待ちの"+ queue.size() +"曲を保存して再生を停止しました。");
+                log.info(event.getGuild().getName()+"で再生待ちを保存して,ボイスチャンネルから切断しました。");
             }else{
                 event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。");
+                log.info(event.getGuild().getName()+"で再生待ちを削除して,ボイスチャンネルから切断しました。");
             }
 
             handler.stopAndClear();
             event.getGuild().getAudioManager().closeAudioConnection();
-            log.info(event.getGuild().getName()+"で再生待ちを保存して,ボイスチャンネルから切断しました。");
         }
     }
 }

@@ -104,6 +104,11 @@ public class CacheLoader
     }
 
     public void createCache(String serverId)throws IOException {
+
+        if(cacheExists(serverId)){
+            log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
+            deleteCache(serverId);
+        }
         Files.createFile(Paths.get("cache" + File.separator + serverId + ".txt"));
     }
 

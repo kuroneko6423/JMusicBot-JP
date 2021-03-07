@@ -45,6 +45,5 @@ public class StopCmd extends DJCommand {
         handler.stopAndClear();
         event.getGuild().getAudioManager().closeAudioConnection();
         event.reply(event.getClient().getSuccess() + " 再生待ちを削除して、再生を停止しました。");
-        log.info(event.getGuild().getName() + "で " + event.getMessage().getContentDisplay() + " を実行しました。");
     }
 }
