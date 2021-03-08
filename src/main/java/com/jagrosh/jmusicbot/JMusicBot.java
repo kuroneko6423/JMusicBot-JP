@@ -26,6 +26,8 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import dev.cosgy.JMusicBot.commands.general.CashCmd;
+import dev.cosgy.JMusicBot.util.MessageTranslator;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -33,6 +35,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.msgpack.core.MessagePack;
 import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
@@ -97,6 +100,7 @@ public class JMusicBot {
             COMMAND_AUDIT_ENABLED = true;
             log.info("実行されたコマンドの記録を有効にしました。");
         }
+        MessageTranslator.LoadLangFail();
 
         // set up the listener
         EventWaiter waiter = new EventWaiter();
@@ -133,6 +137,7 @@ public class JMusicBot {
             // General
             add(new dev.cosgy.JMusicBot.commands.general.ServerInfo());
             add(new dev.cosgy.JMusicBot.commands.general.UserInfo());
+            add(new CashCmd(bot));
             // Music
             add(new LyricsCmd(bot));
             add(new NowplayingCmd(bot));
