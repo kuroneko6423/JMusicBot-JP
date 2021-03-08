@@ -32,7 +32,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.cosgy.JMusicBot.playlist.CacheLoader;
-import dev.cosgy.JMusicBot.util.MessageTranslator;
 import dev.cosgy.JMusicBot.util.StackTraceUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -97,7 +96,7 @@ public class PlayCmd extends MusicCommand {
                                         : event.getClient().getSuccess() + " キャッシュファイルから、" + "**" + cache.getTracks().size() + "**曲読み込みました。");
                                 if (!cache.getErrors().isEmpty())
                                     builder.append("\n以下の楽曲をロードできませんでした:");
-                                cache.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(MessageTranslator.ReplaceText(err.getReason())));
+                                cache.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
                                 String str = builder.toString();
                                 if (str.length() > 2000)
                                     str = str.substring(0, 1994) + " (以下略)";
@@ -272,7 +271,7 @@ public class PlayCmd extends MusicCommand {
                             : event.getClient().getSuccess() + "**" + playlist.getTracks().size() + "**曲読み込みました。");
                     if (!playlist.getErrors().isEmpty())
                         builder.append("\n以下の楽曲をロードできませんでした:");
-                    playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(MessageTranslator.ReplaceText(err.getReason())));
+                    playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
                     String str = builder.toString();
                     if (str.length() > 2000)
                         str = str.substring(0, 1994) + " (以下略)";

@@ -8,7 +8,6 @@ import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.JMusicBot.playlist.MylistLoader;
 import dev.cosgy.JMusicBot.playlist.PubliclistLoader;
-import dev.cosgy.JMusicBot.util.MessageTranslator;
 
 public class PlayCmd {
     public static class MylistCmd extends MusicCommand {
@@ -44,7 +43,7 @@ public class PlayCmd {
                     if (!playlist.getErrors().isEmpty())
                         builder.append("\n以下の楽曲をロードできませんでした:");
                     playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1)
-                            .append("]` **").append(err.getItem()).append("**: ").append(MessageTranslator.ReplaceText(err.getReason())));
+                            .append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
                     String str = builder.toString();
                     if (str.length() > 2000)
                         str = str.substring(0, 1994) + " (以下略)";
@@ -86,7 +85,7 @@ public class PlayCmd {
                     if (!playlist.getErrors().isEmpty())
                         builder.append("\n以下の楽曲をロードできませんでした:");
                     playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1)
-                            .append("]` **").append(err.getItem()).append("**: ").append(MessageTranslator.ReplaceText(err.getReason())));
+                            .append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
                     String str = builder.toString();
                     if (str.length() > 2000)
                         str = str.substring(0, 1994) + " (以下略)";
