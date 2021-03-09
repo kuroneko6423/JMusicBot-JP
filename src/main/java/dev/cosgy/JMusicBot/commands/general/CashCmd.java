@@ -91,7 +91,7 @@ public class CashCmd extends Command {
         @Override
         public void doCommand(CommandEvent event) {
             if(bot.getCacheLoader().cacheExists(event.getGuild().getId())){
-                event.reply("キャッシュファイルが、ありません。");
+                event.reply("キャッシュが存在しません。");
                 return;
             }
 
