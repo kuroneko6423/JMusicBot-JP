@@ -1,6 +1,7 @@
 package dev.cosgy.JMusicBot.playlist;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
@@ -9,7 +10,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import dev.cosgy.JMusicBot.cache.CacheObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class CacheLoader
     }
 
     public List<dev.cosgy.JMusicBot.cache.Cache> GetCache(String serverId) {
-        List<dev.cosgy.JMusicBot.cache.Cache> cacheData = null;
+        List<dev.cosgy.JMusicBot.cache.Cache> cacheData;
         Reader json;
 
         try {
@@ -141,7 +141,7 @@ public class CacheLoader
         }
 
         cacheObject.setCache(data);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(cacheObject);
 
         Files.write(Paths.get("cache" + File.separator + serverId + ".json"), json.getBytes(StandardCharsets.UTF_8));

@@ -4,12 +4,12 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +23,7 @@ public class CashCmd extends Command {
         this.help = "キャッシュに保存されている曲を表示します。";
         this.guildOnly = true;
         this.category = new Category("General");
+        this.children = new Command[]{new DeleteCmd(bot)};
         this.botPermissions = new Permission[] {Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
         builder = new Paginator.Builder()
                 .setColumns(1)
@@ -76,5 +77,32 @@ public class CashCmd extends Command {
         return FormatUtil.filter(sb.append(success).append(" キャッシュに保存された曲一覧 | ").append(songsLength)
                 .append(" 曲 | `").append(FormatUtil.formatTime(total)).append("` ")
                 .toString());
+    }
+
+    public static class DeleteCmd extends DJCommand{
+        public DeleteCmd(Bot bot){
+            super(bot);
+            this.name = "delete";
+            this.aliases = new String[] {"dl", "clear"};
+            this.help = "保存されているキャッシュを削除します。";
+            this.guildOnly = true;
+        }
+
+        @Override
+        public void doCommand(CommandEvent event) {
+            if(bot.getCacheLoader().cacheExists(event.getGuild().getId())){
+                event.reply("キャッシュファイルが、ありません。");
+                return;
+            }
+
+            try {
+                bot.getCacheLoader().deleteCache(event.getGuild().getId());
+            } catch (IOException e) {
+                event.reply("キャッシュを削除する際にエラーが発生しました。");
+                e.printStackTrace();
+                return;
+            }
+            event.reply("キャッシュを削除しました。");
+        }
     }
 }
