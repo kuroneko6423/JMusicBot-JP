@@ -66,8 +66,7 @@ public class JMusicBot {
         Logger log = getLogger("Startup");
 
         // create prompt to handle startup
-        Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。",
-                "true".equalsIgnoreCase(System.getProperty("nogui", "false")));
+        Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。");
 
         // check deprecated nogui mode (new way of setting it is -Dnogui=true)
         for (String arg : args)
