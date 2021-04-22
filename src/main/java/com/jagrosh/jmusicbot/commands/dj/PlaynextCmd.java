@@ -83,8 +83,8 @@ public class PlaynextCmd extends DJCommand {
                     + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を再生待ちに追加しました。" : "を" + pos + "番目の再生待ちに追加しました。"));
             m.editMessage(addMsg).queue();
 
-            log.info(event.getGuild().getName() + track.getInfo().title
-                    + "(" + FormatUtil.formatTime(track.getDuration()) + ") " + (pos == 0 ? "を再生待ちに追加しました。" : "を" + pos + "番目の再生待ちに追加しました。"));
+            //log.info(event.getGuild().getName() + track.getInfo().title
+            //        + "(" + FormatUtil.formatTime(track.getDuration()) + ") " + (pos == 0 ? "を再生待ちに追加しました。" : "を" + pos + "番目の再生待ちに追加しました。"));
 
         }
 

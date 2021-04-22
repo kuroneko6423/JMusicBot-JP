@@ -26,6 +26,7 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import dev.cosgy.JMusicBot.commands.general.CashCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -65,8 +66,7 @@ public class JMusicBot {
         Logger log = getLogger("Startup");
 
         // create prompt to handle startup
-        Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。",
-                "true".equalsIgnoreCase(System.getProperty("nogui", "false")));
+        Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。");
 
         // check deprecated nogui mode (new way of setting it is -Dnogui=true)
         for (String arg : args)
@@ -92,6 +92,11 @@ public class JMusicBot {
         config.load();
         if (!config.isValid())
             return;
+
+        if(config.getAuditCommands()){
+            COMMAND_AUDIT_ENABLED = true;
+            log.info("実行されたコマンドの記録を有効にしました。");
+        }
 
         // set up the listener
         EventWaiter waiter = new EventWaiter();
@@ -128,6 +133,7 @@ public class JMusicBot {
             // General
             add(new dev.cosgy.JMusicBot.commands.general.ServerInfo());
             add(new dev.cosgy.JMusicBot.commands.general.UserInfo());
+            add(new CashCmd(bot));
             // Music
             add(new LyricsCmd(bot));
             add(new NowplayingCmd(bot));

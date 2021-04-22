@@ -29,6 +29,7 @@ public class Prompt {
     private final String noguiMessage;
 
     private boolean nogui;
+    private boolean noprompt;
     private Scanner scanner;
 
     public Prompt(String title) {
@@ -36,13 +37,14 @@ public class Prompt {
     }
 
     public Prompt(String title, String noguiMessage) {
-        this(title, noguiMessage, "true".equalsIgnoreCase(System.getProperty("nogui")));
+        this(title, noguiMessage, "true".equalsIgnoreCase(System.getProperty("nogui")), "true".equalsIgnoreCase(System.getProperty("noprompt")));
     }
 
-    public Prompt(String title, String noguiMessage, boolean nogui) {
+    public Prompt(String title, String noguiMessage, boolean nogui, boolean noprompt) {
         this.title = title;
         this.noguiMessage = noguiMessage == null ? "noguiモードに切り替えます。 -nogui=trueフラグを含めることで、手動でnoguiモードで起動できます。" : noguiMessage;
         this.nogui = nogui;
+        this.noprompt = noprompt;
     }
 
     public boolean isNoGUI() {
@@ -90,6 +92,8 @@ public class Prompt {
     }
 
     public String prompt(String content) {
+        if(noprompt)
+            return null;
         if (nogui) {
             if (scanner == null)
                 scanner = new Scanner(System.in);

@@ -52,7 +52,7 @@ public class BotConfig {
     private String nicoEmail;
     private String nicoPass;
     // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm
-    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave;
+    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
@@ -123,6 +123,7 @@ public class BotConfig {
             // [JMusicBot-JP] End
             helpToDm = config.getBoolean("helptodm");
             autoStopQueueSave = config.getBoolean("autostopqueuesave");
+            auditCommands = config.getBoolean("auditcommands");
 
             // we may need to write a new config file
             boolean write = false;
@@ -340,4 +341,8 @@ public class BotConfig {
     }
 
     public boolean getAutoStopQueueSave() {return autoStopQueueSave; }
+
+    public boolean getAuditCommands(){
+        return auditCommands;
+    }
 }

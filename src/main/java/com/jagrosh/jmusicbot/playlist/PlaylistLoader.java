@@ -175,7 +175,7 @@ public class PlaylistLoader {
                             loaded.removeIf(config::isTooLong);
                             loaded.forEach(at -> at.setUserData(0L));
                             tracks.addAll(loaded);
-                            loaded.forEach(consumer::accept);
+                            loaded.forEach(consumer);
                         }
                         done();
                     }

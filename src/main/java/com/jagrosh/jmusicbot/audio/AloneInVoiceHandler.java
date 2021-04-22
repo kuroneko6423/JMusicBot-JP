@@ -17,8 +17,12 @@ package com.jagrosh.jmusicbot.audio;
 
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.JMusicBot.playlist.CacheLoader;
+import dev.cosgy.JMusicBot.util.LastSendTextChannel;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -33,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class AloneInVoiceHandler
 {
+    Logger log = LoggerFactory.getLogger("AloneInVoiceHandler");
     private final Bot bot;
     private final HashMap<Long, Instant> aloneSince = new HashMap<>();
     private long aloneTimeUntilStop = 0;
@@ -65,8 +70,15 @@ public class AloneInVoiceHandler
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
             if(bot.getConfig().getAutoStopQueueSave()){
+                // キャッシュの保存処理
                 CacheLoader cache = bot.getCacheLoader();
-                cache.Save(guild.toString(), handler.getQueue());
+                cache.Save(guild.getId(), handler.getQueue());
+                log.info("再生待ちを保存してボイスチャンネルから退出します。");
+                LastSendTextChannel.SendMessage(guild, ":notes: 再生待ちを保存してボイスチャンネルから退出しました。");
+            }else{
+                // キャッシュを保存せずに退出する時の処理
+                log.info("再生待ちを削除してボイスチャンネルから退出します。");
+                LastSendTextChannel.SendMessage(guild, ":notes: 再生待ちを削除してボイスチャンネルから退出しました。");
             }
 
             handler.stopAndClear();

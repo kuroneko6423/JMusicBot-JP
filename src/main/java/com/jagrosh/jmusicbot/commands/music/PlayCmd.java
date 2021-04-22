@@ -31,12 +31,17 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import dev.cosgy.JMusicBot.util.StackTraceUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -74,6 +79,38 @@ public class PlayCmd extends MusicCommand {
                     event.replyError("再生を再開できるのはDJのみです！");
                 return;
             }
+
+            // キャッシュの読み込み機構
+            if(bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
+                List<dev.cosgy.JMusicBot.cache.Cache> data = bot.getCacheLoader().GetCache(event.getGuild().getId());
+
+                AtomicInteger count = new AtomicInteger();
+                CacheLoader.Cache cache = bot.getCacheLoader().ConvertCache(data);
+                event.getChannel().sendMessage(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
+                            cache.loadTracks(bot.getPlayerManager(), (at) -> {
+                                handler.addTrack(new QueuedTrack(at, User.fromId(data.get(count.get()).getUserId())));
+                                count.getAndIncrement();
+                            }, () -> {
+                                StringBuilder builder = new StringBuilder(cache.getTracks().isEmpty()
+                                        ? event.getClient().getWarning() + " 楽曲がロードされていません。"
+                                        : event.getClient().getSuccess() + " キャッシュファイルから、" + "**" + cache.getTracks().size() + "**曲読み込みました。");
+                                if (!cache.getErrors().isEmpty())
+                                    builder.append("\n以下の楽曲をロードできませんでした:");
+                                cache.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex() + 1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
+                                String str = builder.toString();
+                                if (str.length() > 2000)
+                                    str = str.substring(0, 1994) + " (以下略)";
+                                m.editMessage(FormatUtil.filter(str)).queue();
+                            });
+                        });
+                try {
+                    bot.getCacheLoader().deleteCache(event.getGuild().getId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+
             StringBuilder builder = new StringBuilder(event.getClient().getWarning() + " Play コマンド:\n");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <曲名>` - YouTubeから最初の結果を再生");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <URL>` - 指定された曲、再生リスト、またはストリームを再生します");
