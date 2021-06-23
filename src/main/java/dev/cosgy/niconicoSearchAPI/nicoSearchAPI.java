@@ -29,7 +29,7 @@ public class nicoSearchAPI {
         if (cacheEnabled && videoResultCache == null) videoResultCache = new LinkedHashMap<>();
 
         HTTPUtil hu = new HTTPUtil();
-        hu.setTargetAddress("http://api.search.nicovideo.jp/api/v2/video/contents/search");
+        hu.setTargetAddress("https://api.search.nicovideo.jp/api/v2/video/contents/search");
         hu.setMethod("GET");
         Map<String, String> queryMap = new HashMap<>();
         try {
