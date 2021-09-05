@@ -361,10 +361,11 @@ public class PlayCmd extends MusicCommand {
                 // <タイトル><(長さ)> を再生待ちの<再生待ち番号>番目に追加しました。
                 String addMsg = FormatUtil.filter(client.getSuccess() + " **" + track.getInfo().title
                         + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。" : "を再生待ちの" + pos + "番目に追加しました。 "));
-            /*if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
-                m.editMessage(addMsg).queue();
-            else {*/
-                new ButtonMenu.Builder()
+                if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
+                    m.editOriginal(addMsg).queue();
+                else
+                    m.deleteOriginal();
+                    new ButtonMenu.Builder()
                         .setText(addMsg + "\n" + client.getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
                         .setChoices(LOAD, CANCEL)
                         .setEventWaiter(bot.getWaiter())
