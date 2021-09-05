@@ -66,7 +66,7 @@ public class SetgameCmd extends OwnerCommand {
         private NoneCmd() {
             this.name = "none";
             this.aliases = new String[]{"none"};
-            this.help = "ステータスをリセットします。。";
+            this.help = "ステータスをリセットします。";
             this.guildOnly = false;
         }
 
@@ -87,7 +87,7 @@ public class SetgameCmd extends OwnerCommand {
         private PlayingCmd() {
             this.name = "playing";
             this.aliases = new String[]{"twitch", "streaming"};
-            this.help = "ボットがプレイしているゲームをストリームに設定します。";
+            this.help = "ボットがプレイしているゲームを設定します。";
             this.arguments = "<title>";
             this.guildOnly = false;
             List<OptionData> options = new ArrayList<>();
@@ -234,7 +234,7 @@ public class SetgameCmd extends OwnerCommand {
     private class SetCompetingCmd extends OwnerCommand {
         private SetCompetingCmd() {
             this.name = "competing";
-            this.help = "competingステータスを設定します。";
+            this.help = "ボットが参戦しているゲームを設定します";
             this.arguments = "<title>";
             this.guildOnly = false;
             List<OptionData> options = new ArrayList<>();
@@ -256,13 +256,13 @@ public class SetgameCmd extends OwnerCommand {
         @Override
         protected void execute(CommandEvent event) {
             if (event.getArgs().isEmpty()) {
-                event.replyError("競い合っているタイトルを入力してください。");
+                event.replyError("参戦しているタイトルを入力してください。");
                 return;
             }
             String title = event.getArgs();
             try {
                 event.getJDA().getPresence().setActivity(Activity.watching(title));
-                event.replySuccess("**" + event.getSelfUser().getName() + "** は、現在`" + title + "`を競い合っています。");
+                event.replySuccess("**" + event.getSelfUser().getName() + "** は、現在`" + title + "`に参戦してています。");
             } catch (Exception e) {
                 event.reply(event.getClient().getError() + " ゲームを設定できませんでした。");
             }
