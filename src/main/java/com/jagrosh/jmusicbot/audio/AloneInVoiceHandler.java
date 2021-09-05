@@ -18,6 +18,7 @@ package com.jagrosh.jmusicbot.audio;
 import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import dev.cosgy.JMusicBot.util.LastSendTextChannel;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import org.slf4j.Logger;
@@ -61,6 +62,7 @@ public class AloneInVoiceHandler {
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
+
             if (bot.getConfig().getAutoStopQueueSave()) {
                 // キャッシュの保存処理
                 CacheLoader cache = bot.getCacheLoader();
@@ -82,10 +84,13 @@ public class AloneInVoiceHandler {
     }
 
     public void onVoiceUpdate(GuildVoiceUpdateEvent event) {
+
         if (aloneTimeUntilStop <= 0) return;
 
         Guild guild = event.getEntity().getGuild();
         if (!bot.getPlayerManager().hasHandler(guild)) return;
+        // ステージチャンネルにいる場合は退出しない。
+        if (guild.getAudioManager().getConnectedChannel().getType() == ChannelType.STAGE) return;
 
         boolean alone = isAlone(guild);
         boolean inList = aloneSince.containsKey(guild.getIdLong());
