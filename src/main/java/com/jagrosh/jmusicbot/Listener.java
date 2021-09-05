@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class Listener extends ListenerAdapter {

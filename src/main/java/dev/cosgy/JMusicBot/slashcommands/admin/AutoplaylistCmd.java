@@ -16,19 +16,15 @@
 package dev.cosgy.JMusicBot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.JMusicBot.slashcommands.AdminCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author kosugi_kun

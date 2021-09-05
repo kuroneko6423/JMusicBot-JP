@@ -300,7 +300,7 @@ public class PlayCmd extends MusicCommand {
 
                     AtomicInteger count = new AtomicInteger();
                     CacheLoader.Cache cache = bot.getCacheLoader().ConvertCache(data);
-                    event.getChannel().sendMessage(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
+                    event.reply(":calling: キャッシュファイルを読み込んでいます... (" + cache.getItems().size() + "曲)").queue(m -> {
                         cache.loadTracks(bot.getPlayerManager(), (at) -> {
                             handler.addTrack(new QueuedTrack(at, User.fromId(data.get(count.get()).getUserId())));
                             count.getAndIncrement();
@@ -314,7 +314,7 @@ public class PlayCmd extends MusicCommand {
                             String str = builder.toString();
                             if (str.length() > 2000)
                                 str = str.substring(0, 1994) + " (以下略)";
-                            m.editMessage(FormatUtil.filter(str)).queue();
+                            m.editOriginal(FormatUtil.filter(str)).queue();
                         });
                     });
                     try {
@@ -361,28 +361,30 @@ public class PlayCmd extends MusicCommand {
                 // <タイトル><(長さ)> を再生待ちの<再生待ち番号>番目に追加しました。
                 String addMsg = FormatUtil.filter(client.getSuccess() + " **" + track.getInfo().title
                         + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "を追加しました。" : "を再生待ちの" + pos + "番目に追加しました。 "));
-                if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
+                if (playlist == null || !event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION)) {
                     m.editOriginal(addMsg).queue();
-                else
-                    m.deleteOriginal();
+                } else {
+                    m.deleteOriginal().queue();
                     new ButtonMenu.Builder()
-                        .setText(addMsg + "\n" + client.getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
-                        .setChoices(LOAD, CANCEL)
-                        .setEventWaiter(bot.getWaiter())
-                        .setTimeout(30, TimeUnit.SECONDS)
-                        .setAction(re ->
-                        {
-                            if (re.getName().equals(LOAD))
-                                m.editOriginal(addMsg + "\n" + client.getSuccess() + "**" + loadPlaylist(playlist, track) + "**曲を再生待ちに追加しました!").queue();
-                            else
-                                m.editOriginal(addMsg).queue();
-                        }).setFinalAction(m ->
-                        {
-                            try {
-                                m.clearReactions().queue();
-                            } catch (PermissionException ignore) {
-                            }
-                        }).build().display(event.getChannel());
+                            .setText(addMsg + "\n" + client.getWarning() + " この曲の再生リストには他に**" + playlist.getTracks().size() + "**曲が付属しています。トラックを読み込むには " + LOAD + " を選択して下さい。")
+                            .setChoices(LOAD, CANCEL)
+                            .setEventWaiter(bot.getWaiter())
+                            .setTimeout(30, TimeUnit.SECONDS)
+                            .setAction(re ->
+                            {
+                                if (re.getName().equals(LOAD))
+                                    m.editOriginal(addMsg + "\n" + client.getSuccess() + "**" + loadPlaylist(playlist, track) + "**曲を再生待ちに追加しました!").queue();
+                                else
+                                    m.editOriginal(addMsg).queue();
+                            }).setFinalAction(m ->
+                            {
+                                try {
+                                    m.clearReactions().queue();
+                                } catch (PermissionException ignore) {
+                                }
+                            }).build().display(event.getChannel());
+
+                }
             }
 
             private int loadPlaylist(AudioPlaylist playlist, AudioTrack exclude) {

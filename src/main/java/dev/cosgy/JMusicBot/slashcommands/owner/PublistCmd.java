@@ -159,7 +159,7 @@ public class PublistCmd extends OwnerCommand {
         }
 
         @Override
-        protected void execute(SlashCommandEvent event){
+        protected void execute(SlashCommandEvent event) {
             String pname = event.getOption("name").getAsString();
             Playlist playlist = bot.getPublistLoader().getPlaylist(pname);
             if (playlist == null)

@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -122,6 +123,7 @@ public class QueueCmd extends MusicCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
+        InteractionHook m = event.reply("再生待ちを取得しています。").complete();
         int pagenum = 1;
         AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         List<QueuedTrack> list = ah.getQueue().getList();
@@ -131,7 +133,7 @@ public class QueueCmd extends MusicCommand {
             Message built = new MessageBuilder()
                     .setContent(client.getWarning() + " 再生待ちの楽曲はありません。")
                     .append((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
-            event.reply(built).queue();
+            m.editOriginal(built).queue();
             return;
         }
         String[] songs = new String[list.size()];
@@ -141,14 +143,12 @@ public class QueueCmd extends MusicCommand {
             songs[i] = list.get(i).toString();
         }
         Settings settings = client.getSettingsFor(event.getGuild());
-
-        event.reply("再生待ちの楽曲一覧").queue();
-
         long finTotal = total;
         builder.setText((i1, i2) -> getQueueTitle(ah, client.getSuccess(), songs.length, finTotal, settings.getRepeatMode()))
                 .setItems(songs)
                 .setUsers(event.getUser())
                 .setColor(event.getGuild().getSelfMember().getColor());
         builder.build().paginate(event.getChannel(), pagenum);
+        m.deleteOriginal().queue();
     }
 }

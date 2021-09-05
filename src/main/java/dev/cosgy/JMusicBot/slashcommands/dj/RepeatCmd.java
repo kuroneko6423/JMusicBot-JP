@@ -44,63 +44,7 @@ public class RepeatCmd extends DJCommand {
     }
 
     @Override
-    public void doCommand(SlashCommandEvent event) {}
-
-    private class SingleCmd extends DJCommand{
-        public SingleCmd(Bot bot){
-            super(bot);
-            this.name = "single";
-            this.help = "１曲リピートモードに変更します。";
-            this.guildOnly = true;
-        }
-
-        @Override
-        public void doCommand(SlashCommandEvent event) {
-            Settings settings = client.getSettingsFor(event.getGuild());
-            settings.setRepeatMode(RepeatMode.SINGLE);
-            event.reply("リピートを `有効(1曲リピート)` にしました。").queue();
-        }
-
-        @Override
-        public void doCommand(CommandEvent event) {}
-    }
-
-    private class AllCmd extends DJCommand{
-        public AllCmd(Bot bot){
-            super(bot);
-            this.name = "all";
-            this.help = "全曲リピートモードに変更します。";
-            this.guildOnly = true;
-        }
-
-        @Override
-        public void doCommand(SlashCommandEvent event) {
-            Settings settings = client.getSettingsFor(event.getGuild());
-            settings.setRepeatMode(RepeatMode.ALL);
-            event.reply("リピートを `有効(全曲リピート)` にしました。").queue();
-        }
-
-        @Override
-        public void doCommand(CommandEvent event) {}
-    }
-
-    private class OffCmd extends DJCommand{
-        public OffCmd(Bot bot){
-            super(bot);
-            this.name = "off";
-            this.help = "全曲リピートモードに変更します。";
-            this.guildOnly = true;
-        }
-
-        @Override
-        public void doCommand(SlashCommandEvent event) {
-            Settings settings = client.getSettingsFor(event.getGuild());
-            settings.setRepeatMode(RepeatMode.OFF);
-            event.reply("リピートを `無効` にしました。").queue();
-        }
-
-        @Override
-        public void doCommand(CommandEvent event) {}
+    public void doCommand(SlashCommandEvent event) {
     }
 
     // override musiccommand's execute because we don't actually care where this is used
@@ -136,4 +80,64 @@ public class RepeatCmd extends DJCommand {
 
     @Override
     public void doCommand(CommandEvent event) { /* Intentionally Empty */ }
+
+    private class SingleCmd extends DJCommand {
+        public SingleCmd(Bot bot) {
+            super(bot);
+            this.name = "single";
+            this.help = "１曲リピートモードに変更します。";
+            this.guildOnly = true;
+        }
+
+        @Override
+        public void doCommand(SlashCommandEvent event) {
+            Settings settings = client.getSettingsFor(event.getGuild());
+            settings.setRepeatMode(RepeatMode.SINGLE);
+            event.reply("リピートを `有効(1曲リピート)` にしました。").queue();
+        }
+
+        @Override
+        public void doCommand(CommandEvent event) {
+        }
+    }
+
+    private class AllCmd extends DJCommand {
+        public AllCmd(Bot bot) {
+            super(bot);
+            this.name = "all";
+            this.help = "全曲リピートモードに変更します。";
+            this.guildOnly = true;
+        }
+
+        @Override
+        public void doCommand(SlashCommandEvent event) {
+            Settings settings = client.getSettingsFor(event.getGuild());
+            settings.setRepeatMode(RepeatMode.ALL);
+            event.reply("リピートを `有効(全曲リピート)` にしました。").queue();
+        }
+
+        @Override
+        public void doCommand(CommandEvent event) {
+        }
+    }
+
+    private class OffCmd extends DJCommand {
+        public OffCmd(Bot bot) {
+            super(bot);
+            this.name = "off";
+            this.help = "全曲リピートモードに変更します。";
+            this.guildOnly = true;
+        }
+
+        @Override
+        public void doCommand(SlashCommandEvent event) {
+            Settings settings = client.getSettingsFor(event.getGuild());
+            settings.setRepeatMode(RepeatMode.OFF);
+            event.reply("リピートを `無効` にしました。").queue();
+        }
+
+        @Override
+        public void doCommand(CommandEvent event) {
+        }
+    }
 }

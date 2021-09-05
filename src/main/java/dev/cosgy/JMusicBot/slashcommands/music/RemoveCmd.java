@@ -99,16 +99,16 @@ public class RemoveCmd extends MusicCommand {
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty()) {
-            event.reply(client.getError()+"再生待ちには何もありません。").queue();
+            event.reply(client.getError() + "再生待ちには何もありません。").queue();
             return;
         }
 
         if (event.getOption("input").getAsString().toLowerCase().matches("(all|すべて)")) {
             int count = handler.getQueue().removeAll(event.getUser().getIdLong());
             if (count == 0)
-                event.reply(client.getWarning()+"再生待ちに曲がありません。");
+                event.reply(client.getWarning() + "再生待ちに曲がありません。");
             else
-                event.reply(client.getSuccess()+count + "曲を削除しました。");
+                event.reply(client.getSuccess() + count + "曲を削除しました。");
             return;
         }
         int pos;
@@ -128,7 +128,7 @@ public class RemoveCmd extends MusicCommand {
         QueuedTrack qt = handler.getQueue().get(pos - 1);
         if (qt.getIdentifier() == event.getUser().getIdLong()) {
             handler.getQueue().remove(pos - 1);
-            event.reply(client.getSuccess()+"**" + qt.getTrack().getInfo().title + "**をキューから削除しました。").queue();
+            event.reply(client.getSuccess() + "**" + qt.getTrack().getInfo().title + "**をキューから削除しました。").queue();
         } else if (isDJ) {
             handler.getQueue().remove(pos - 1);
             User u;
@@ -137,10 +137,10 @@ public class RemoveCmd extends MusicCommand {
             } catch (Exception e) {
                 u = null;
             }
-            event.reply(client.getSuccess() +"**" + qt.getTrack().getInfo().title
+            event.reply(client.getSuccess() + "**" + qt.getTrack().getInfo().title
                     + "**を再生待ちから削除しました。\n(この曲は" + (u == null ? "誰かがリクエストしました。" : "**" + u.getName() + "**がリクエストしました。") + ")").queue();
         } else {
-            event.reply(client.getError()+"**" + qt.getTrack().getInfo().title + "** を削除できませんでした。理由: DJ権限を持っていますか？自分のリクエスト以外は削除できません。").queue();
+            event.reply(client.getError() + "**" + qt.getTrack().getInfo().title + "** を削除できませんでした。理由: DJ権限を持っていますか？自分のリクエスト以外は削除できません。").queue();
         }
     }
 }

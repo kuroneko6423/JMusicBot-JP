@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
  * @author Michaili K.
  */
 public class ForceRemoveCmd extends DJCommand {
@@ -116,7 +115,7 @@ public class ForceRemoveCmd extends DJCommand {
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty()) {
-            event.reply(client.getError()+"再生待ちには何もありません！").queue();
+            event.reply(client.getError() + "再生待ちには何もありません！").queue();
             return;
         }
 

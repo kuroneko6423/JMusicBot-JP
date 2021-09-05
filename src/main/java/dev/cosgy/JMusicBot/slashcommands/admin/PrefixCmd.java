@@ -17,7 +17,6 @@
 package dev.cosgy.JMusicBot.slashcommands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.JMusicBot.slashcommands.AdminCommand;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class PrefixCmd extends AdminCommand {
@@ -52,10 +50,10 @@ public class PrefixCmd extends AdminCommand {
         String prefix = event.getOption("prefix").getAsString();
         if (prefix.toLowerCase().matches("(none|なし)")) {
             s.setPrefix(null);
-            event.reply(client.getSuccess()+"プレフィックスがクリアされました。").queue();
+            event.reply(client.getSuccess() + "プレフィックスがクリアされました。").queue();
         } else {
             s.setPrefix(prefix);
-            event.reply(client.getSuccess()+"*" + event.getGuild().getName() + "* でのプレフィックスを、 `" + prefix + "`に設定しました。").queue();
+            event.reply(client.getSuccess() + "*" + event.getGuild().getName() + "* でのプレフィックスを、 `" + prefix + "`に設定しました。").queue();
         }
     }
 

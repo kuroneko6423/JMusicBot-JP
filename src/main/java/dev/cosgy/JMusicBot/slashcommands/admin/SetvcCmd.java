@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class SetvcCmd extends AdminCommand {
@@ -51,8 +50,33 @@ public class SetvcCmd extends AdminCommand {
     protected void execute(SlashCommandEvent slashCommandEvent) {
     }
 
-    private static class Set extends AdminCommand{
-        public Set(){
+    @Override
+    protected void execute(CommandEvent event) {
+        Logger log = LoggerFactory.getLogger("SetVcCmd");
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + "音声チャンネルまたはNONEを含めてください。");
+            return;
+        }
+        Settings s = event.getClient().getSettingsFor(event.getGuild());
+        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
+            s.setVoiceChannel(null);
+            event.reply(event.getClient().getSuccess() + "音楽はどの音声チャンネルでも再生できます。");
+        } else {
+            List<VoiceChannel> list = FinderUtil.findVoiceChannels(event.getArgs(), event.getGuild());
+            if (list.isEmpty())
+                event.reply(event.getClient().getWarning() + "一致する音声チャンネルが見つかりませんでした \"" + event.getArgs() + "\"");
+            else if (list.size() > 1)
+                event.reply(event.getClient().getWarning() + FormatUtil.listOfVChannels(list, event.getArgs()));
+            else {
+                s.setVoiceChannel(list.get(0));
+                log.info("音楽チャンネルを設定しました。");
+                event.reply(event.getClient().getSuccess() + "音楽は**" + list.get(0).getName() + "**でのみ再生できるようになりました。");
+            }
+        }
+    }
+
+    private static class Set extends AdminCommand {
+        public Set() {
             this.name = "set";
             this.help = "再生に使用する音声チャンネルを設定";
 
@@ -77,8 +101,8 @@ public class SetvcCmd extends AdminCommand {
         }
     }
 
-    private static class None extends AdminCommand{
-        public None(){
+    private static class None extends AdminCommand {
+        public None() {
             this.name = "none";
             this.help = "再生に使用する音声チャンネルの設定をリセットします。";
         }
@@ -88,33 +112,6 @@ public class SetvcCmd extends AdminCommand {
             Settings s = client.getSettingsFor(event.getGuild());
             s.setVoiceChannel(null);
             event.reply(client.getSuccess() + "音楽はどの音声チャンネルでも再生できます。").queue();
-        }
-    }
-
-
-
-    @Override
-    protected void execute(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("SetVcCmd");
-        if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + "音声チャンネルまたはNONEを含めてください。");
-            return;
-        }
-        Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
-            s.setVoiceChannel(null);
-            event.reply(event.getClient().getSuccess() + "音楽はどの音声チャンネルでも再生できます。");
-        } else {
-            List<VoiceChannel> list = FinderUtil.findVoiceChannels(event.getArgs(), event.getGuild());
-            if (list.isEmpty())
-                event.reply(event.getClient().getWarning() + "一致する音声チャンネルが見つかりませんでした \"" + event.getArgs() + "\"");
-            else if (list.size() > 1)
-                event.reply(event.getClient().getWarning() + FormatUtil.listOfVChannels(list, event.getArgs()));
-            else {
-                s.setVoiceChannel(list.get(0));
-                log.info("音楽チャンネルを設定しました。");
-                event.reply(event.getClient().getSuccess() + "音楽は**" + list.get(0).getName() + "**でのみ再生できるようになりました。");
-            }
         }
     }
 }

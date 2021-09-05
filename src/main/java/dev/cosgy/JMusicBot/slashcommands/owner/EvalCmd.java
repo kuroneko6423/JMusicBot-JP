@@ -26,7 +26,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
 
 /**
  * @author John Grosh (jagrosh)

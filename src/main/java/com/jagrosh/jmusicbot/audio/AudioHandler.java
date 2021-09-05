@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {

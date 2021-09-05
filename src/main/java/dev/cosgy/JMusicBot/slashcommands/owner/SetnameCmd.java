@@ -44,9 +44,9 @@ public class SetnameCmd extends OwnerCommand {
     @Override
     protected void execute(SlashCommandEvent event) {
         try {
-            String oldname =event.getJDA().getSelfUser().getName();
+            String oldname = event.getJDA().getSelfUser().getName();
             event.getJDA().getSelfUser().getManager().setName(event.getOption("name").getAsString()).complete(false);
-            event.reply(client.getSuccess() + "ボットの名前を`" + oldname + "` から `" +event.getOption("name").getAsString() + "`に変更しました。").queue();
+            event.reply(client.getSuccess() + "ボットの名前を`" + oldname + "` から `" + event.getOption("name").getAsString() + "`に変更しました。").queue();
         } catch (RateLimitedException e) {
             event.reply(client.getError() + "名前は1時間に2回しか変更できません。").queue();
         } catch (Exception e) {

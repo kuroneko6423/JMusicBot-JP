@@ -60,7 +60,7 @@ public class LyricsCmd extends MusicCommand {
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
             if (lyrics == null) {
-                event.reply(client.getError()+"`" + title + "` の歌詞は見つかりませんでした。" + (event.getOption("name").getAsString().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : "")).queue();
+                event.reply(client.getError() + "`" + title + "` の歌詞は見つかりませんでした。" + (event.getOption("name").getAsString().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : "")).queue();
                 return;
             }
 

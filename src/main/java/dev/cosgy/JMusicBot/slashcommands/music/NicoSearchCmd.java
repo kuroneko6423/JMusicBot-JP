@@ -94,7 +94,7 @@ public class NicoSearchCmd extends MusicCommand {
         String input = event.getOption("input").getAsString();
 
         event.reply(bot.getConfig().getSearching() + " ニコニコ動画で " + input + " を検索しています\n" +
-                "**(注: 一部再生できない動画があります。)**").queue(m ->{
+                "**(注: 一部再生できない動画があります。)**").queue(m -> {
             LinkedList<nicoVideoSearchResult> results = niconicoAPI.searchVideo(input, 5, true);
             if (results.size() == 0) {
                 m.editOriginal(input + " の検索結果はありません。").queue();
@@ -118,66 +118,6 @@ public class NicoSearchCmd extends MusicCommand {
             results.forEach(result -> builder.addChoice("`[" + result.getInfo().getLengthFormatted() + "]` [**" + result.getTitle() + "**](" + result.getWatchUrl() + ")"));
             builder.build().display(event.getChannel());
         });
-    }
-
-    private class SlashResultHandler implements AudioLoadResultHandler {
-        private final SlashCommandEvent event;
-        private final Bot bot;
-
-        private SlashResultHandler(InteractionHook m, SlashCommandEvent event, Bot bot) {
-            this.bot = bot;
-            this.event = event;
-        }
-
-        /**
-         * Called when the requested item is a track and it was successfully loaded.
-         *
-         * @param track The loaded track
-         */
-        @Override
-        public void trackLoaded(AudioTrack track) {
-            if (bot.getConfig().isTooLong(track)) {
-                event.reply(FormatUtil.filter(client.getWarning() + " 楽曲 (**" + track.getInfo().title + "**) は許容されている動画の長さを超えています: `"
-                        + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
-                return;
-            }
-
-            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
-
-            event.reply(FormatUtil.filter(String.format("%s %s **%s** (`%s`) を追加しました", client.getSuccess(), (pos == 0 ? "再生待ちに" : "再生待ち #" + pos + " に"), track.getInfo().title, FormatUtil.formatTime(track.getDuration())))).queue();
-        }
-
-        /**
-         * Called when the requested item is a playlist and it was successfully loaded.
-         *
-         * @param playlist The loaded playlist
-         */
-        @Override
-        public void playlistLoaded(AudioPlaylist playlist) {
-
-        }
-
-        /**
-         * Called when there were no items found by the specified identifier.
-         */
-        @Override
-        public void noMatches() {
-            event.reply(FormatUtil.filter(client.getWarning() + " `" + event.getOption("input").getAsString() + "`の検索結果はありません.")).queue();
-        }
-
-        /**
-         * Called when loading an item failed with an exception.
-         *
-         * @param exception The exception that was thrown
-         */
-        @Override
-        public void loadFailed(FriendlyException exception) {
-            if (exception.severity == FriendlyException.Severity.COMMON)
-                event.reply(client.getError() + " 読み込み中にエラーが発生しました: " + exception.getMessage()).queue();
-            else
-                event.reply(client.getError() + " 楽曲を読み込み中にエラーが発生しました").queue();
-        }
     }
 
     private static class ResultHandler implements AudioLoadResultHandler {
@@ -237,6 +177,66 @@ public class NicoSearchCmd extends MusicCommand {
                 event.reply(event.getClient().getError() + " 読み込み中にエラーが発生しました: " + exception.getMessage());
             else
                 event.reply(event.getClient().getError() + " 楽曲を読み込み中にエラーが発生しました");
+        }
+    }
+
+    private class SlashResultHandler implements AudioLoadResultHandler {
+        private final SlashCommandEvent event;
+        private final Bot bot;
+
+        private SlashResultHandler(InteractionHook m, SlashCommandEvent event, Bot bot) {
+            this.bot = bot;
+            this.event = event;
+        }
+
+        /**
+         * Called when the requested item is a track and it was successfully loaded.
+         *
+         * @param track The loaded track
+         */
+        @Override
+        public void trackLoaded(AudioTrack track) {
+            if (bot.getConfig().isTooLong(track)) {
+                event.reply(FormatUtil.filter(client.getWarning() + " 楽曲 (**" + track.getInfo().title + "**) は許容されている動画の長さを超えています: `"
+                        + FormatUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
+                return;
+            }
+
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrack(new QueuedTrack(track, event.getUser())) + 1;
+
+            event.reply(FormatUtil.filter(String.format("%s %s **%s** (`%s`) を追加しました", client.getSuccess(), (pos == 0 ? "再生待ちに" : "再生待ち #" + pos + " に"), track.getInfo().title, FormatUtil.formatTime(track.getDuration())))).queue();
+        }
+
+        /**
+         * Called when the requested item is a playlist and it was successfully loaded.
+         *
+         * @param playlist The loaded playlist
+         */
+        @Override
+        public void playlistLoaded(AudioPlaylist playlist) {
+
+        }
+
+        /**
+         * Called when there were no items found by the specified identifier.
+         */
+        @Override
+        public void noMatches() {
+            event.reply(FormatUtil.filter(client.getWarning() + " `" + event.getOption("input").getAsString() + "`の検索結果はありません.")).queue();
+        }
+
+        /**
+         * Called when loading an item failed with an exception.
+         *
+         * @param exception The exception that was thrown
+         */
+        @Override
+        public void loadFailed(FriendlyException exception) {
+            if (exception.severity == FriendlyException.Severity.COMMON)
+                event.reply(client.getError() + " 読み込み中にエラーが発生しました: " + exception.getMessage()).queue();
+            else
+                event.reply(client.getError() + " 楽曲を読み込み中にエラーが発生しました").queue();
         }
     }
 }

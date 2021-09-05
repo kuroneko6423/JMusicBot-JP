@@ -46,7 +46,8 @@ public class MylistCmd extends MusicCommand {
     }
 
     @Override
-    public void doCommand(SlashCommandEvent slashCommandEvent) {}
+    public void doCommand(SlashCommandEvent slashCommandEvent) {
+    }
 
     public static class MakelistCmd extends DJCommand {
         public MakelistCmd(Bot bot) {
@@ -99,7 +100,7 @@ public class MylistCmd extends MusicCommand {
             String userId = event.getUser().getId();
 
             if (pName.isEmpty()) {
-                event.reply(client.getError()+"プレイリスト名を指定してください。").queue();
+                event.reply(client.getError() + "プレイリスト名を指定してください。").queue();
                 return;
             }
 
@@ -109,7 +110,7 @@ public class MylistCmd extends MusicCommand {
                     event.reply(client.getSuccess() + "マイリスト `" + pName + "` を作成しました").queue();
                 } catch (IOException e) {
                     if (client.getOwnerId() == event.getMember().getId() || event.getMember().isOwner()) {
-                        event.reply(client.getError()+"曲の読み込み中にエラーが発生しました。\n" +
+                        event.reply(client.getError() + "曲の読み込み中にエラーが発生しました。\n" +
                                 "**エラーの内容: " + e.getLocalizedMessage() + "**").queue();
                         StackTraceUtil.sendStackTrace(event.getTextChannel(), e);
                         return;

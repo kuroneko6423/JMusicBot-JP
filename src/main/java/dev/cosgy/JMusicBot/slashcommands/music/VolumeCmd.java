@@ -75,7 +75,7 @@ public class VolumeCmd extends MusicCommand {
     @Override
     public void doCommand(SlashCommandEvent event) {
 
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         Settings settings = client.getSettingsFor(event.getGuild());
         int volume = handler.getPlayer().getVolume();
         int nvolume;

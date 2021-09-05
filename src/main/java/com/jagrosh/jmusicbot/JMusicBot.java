@@ -24,9 +24,9 @@ import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import dev.cosgy.JMusicBot.slashcommands.general.*;
 import dev.cosgy.JMusicBot.slashcommands.admin.*;
 import dev.cosgy.JMusicBot.slashcommands.dj.*;
+import dev.cosgy.JMusicBot.slashcommands.general.*;
 import dev.cosgy.JMusicBot.slashcommands.listeners.CommandAudit;
 import dev.cosgy.JMusicBot.slashcommands.music.*;
 import dev.cosgy.JMusicBot.slashcommands.owner.*;
@@ -277,7 +277,7 @@ public class JMusicBot {
         try {
             JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
                     .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                    .disableCache(CacheFlag.ACTIVITY,CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
+                    .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
                     .setActivity(nogame ? null : Activity.playing("ロード中..."))
                     .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)

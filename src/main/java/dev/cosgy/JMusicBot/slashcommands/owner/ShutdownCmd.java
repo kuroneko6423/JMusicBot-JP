@@ -36,13 +36,13 @@ public class ShutdownCmd extends OwnerCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        event.reply(client.getWarning() + "シャットダウンしています...").queue();
+        event.reply(client.getWarning() + "シャットダウンしています...\n不具合で正常に停止できないことがあります。その場合は強制的にボットを停止して下さい。").queue();
         bot.shutdown();
     }
 
     @Override
     protected void execute(CommandEvent event) {
-        event.replyWarning("シャットダウンしています...");
+        event.replyWarning("シャットダウンしています...\n不具合で正常に停止できないことがあります。その場合は強制的にボットを停止して下さい。");
         bot.shutdown();
     }
 }

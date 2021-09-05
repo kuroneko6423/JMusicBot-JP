@@ -23,7 +23,6 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.JMusicBot.slashcommands.AdminCommand;
 import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -35,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class SettcCmd extends AdminCommand {
@@ -52,9 +50,34 @@ public class SettcCmd extends AdminCommand {
     protected void execute(SlashCommandEvent event) {
     }
 
+    // ここは普通のコマンド
+    @Override
+    protected void execute(CommandEvent event) {
+        Logger log = LoggerFactory.getLogger("SettcCmd");
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + "チャンネルまたはNONEを含めてください。");
+            return;
+        }
+        Settings s = event.getClient().getSettingsFor(event.getGuild());
+        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
+            s.setTextChannel(null);
+            event.reply(event.getClient().getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。");
+        } else {
+            List<TextChannel> list = FinderUtil.findTextChannels(event.getArgs(), event.getGuild());
+            if (list.isEmpty())
+                event.reply(event.getClient().getWarning() + "一致するチャンネルが見つかりませんでした \"" + event.getArgs() + "\"");
+            else if (list.size() > 1)
+                event.reply(event.getClient().getWarning() + FormatUtil.listOfTChannels(list, event.getArgs()));
+            else {
+                s.setTextChannel(list.get(0));
+                log.info("音楽コマンド用のチャンネルを設定しました。");
+                event.reply(event.getClient().getSuccess() + "音楽コマンドを<#" + list.get(0).getId() + ">のみで使用できるように設定しました。");
+            }
+        }
+    }
 
-    private static class Set extends AdminCommand{
-        public Set(){
+    private static class Set extends AdminCommand {
+        public Set() {
             this.name = "set";
             this.help = "音楽コマンド用のチャンネルを設定";
 
@@ -82,8 +105,8 @@ public class SettcCmd extends AdminCommand {
         }
     }
 
-    private static class None extends AdminCommand{
-        public None(){
+    private static class None extends AdminCommand {
+        public None() {
             this.name = "none";
             this.help = "音楽コマンド用チャンネルの設定を無効にします。";
         }
@@ -93,33 +116,6 @@ public class SettcCmd extends AdminCommand {
             Settings s = client.getSettingsFor(event.getGuild());
             s.setTextChannel(null);
             event.reply(client.getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。").queue();
-        }
-    }
-
-
-    // ここは普通のコマンド
-    @Override
-    protected void execute(CommandEvent event) {
-        Logger log = LoggerFactory.getLogger("SettcCmd");
-        if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + "チャンネルまたはNONEを含めてください。");
-            return;
-        }
-        Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
-            s.setTextChannel(null);
-            event.reply(event.getClient().getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。");
-        } else {
-            List<TextChannel> list = FinderUtil.findTextChannels(event.getArgs(), event.getGuild());
-            if (list.isEmpty())
-                event.reply(event.getClient().getWarning() + "一致するチャンネルが見つかりませんでした \"" + event.getArgs() + "\"");
-            else if (list.size() > 1)
-                event.reply(event.getClient().getWarning() + FormatUtil.listOfTChannels(list, event.getArgs()));
-            else {
-                s.setTextChannel(list.get(0));
-                log.info("音楽コマンド用のチャンネルを設定しました。");
-                event.reply(event.getClient().getSuccess() + "音楽コマンドを<#" + list.get(0).getId() + ">のみで使用できるように設定しました。");
-            }
         }
     }
 

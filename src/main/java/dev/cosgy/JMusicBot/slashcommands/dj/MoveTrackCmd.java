@@ -47,7 +47,7 @@ public class MoveTrackCmd extends DJCommand {
 
         List<OptionData> options = new ArrayList<>();
         options.add(new OptionData(OptionType.INTEGER, "from", "from", true));
-        options.add(new OptionData(OptionType.INTEGER, "to","to", true));
+        options.add(new OptionData(OptionType.INTEGER, "to", "to", true));
         this.options = options;
 
     }

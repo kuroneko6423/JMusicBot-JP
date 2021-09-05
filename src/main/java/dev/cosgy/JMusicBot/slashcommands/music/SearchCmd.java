@@ -36,7 +36,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.concurrent.TimeUnit;
 
 /**

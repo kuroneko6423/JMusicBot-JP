@@ -57,7 +57,7 @@ public class ShuffleCmd extends MusicCommand {
         int s = handler.getQueue().shuffle(event.getUser().getIdLong());
         switch (s) {
             case 0:
-                event.reply(client.getError()+"再生待ちに曲がありません!").queue();
+                event.reply(client.getError() + "再生待ちに曲がありません!").queue();
                 break;
             case 1:
                 event.reply(client.getWarning() + "再生待ちには現在1曲しかありません!").queue();

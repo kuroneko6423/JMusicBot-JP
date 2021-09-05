@@ -46,10 +46,10 @@ public class SetstatusCmd extends OwnerCommand {
         try {
             OnlineStatus status = OnlineStatus.fromKey(event.getOption("status").getAsString());
             if (status == OnlineStatus.UNKNOWN) {
-                event.reply(client.getError()+"次のいずれかのステータスを含めてください。 :`ONLINE`, `IDLE`, `DND`, `INVISIBLE`").queue();
+                event.reply(client.getError() + "次のいずれかのステータスを含めてください。 :`ONLINE`, `IDLE`, `DND`, `INVISIBLE`").queue();
             } else {
                 event.getJDA().getPresence().setStatus(status);
-                event.reply(client.getSuccess()+"ステータスを`" + status.getKey().toUpperCase() + "`に設定しました。").queue();
+                event.reply(client.getSuccess() + "ステータスを`" + status.getKey().toUpperCase() + "`に設定しました。").queue();
             }
         } catch (Exception e) {
             event.reply(client.getError() + " ステータスを設定できませんでした。").queue();

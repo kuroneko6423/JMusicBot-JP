@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class SetdjCmd extends AdminCommand {
@@ -55,48 +54,13 @@ public class SetdjCmd extends AdminCommand {
             event.reply(client.getSuccess() + "DJコマンドを役割が、**" + event.getOption("role").getAsRole().getName() + "**のユーザーが使用できるように設定しました。").queue();
             return;
         }
-        if(event.getOption("none").getAsString().toLowerCase().matches("(none|なし)")){
+        if (event.getOption("none").getAsString().toLowerCase().matches("(none|なし)")) {
             s.setDJRole(null);
             event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
-        }else{
+        } else {
             event.reply("コマンドが間違っています。").queue();
         }
     }
-
-    private static class SetRole extends AdminCommand{
-        public SetRole(){
-            this.name = "set";
-            this.help = "DJ権限を付与する役割を設定する。";
-
-            List<OptionData> options = new ArrayList<>();
-            options.add(new OptionData(OptionType.ROLE, "role", "権限を付与する役割", true));
-            this.options = options;
-        }
-
-        @Override
-        protected void execute(SlashCommandEvent event) {
-            Settings s = client.getSettingsFor(event.getGuild());
-            Role role = event.getOption("role").getAsRole();
-
-            s.setDJRole(role);
-            event.reply(client.getSuccess() + "DJコマンドを役割が、**" + role.getName() + "**のユーザーが使用できるように設定しました。").queue();
-        }
-    }
-
-    private static class None extends AdminCommand{
-        public None(){
-            this.name = "none";
-            this.help = "DJの役割をリセット";
-        }
-
-        @Override
-        protected void execute(SlashCommandEvent event) {
-            Settings s = client.getSettingsFor(event.getGuild());
-            s.setDJRole(null);
-            event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
-        }
-    }
-
 
     @Override
     protected void execute(CommandEvent event) {
@@ -120,6 +84,40 @@ public class SetdjCmd extends AdminCommand {
                 log.info("DJコマンドを使える役割が追加されました。(" + list.get(0).getName() + ")");
                 event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + list.get(0).getName() + "**のユーザーが使用できるように設定しました。");
             }
+        }
+    }
+
+    private static class SetRole extends AdminCommand {
+        public SetRole() {
+            this.name = "set";
+            this.help = "DJ権限を付与する役割を設定する。";
+
+            List<OptionData> options = new ArrayList<>();
+            options.add(new OptionData(OptionType.ROLE, "role", "権限を付与する役割", true));
+            this.options = options;
+        }
+
+        @Override
+        protected void execute(SlashCommandEvent event) {
+            Settings s = client.getSettingsFor(event.getGuild());
+            Role role = event.getOption("role").getAsRole();
+
+            s.setDJRole(role);
+            event.reply(client.getSuccess() + "DJコマンドを役割が、**" + role.getName() + "**のユーザーが使用できるように設定しました。").queue();
+        }
+    }
+
+    private static class None extends AdminCommand {
+        public None() {
+            this.name = "none";
+            this.help = "DJの役割をリセット";
+        }
+
+        @Override
+        protected void execute(SlashCommandEvent event) {
+            Settings s = client.getSettingsFor(event.getGuild());
+            s.setDJRole(null);
+            event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
         }
     }
 
