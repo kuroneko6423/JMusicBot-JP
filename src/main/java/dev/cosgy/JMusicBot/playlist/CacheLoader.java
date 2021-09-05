@@ -25,10 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CacheLoader
-{
-    Logger log = LoggerFactory.getLogger("CacheLoader");
+public class CacheLoader {
     private final BotConfig config;
+    Logger log = LoggerFactory.getLogger("CacheLoader");
 
     public CacheLoader(BotConfig config) {
         this.config = config;
@@ -36,7 +35,7 @@ public class CacheLoader
 
     public void Save(String guildId, FairQueue<QueuedTrack> queue) {
         List<QueuedTrack> list = queue.getList();
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             return;
         }
 
@@ -72,7 +71,7 @@ public class CacheLoader
         Reader json;
 
         try {
-            log.debug("キャッシュの読み込み開始: "+ "cache" + File.separator + serverId + ".json");
+            log.debug("キャッシュの読み込み開始: " + "cache" + File.separator + serverId + ".json");
 
             json = Files.newBufferedReader(Paths.get("cache" + File.separator + serverId + ".json"));
 
@@ -88,7 +87,7 @@ public class CacheLoader
         }
     }
 
-    public Cache ConvertCache(List<dev.cosgy.JMusicBot.cache.Cache> data){
+    public Cache ConvertCache(List<dev.cosgy.JMusicBot.cache.Cache> data) {
         List<String> urls = new ArrayList<>();
         for (dev.cosgy.JMusicBot.cache.Cache datum : data) {
             urls.add(datum.getUrl());
@@ -107,14 +106,14 @@ public class CacheLoader
         return Files.exists(Paths.get("cache"));
     }
 
-    public boolean cacheExists(String serverId){
-        log.debug("確認するファイル名："+ serverId + ".json");
-        return Files.exists(Paths.get("cache"+ File.separator + serverId + ".json"));
+    public boolean cacheExists(String serverId) {
+        log.debug("確認するファイル名：" + serverId + ".json");
+        return Files.exists(Paths.get("cache" + File.separator + serverId + ".json"));
     }
 
-    public void createCache(String serverId)throws IOException {
+    public void createCache(String serverId) throws IOException {
 
-        if(cacheExists(serverId)){
+        if (cacheExists(serverId)) {
             log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
             deleteCache(serverId);
         }
@@ -150,6 +149,30 @@ public class CacheLoader
     public CacheLoader deleteCache(String serverId) throws IOException {
         Files.delete(Paths.get("cache" + File.separator + serverId + ".json"));
         return null;
+    }
+
+    public static class CacheLoadError {
+        private final int number;
+        private final String item;
+        private final String reason;
+
+        private CacheLoadError(int number, String item, String reason) {
+            this.number = number;
+            this.item = item;
+            this.reason = reason;
+        }
+
+        public int getIndex() {
+            return number;
+        }
+
+        public String getItem() {
+            return item;
+        }
+
+        public String getReason() {
+            return reason;
+        }
     }
 
     public class Cache {
@@ -239,30 +262,6 @@ public class CacheLoader
 
         public List<CacheLoadError> getErrors() {
             return errors;
-        }
-    }
-
-    public static class CacheLoadError {
-        private final int number;
-        private final String item;
-        private final String reason;
-
-        private CacheLoadError(int number, String item, String reason) {
-            this.number = number;
-            this.item = item;
-            this.reason = reason;
-        }
-
-        public int getIndex() {
-            return number;
-        }
-
-        public String getItem() {
-            return item;
-        }
-
-        public String getReason() {
-            return reason;
         }
     }
 }

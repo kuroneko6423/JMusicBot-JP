@@ -44,7 +44,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Cosgy Dev (info@cosgy.jp)
+ *
+ * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {
     private final FairQueue<QueuedTrack> queue = new FairQueue<>();

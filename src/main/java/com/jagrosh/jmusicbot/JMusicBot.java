@@ -1,33 +1,35 @@
 /*
- * Copyright 2018-2020 Cosgy Dev
+ * Copyright 2016 John Grosh (jagrosh).
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.jagrosh.jmusicbot;
 
+import com.github.lalyos.jfiglet.FigletFont;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.jagrosh.jdautilities.command.annotation.JDACommand;
+import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.jagrosh.jmusicbot.commands.admin.*;
-import com.jagrosh.jmusicbot.commands.dj.*;
-import com.jagrosh.jmusicbot.commands.music.*;
-import com.jagrosh.jmusicbot.commands.owner.*;
 import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
-import dev.cosgy.JMusicBot.commands.general.CashCmd;
+import dev.cosgy.JMusicBot.slashcommands.general.*;
+import dev.cosgy.JMusicBot.slashcommands.admin.*;
+import dev.cosgy.JMusicBot.slashcommands.dj.*;
+import dev.cosgy.JMusicBot.slashcommands.listeners.CommandAudit;
+import dev.cosgy.JMusicBot.slashcommands.music.*;
+import dev.cosgy.JMusicBot.slashcommands.owner.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -39,6 +41,7 @@ import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +68,13 @@ public class JMusicBot {
     public static void main(String[] args) {
         // startup log
         Logger log = getLogger("Startup");
+
+        try {
+            System.out.println(FigletFont.convertOneLine("JMusicBot v" + OtherUtil.getCurrentVersion()) + "\n" + "by Cosgy Dev");
+        } catch (IOException e) {
+            System.out.println("JMusicBot v" + OtherUtil.getCurrentVersion() + "\nby Cosgy Dev");
+        }
+
 
         // create prompt to handle startup
         Prompt prompt = new Prompt("JMusicBot", "noguiモードに切り替えます。  -Dnogui=trueフラグを含めると、手動でnoguiモードで起動できます。");
@@ -94,7 +104,7 @@ public class JMusicBot {
         if (!config.isValid())
             return;
 
-        if(config.getAuditCommands()){
+        if (config.getAuditCommands()) {
             COMMAND_AUDIT_ENABLED = true;
             log.info("実行されたコマンドの記録を有効にしました。");
         }
@@ -105,9 +115,9 @@ public class JMusicBot {
         Bot bot = new Bot(waiter, config, settings);
         Bot.INSTANCE = bot;
 
-        dev.cosgy.JMusicBot.commands.general.AboutCommand aboutCommand = new dev.cosgy.JMusicBot.commands.general.AboutCommand(Color.BLUE.brighter(),
+        AboutCommand aboutCommand = new AboutCommand(Color.BLUE.brighter(),
                 "[簡単にホストできる！](https://github.com/Cosgy-Dev/MusicBot-JP-java)JMusicBot JP(v" + version + ")",
-                new String[] {"高品質の音楽再生", "FairQueue™テクノロジー", "自分で簡単にホスト"},
+                new String[]{"高品質の音楽再生", "FairQueue™テクノロジー", "自分で簡単にホスト"},
                 RECOMMENDED_PERMS);
         aboutCommand.setIsAuthor(false);
         aboutCommand.setReplacementCharacter("\uD83C\uDFB6"); // 🎶
@@ -121,35 +131,34 @@ public class JMusicBot {
                 .setHelpWord(config.getHelp())
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
-                .setListener(new dev.cosgy.JMusicBot.commands.listeners.CommandAudit())
-                .setHelpToDm(config.getHelpToDm());
+                .setListener(new CommandAudit());
 
         List<Command> commandList = new ArrayList<Command>() {{
             //その他
             add(aboutCommand);
-            add(new dev.cosgy.JMusicBot.commands.general.InviteCommand());
-            add(new dev.cosgy.JMusicBot.commands.general.PingCommand());
-            add(new dev.cosgy.JMusicBot.commands.general.SettingsCmd(bot));
-            if (config.getCosgyDevHost()) add(new dev.cosgy.JMusicBot.commands.general.InfoCommand(bot));
+            add(new InviteCommand());
+            add(new PingCommand());
+            add(new SettingsCmd(bot));
+            if (config.getCosgyDevHost()) add(new InfoCommand(bot));
             // General
-            add(new dev.cosgy.JMusicBot.commands.general.ServerInfo());
-            add(new dev.cosgy.JMusicBot.commands.general.UserInfo());
+            add(new ServerInfo());
+            //add(new UserInfo());
             add(new CashCmd(bot));
             // Music
             add(new LyricsCmd(bot));
             add(new NowplayingCmd(bot));
             add(new PlayCmd(bot));
             add(new PlaylistsCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.music.MylistCmd(bot));
+            add(new MylistCmd(bot));
             //add(new QueueCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.music.QueueCmd(bot));
+            add(new QueueCmd(bot));
             add(new RemoveCmd(bot));
             add(new SearchCmd(bot));
             add(new SCSearchCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.music.NicoSearchCmd(bot));
+            add(new NicoSearchCmd(bot));
             add(new ShuffleCmd(bot));
             add(new SkipCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.music.VolumeCmd(bot));
+            add(new VolumeCmd(bot));
             // DJ
             add(new ForceRemoveCmd(bot));
             add(new ForceskipCmd(bot));
@@ -157,7 +166,7 @@ public class JMusicBot {
             add(new PauseCmd(bot));
             add(new PlaynextCmd(bot));
             //add(new RepeatCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.dj.RepeatCmd(bot));
+            add(new RepeatCmd(bot));
             add(new SkipToCmd(bot));
             add(new PlaylistCmd(bot));
             add(new StopCmd(bot));
@@ -174,11 +183,67 @@ public class JMusicBot {
             add(new SetgameCmd(bot));
             add(new SetnameCmd(bot));
             add(new SetstatusCmd(bot));
-            add(new dev.cosgy.JMusicBot.commands.owner.PublistCmd(bot));
+            add(new PublistCmd(bot));
             add(new ShutdownCmd(bot));
         }};
 
         cb.addCommands(commandList.toArray(new Command[0]));
+
+        // スラッシュコマンドの実装
+        List<SlashCommand> slashCommandList = new ArrayList<SlashCommand>() {{
+            add(aboutCommand);
+            add(new InviteCommand());
+            add(new PingCommand());
+            add(new SettingsCmd(bot));
+            if (config.getCosgyDevHost()) add(new InfoCommand(bot));
+            // General
+            add(new ServerInfo());
+            //add(new UserInfo());
+            add(new CashCmd(bot));
+            // Music
+            add(new LyricsCmd(bot));
+            add(new NowplayingCmd(bot));
+            add(new PlayCmd(bot));
+            add(new PlaylistsCmd(bot));
+            add(new MylistCmd(bot));
+            //add(new QueueCmd(bot));
+            add(new QueueCmd(bot));
+            add(new RemoveCmd(bot));
+            add(new SearchCmd(bot));
+            add(new SCSearchCmd(bot));
+            add(new NicoSearchCmd(bot));
+            add(new ShuffleCmd(bot));
+            add(new SkipCmd(bot));
+            add(new VolumeCmd(bot));
+            // DJ
+            add(new ForceRemoveCmd(bot));
+            add(new ForceskipCmd(bot));
+            add(new MoveTrackCmd(bot));
+            add(new PauseCmd(bot));
+            add(new PlaynextCmd(bot));
+            //add(new RepeatCmd(bot));
+            add(new RepeatCmd(bot));
+            add(new SkipToCmd(bot));
+            add(new PlaylistCmd(bot));
+            add(new StopCmd(bot));
+            //add(new VolumeCmd(bot));
+            // Admin
+            add(new PrefixCmd(bot));
+            add(new SetdjCmd(bot));
+            add(new SettcCmd(bot));
+            add(new SetvcCmd(bot));
+            add(new AutoplaylistCmd(bot));
+            // Owner
+            add(new DebugCmd(bot));
+            add(new SetavatarCmd(bot));
+            add(new SetgameCmd(bot));
+            add(new SetnameCmd(bot));
+            add(new SetstatusCmd(bot));
+            add(new PublistCmd(bot));
+            add(new ShutdownCmd(bot));
+        }};
+
+        cb.addSlashCommands(slashCommandList.toArray(new SlashCommand[0]));
 
         if (config.useEval())
             cb.addCommand(new EvalCmd(bot));
@@ -212,7 +277,7 @@ public class JMusicBot {
         try {
             JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
                     .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                    .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
+                    .disableCache(CacheFlag.ACTIVITY,CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE)
                     .setActivity(nogame ? null : Activity.playing("ロード中..."))
                     .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)

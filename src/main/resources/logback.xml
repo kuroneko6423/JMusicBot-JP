@@ -16,7 +16,7 @@
 
 <!-- author: Kaidan Gustave -->
 <configuration>
-    <property name="logDir" value="./logs/" />
+    <property name="logDir" value="./logs/"/>
     <property name="fileName" value="JMusicBotJP"/>
     <appender name="Simple" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

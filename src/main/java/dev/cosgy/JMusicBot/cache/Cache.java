@@ -1,4 +1,3 @@
-
 package dev.cosgy.JMusicBot.cache;
 
 import com.google.gson.annotations.Expose;
@@ -86,8 +85,12 @@ public class Cache {
         this.url = url;
     }
 
-    public String getUserId() { return userId;}
+    public String getUserId() {
+        return userId;
+    }
 
-    public void setUserId(String userId){ this.userId = userId; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 }

@@ -1,17 +1,17 @@
 /*
- * Copyright 2018-2020 Cosgy Dev
+ * Copyright 2016 John Grosh (jagrosh).
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.jagrosh.jmusicbot;
 
@@ -32,12 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Cosgy Dev (info@cosgy.tokyo)
+ *
+ * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class Listener extends ListenerAdapter {
     private final Bot bot;
@@ -86,8 +85,7 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event)
-    {
+    public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
         bot.getAloneInVoiceHandler().onVoiceUpdate(event);
     }
 
@@ -120,7 +118,7 @@ public class Listener extends ListenerAdapter {
 
             if (bot.getConfig().getNoUserStop()) {
                 //⏹
-                if(bot.getConfig().getAutoStopQueueSave()){
+                if (bot.getConfig().getAutoStopQueueSave()) {
                     bot.getCacheLoader().Save(event.getGuild().toString(), handler.getQueue());
                 }
                 Objects.requireNonNull(handler).stopAndClear();

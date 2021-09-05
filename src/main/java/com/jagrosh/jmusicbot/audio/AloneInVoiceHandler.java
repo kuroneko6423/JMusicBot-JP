@@ -19,7 +19,6 @@ import com.jagrosh.jmusicbot.Bot;
 import dev.cosgy.JMusicBot.playlist.CacheLoader;
 import dev.cosgy.JMusicBot.util.LastSendTextChannel;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,50 +31,43 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
  * @author Michaili K (mysteriouscursor+git@protonmail.com)
  */
-public class AloneInVoiceHandler
-{
-    Logger log = LoggerFactory.getLogger("AloneInVoiceHandler");
+public class AloneInVoiceHandler {
     private final Bot bot;
     private final HashMap<Long, Instant> aloneSince = new HashMap<>();
+    Logger log = LoggerFactory.getLogger("AloneInVoiceHandler");
     private long aloneTimeUntilStop = 0;
 
-    public AloneInVoiceHandler(Bot bot)
-    {
+    public AloneInVoiceHandler(Bot bot) {
         this.bot = bot;
     }
 
-    public void init()
-    {
+    public void init() {
         aloneTimeUntilStop = bot.getConfig().getAloneTimeUntilStop();
-        if(aloneTimeUntilStop > 0)
+        if (aloneTimeUntilStop > 0)
             bot.getThreadpool().scheduleWithFixedDelay(this::check, 0, 5, TimeUnit.SECONDS);
     }
 
-    private void check()
-    {
+    private void check() {
         Set<Long> toRemove = new HashSet<>();
-        for(Map.Entry<Long, Instant> entrySet: aloneSince.entrySet())
-        {
-            if(entrySet.getValue().getEpochSecond() > Instant.now().getEpochSecond() - aloneTimeUntilStop) continue;
+        for (Map.Entry<Long, Instant> entrySet : aloneSince.entrySet()) {
+            if (entrySet.getValue().getEpochSecond() > Instant.now().getEpochSecond() - aloneTimeUntilStop) continue;
 
             Guild guild = bot.getJDA().getGuildById(entrySet.getKey());
 
-            if(guild == null)
-            {
+            if (guild == null) {
                 toRemove.add(entrySet.getKey());
                 continue;
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-            if(bot.getConfig().getAutoStopQueueSave()){
+            if (bot.getConfig().getAutoStopQueueSave()) {
                 // キャッシュの保存処理
                 CacheLoader cache = bot.getCacheLoader();
                 cache.Save(guild.getId(), handler.getQueue());
                 log.info("再生待ちを保存してボイスチャンネルから退出します。");
                 LastSendTextChannel.SendMessage(guild, ":notes: 再生待ちを保存してボイスチャンネルから退出しました。");
-            }else{
+            } else {
                 // キャッシュを保存せずに退出する時の処理
                 log.info("再生待ちを削除してボイスチャンネルから退出します。");
                 LastSendTextChannel.SendMessage(guild, ":notes: 再生待ちを削除してボイスチャンネルから退出しました。");
@@ -89,25 +81,23 @@ public class AloneInVoiceHandler
         toRemove.forEach(aloneSince::remove);
     }
 
-    public void onVoiceUpdate(GuildVoiceUpdateEvent event)
-    {
-        if(aloneTimeUntilStop <= 0) return;
+    public void onVoiceUpdate(GuildVoiceUpdateEvent event) {
+        if (aloneTimeUntilStop <= 0) return;
 
         Guild guild = event.getEntity().getGuild();
-        if(!bot.getPlayerManager().hasHandler(guild)) return;
+        if (!bot.getPlayerManager().hasHandler(guild)) return;
 
         boolean alone = isAlone(guild);
         boolean inList = aloneSince.containsKey(guild.getIdLong());
 
-        if(!alone && inList)
+        if (!alone && inList)
             aloneSince.remove(guild.getIdLong());
-        else if(alone && !inList)
+        else if (alone && !inList)
             aloneSince.put(guild.getIdLong(), Instant.now());
     }
 
-    private boolean isAlone(Guild guild)
-    {
-        if(guild.getAudioManager().getConnectedChannel() == null) return false;
+    private boolean isAlone(Guild guild) {
+        if (guild.getAudioManager().getConnectedChannel() == null) return false;
         return guild.getAudioManager().getConnectedChannel().getMembers().stream()
                 .noneMatch(x ->
                         !x.getVoiceState().isDeafened()

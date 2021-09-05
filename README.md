@@ -9,11 +9,13 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/cosgy-dev/jmusicbot-jp/badge)](https://www.codefactor.io/repository/github/cosgy-dev/jmusicbot-jp)
 
 # JMusicBotJP
+
 JMusicBotは、シンプルでかつ操作性の良いUIを使用しています。セットアップも起動も簡単です。
 
 [![Setup](http://i.imgur.com/VvXYp5j.png)](https://www.cosgy.dev/2019/09/06/jmusicbot-setup/)
 
 # 機能性
+
 * 操作が簡単(Javaがインストールされているか確認してください)
 * 曲を高速にロード
 * 独自の外部キーなどは要りません。(DiscordのBotトークンを除く)
@@ -27,13 +29,18 @@ JMusicBotは、シンプルでかつ操作性の良いUIを使用しています
 * 再生リストのサポート(web/youtube/ニコニコ動画/local)
 
 # セットアップ
+
 このボットを自分で起動するには [Cosgy Dev 公式ページ](https://www.cosgy.dev/2019/09/06/jmusicbot-setup/) を参照してください
 
 # 質問/提案/バグレポート
+
 **機能を提案する前に、推奨/計画された機能リストをお読みください。**<br>
-ボットの機能の変更を提案したり、カスタマイズ・オプションを推奨したり、バグを報告したりしたい場合には、このリポジトリーでIssueを開くか、あるいは[Discordサーバー](https://discord.gg/RBpkHxf)に参加してください。(注意: 追加のAPIキーを必要とする機能リクエストや音楽以外の機能は受け付けません)。
-<br>このBotが好きでしたら、このBotに使われているライブラリにStarを追加してください:<br>[JDA](https://github.com/DV8FromTheWorld/JDA) と [lavaplayer](https://github.com/sedmelluq/lavaplayer)
+ボットの機能の変更を提案したり、カスタマイズ・オプションを推奨したり、バグを報告したりしたい場合には、このリポジトリーでIssueを開くか、あるいは[Discordサーバー](https://discord.gg/RBpkHxf)に参加してください。(注意:
+追加のAPIキーを必要とする機能リクエストや音楽以外の機能は受け付けません)。
+<br>このBotが好きでしたら、このBotに使われているライブラリにStarを追加してください:<br>[JDA](https://github.com/DV8FromTheWorld/JDA)
+と [lavaplayer](https://github.com/sedmelluq/lavaplayer)
 
 # コマンドの例
+
 ![Example](https://i.imgur.com/tevrtKt.png)
 
