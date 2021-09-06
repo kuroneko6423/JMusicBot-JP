@@ -77,7 +77,8 @@ public class CacheLoader {
             reader.read(data);
 
             ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
-            List<dev.cosgy.JMusicBot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.JMusicBot.util.Cache>>() {});
+            List<dev.cosgy.JMusicBot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.JMusicBot.util.Cache>>() {
+            });
 
             log.debug("キャッシュの読み込み完了");
             return deserialized;

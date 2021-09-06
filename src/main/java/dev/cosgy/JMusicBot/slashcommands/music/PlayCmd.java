@@ -502,7 +502,7 @@ public class PlayCmd extends MusicCommand {
 
             Playlist playlist = bot.getPlaylistLoader().getPlaylist(guildId, name);
             if (playlist == null) {
-                event.reply(client.getError()+"`" + name + ".txt`を見つけられませんでした ").queue();
+                event.reply(client.getError() + "`" + name + ".txt`を見つけられませんでした ").queue();
                 return;
             }
             event.reply(":calling: 再生リスト **" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
@@ -578,7 +578,7 @@ public class PlayCmd extends MusicCommand {
 
             MylistLoader.Playlist playlist = bot.getMylistLoader().getPlaylist(userId, name);
             if (playlist == null) {
-                event.reply(client.getError()+"`" + name + ".txt `を見つけられませんでした ").queue();
+                event.reply(client.getError() + "`" + name + ".txt `を見つけられませんでした ").queue();
                 return;
             }
             event.reply(":calling: マイリスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
@@ -651,7 +651,7 @@ public class PlayCmd extends MusicCommand {
             String name = event.getOption("name").getAsString();
             PubliclistLoader.Playlist playlist = bot.getPublistLoader().getPlaylist(name);
             if (playlist == null) {
-                event.reply(client.getError()+"`" + name + ".txt `を見つけられませんでした ").queue();
+                event.reply(client.getError() + "`" + name + ".txt `を見つけられませんでした ").queue();
                 return;
             }
             event.reply(":calling: 再生リスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->

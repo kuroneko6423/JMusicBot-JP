@@ -21,11 +21,12 @@ import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.settings.Settings;
 import dev.cosgy.JMusicBot.util.MaintenanceInfo;
-import net.dv8tion.jda.api.audio.AudioSendHandler;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ public abstract class MusicCommand extends SlashCommand {
                     event.reply(client.getError() + String.format("**%s**に接続できません!", userState.getChannel().getName())).queue();
                     return;
                 }
-                if(userState.getChannel().getType() == ChannelType.STAGE){
+                if (userState.getChannel().getType() == ChannelType.STAGE) {
                     event.reply(client.getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
@@ -125,7 +126,7 @@ public abstract class MusicCommand extends SlashCommand {
                     event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getName()));
                     return;
                 }
-                if(userState.getChannel().getType() == ChannelType.STAGE){
+                if (userState.getChannel().getType() == ChannelType.STAGE) {
                     event.reply(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname()));
                 }
             }

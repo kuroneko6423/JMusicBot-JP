@@ -35,7 +35,8 @@ public class Cache {
         this.userId = String.valueOf(userId);
     }
 
-    public Cache(){}
+    public Cache() {
+    }
 
     public String getTitle() {
         return title;
