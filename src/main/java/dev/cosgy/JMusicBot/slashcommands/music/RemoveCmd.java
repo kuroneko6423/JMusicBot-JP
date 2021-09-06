@@ -106,9 +106,9 @@ public class RemoveCmd extends MusicCommand {
         if (event.getOption("input").getAsString().toLowerCase().matches("(all|すべて)")) {
             int count = handler.getQueue().removeAll(event.getUser().getIdLong());
             if (count == 0)
-                event.reply(client.getWarning() + "再生待ちに曲がありません。");
+                event.reply(client.getWarning() + "再生待ちに曲がありません。").queue();
             else
-                event.reply(client.getSuccess() + count + "曲を削除しました。");
+                event.reply(client.getSuccess() + count + "曲を削除しました。").queue();
             return;
         }
         int pos;

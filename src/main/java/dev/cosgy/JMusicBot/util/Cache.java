@@ -16,6 +16,9 @@
 
 package dev.cosgy.JMusicBot.util;
 
+/**
+ * @author Kosugi_kun
+ */
 public class Cache {
     private String title;
     private String author;
