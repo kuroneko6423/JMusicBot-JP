@@ -288,7 +288,7 @@ public class PlaylistCmd extends DJCommand {
                 event.reply(event.getClient().getWarning() + " 再生リストフォルダに再生リストがありません。");
             else {
                 StringBuilder builder = new StringBuilder(event.getClient().getSuccess() + " 利用可能な再生リスト:\n");
-                list.forEach(str -> builder.append("`").append(str).append("`"));
+                list.forEach(str -> builder.append("`").append(str).append("` "));
                 event.reply(builder.toString());
             }
         }
