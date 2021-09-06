@@ -90,7 +90,9 @@ public class AloneInVoiceHandler {
         Guild guild = event.getEntity().getGuild();
         if (!bot.getPlayerManager().hasHandler(guild)) return;
         // ステージチャンネルにいる場合は退出しない。
-        if (guild.getAudioManager().getConnectedChannel().getType() == ChannelType.STAGE) return;
+        if(guild.getAudioManager().getConnectedChannel() != null) {
+            if (guild.getAudioManager().getConnectedChannel().getType() == ChannelType.STAGE) return;
+        }
 
         boolean alone = isAlone(guild);
         boolean inList = aloneSince.containsKey(guild.getIdLong());
