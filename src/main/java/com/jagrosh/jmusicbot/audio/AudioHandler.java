@@ -225,7 +225,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         Guild guild = guild(jda);
         return new MessageBuilder()
                 .setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **音楽を再生していません。**"))
-                .setEmbed(new EmbedBuilder()
+                .append(new EmbedBuilder()
                         .setTitle("音楽を再生していません。")
                         .setDescription(JMusicBot.STOP_EMOJI + " " + FormatUtil.progressBar(-1) + " " + FormatUtil.volumeIcon(audioPlayer.getVolume()))
                         .setColor(guild.getSelfMember().getColor())

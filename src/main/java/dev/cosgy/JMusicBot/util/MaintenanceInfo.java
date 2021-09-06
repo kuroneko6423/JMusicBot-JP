@@ -105,7 +105,7 @@ public class MaintenanceInfo {
             ebuilder.addField("更新日時:", InfoResult.LastUpdate, false)
                     .addField("現在時刻", sdf.format(NowTime), false)
                     .setFooter("※メンテナンス期間は予定なく変更する場合があります。", null);
-            event.getChannel().sendMessage(builder.setEmbed(ebuilder.build()).build()).complete();
+            event.getChannel().sendMessage(builder.append(ebuilder.build()).build()).complete();
             s.setAnnounce(AnnounceID);
         }
     }
