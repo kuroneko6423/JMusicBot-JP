@@ -1,30 +1,28 @@
-package dev.cosgy.JMusicBot.cache;
+/*
+ *  Copyright 2021 Cosgy Dev (info@cosgy.dev).
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package dev.cosgy.JMusicBot.util;
 
 public class Cache {
-
-    @SerializedName("title")
-    @Expose
     private String title;
-    @SerializedName("author")
-    @Expose
     private String author;
-    @SerializedName("length")
-    @Expose
     private String length;
-    @SerializedName("identifier")
-    @Expose
     private String identifier;
-    @SerializedName("isStream")
-    @Expose
     private Boolean isStream;
-    @SerializedName("url")
-    @Expose
     private String url;
-    @SerializedName("userId")
-    @Expose
     private String userId;
 
     public Cache(String title, String author, long length, String identifier, boolean isStream, String uri, long userId) {
@@ -36,6 +34,8 @@ public class Cache {
         this.url = uri;
         this.userId = String.valueOf(userId);
     }
+
+    public Cache(){}
 
     public String getTitle() {
         return title;
@@ -92,5 +92,4 @@ public class Cache {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }

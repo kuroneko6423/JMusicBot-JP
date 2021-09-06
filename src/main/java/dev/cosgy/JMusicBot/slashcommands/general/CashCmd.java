@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import dev.cosgy.JMusicBot.slashcommands.DJCommand;
+import dev.cosgy.JMusicBot.util.Cache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
@@ -62,7 +63,7 @@ public class CashCmd extends SlashCommand {
         } catch (NumberFormatException ignore) {
         }
 
-        List<dev.cosgy.JMusicBot.cache.Cache> cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
+        List<Cache> cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
 
         String[] songs = new String[cache.size()];
         long total = 0;
@@ -165,7 +166,7 @@ public class CashCmd extends SlashCommand {
             int pagenum = 1;
             event.reply("キャッシュを取得します。").queue();
 
-            List<dev.cosgy.JMusicBot.cache.Cache> cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
+            List<Cache> cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
 
             String[] songs = new String[cache.size()];
             long total = 0;
