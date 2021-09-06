@@ -581,7 +581,7 @@ public class PlayCmd extends MusicCommand {
                 event.reply(client.getError()+"`" + name + ".txt `を見つけられませんでした ").queue();
                 return;
             }
-            event.getChannel().sendMessage(":calling: マイリスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
+            event.reply(":calling: マイリスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
             {
                 AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
                 playlist.loadTracks(bot.getPlayerManager(), (at) -> handler.addTrack(new QueuedTrack(at, event.getUser())), () -> {
@@ -595,7 +595,7 @@ public class PlayCmd extends MusicCommand {
                     String str = builder.toString();
                     if (str.length() > 2000)
                         str = str.substring(0, 1994) + " (以下略)";
-                    m.editMessage(FormatUtil.filter(str)).queue();
+                    m.editOriginal(FormatUtil.filter(str)).queue();
                 });
             });
         }
@@ -654,7 +654,7 @@ public class PlayCmd extends MusicCommand {
                 event.reply(client.getError()+"`" + name + ".txt `を見つけられませんでした ").queue();
                 return;
             }
-            event.getChannel().sendMessage(":calling: 再生リスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
+            event.reply(":calling: 再生リスト**" + name + "**を読み込んでいます... (" + playlist.getItems().size() + " 曲)").queue(m ->
             {
                 AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
                 playlist.loadTracks(bot.getPlayerManager(), (at) -> handler.addTrack(new QueuedTrack(at, event.getUser())), () -> {
@@ -668,7 +668,7 @@ public class PlayCmd extends MusicCommand {
                     String str = builder.toString();
                     if (str.length() > 2000)
                         str = str.substring(0, 1994) + " (以下略)";
-                    m.editMessage(FormatUtil.filter(str)).queue();
+                    m.editOriginal(FormatUtil.filter(str)).queue();
                 });
             });
         }
