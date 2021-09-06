@@ -16,6 +16,9 @@
 
 package dev.cosgy.JMusicBot.util;
 
+/**
+ * @author Kosugi_kun
+ */
 public class Cache {
     private String title;
     private String author;
@@ -35,7 +38,8 @@ public class Cache {
         this.userId = String.valueOf(userId);
     }
 
-    public Cache(){}
+    public Cache() {
+    }
 
     public String getTitle() {
         return title;
