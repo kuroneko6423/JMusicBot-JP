@@ -7,8 +7,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.JsonBrowser;
 import com.sedmelluq.discord.lavaplayer.tools.io.HttpClientTools;
 import com.sedmelluq.discord.lavaplayer.tools.io.HttpInterface;
-import java.io.IOException;
-import java.net.URLEncoder;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,6 +14,9 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URLEncoder;
 
 import static com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeTrackJsonData.fromEmbedParts;
 import static com.sedmelluq.discord.lavaplayer.tools.ExceptionTools.throwWithDebugInfo;
@@ -26,7 +27,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoader {
     private static final Logger log = LoggerFactory.getLogger(DefaultYoutubeTrackDetailsLoader.class);
 
-    private static final TextRange[] EMBED_CONFIG_RANGES = new TextRange[] {
+    private static final TextRange[] EMBED_CONFIG_RANGES = new TextRange[]{
             new TextRange("'WEB_PLAYER_CONTEXT_CONFIGS':", "});writeEmbed();"),
             new TextRange("'WEB_PLAYER_CONTEXT_CONFIGS':", "});yt.setConfig"),
             new TextRange("\"WEB_PLAYER_CONTEXT_CONFIGS\":", "});writeEmbed();"),
@@ -135,12 +136,6 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
         } else {
             throw new FriendlyException("This video cannot be viewed anonymously.", COMMON, null);
         }
-    }
-
-    protected enum InfoStatus {
-        INFO_PRESENT,
-        REQUIRES_LOGIN,
-        DOES_NOT_EXIST
     }
 
     protected String getUnplayableReason(JsonBrowser statusBlock) {
@@ -259,6 +254,12 @@ public class DefaultYoutubeTrackDetailsLoader implements YoutubeTrackDetailsLoad
 
             return data.withPlayerScriptUrl(fetchedPlayerScript);
         }
+    }
+
+    protected enum InfoStatus {
+        INFO_PRESENT,
+        REQUIRES_LOGIN,
+        DOES_NOT_EXIST
     }
 
     protected static class CachedPlayerScript {

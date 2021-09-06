@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Cosgy Dev (info@cosgy.jp)
+ * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class NowplayingHandler {
     private final Bot bot;

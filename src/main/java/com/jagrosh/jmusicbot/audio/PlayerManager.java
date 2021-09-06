@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Cosgy Dev (info@cosgy.jp)
+ * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class PlayerManager extends DefaultAudioPlayerManager {
     private final Bot bot;

@@ -92,7 +92,7 @@ public class Prompt {
     }
 
     public String prompt(String content) {
-        if(noprompt)
+        if (noprompt)
             return null;
         if (nogui) {
             if (scanner == null)

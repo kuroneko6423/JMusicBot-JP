@@ -1,7 +1,23 @@
+/*
+ *  Copyright 2021 Cosgy Dev (info@cosgy.dev).
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package dev.cosgy.JMusicBot.playlist;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.queue.FairQueue;
@@ -10,14 +26,12 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import dev.cosgy.JMusicBot.cache.CacheObject;
+import dev.cosgy.JMusicBot.util.Cache;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,10 +39,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CacheLoader
-{
-    Logger log = LoggerFactory.getLogger("CacheLoader");
+/**
+ * @author Kosugi_kun
+ */
+public class CacheLoader {
     private final BotConfig config;
+    Logger log = LoggerFactory.getLogger("CacheLoader");
 
     public CacheLoader(BotConfig config) {
         this.config = config;
@@ -36,7 +52,7 @@ public class CacheLoader
 
     public void Save(String guildId, FairQueue<QueuedTrack> queue) {
         List<QueuedTrack> list = queue.getList();
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             return;
         }
 
@@ -67,20 +83,24 @@ public class CacheLoader
         list.add(s);
     }
 
-    public List<dev.cosgy.JMusicBot.cache.Cache> GetCache(String serverId) {
-        List<dev.cosgy.JMusicBot.cache.Cache> cacheData;
-        Reader json;
+    public List<Cache> GetCache(String serverId) {
 
         try {
-            log.debug("キャッシュの読み込み開始: "+ "cache" + File.separator + serverId + ".json");
+            log.debug("キャッシュの読み込み開始: " + "cache" + File.separator + serverId + ".cash");
 
-            json = Files.newBufferedReader(Paths.get("cache" + File.separator + serverId + ".json"));
+            File file = new File(Paths.get("cache" + File.separator + serverId + ".cash").toString());
 
-            Gson gson = new Gson();
-            cacheData = gson.fromJson(json, CacheObject.class).getCache();
+            byte[] data = new byte[(int) file.length()];
+            InputStream reader = new FileInputStream(file);
+
+            reader.read(data);
+
+            ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+            List<dev.cosgy.JMusicBot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.JMusicBot.util.Cache>>() {
+            });
 
             log.debug("キャッシュの読み込み完了");
-            return cacheData;
+            return deserialized;
         } catch (IOException e) {
             log.debug("キャッシュの読み込み中にエラーが発生しました。");
             e.printStackTrace();
@@ -88,12 +108,12 @@ public class CacheLoader
         }
     }
 
-    public Cache ConvertCache(List<dev.cosgy.JMusicBot.cache.Cache> data){
+    public CacheResult ConvertCache(List<dev.cosgy.JMusicBot.util.Cache> data) {
         List<String> urls = new ArrayList<>();
-        for (dev.cosgy.JMusicBot.cache.Cache datum : data) {
+        for (dev.cosgy.JMusicBot.util.Cache datum : data) {
             urls.add(datum.getUrl());
         }
-        return new Cache(urls, false);
+        return new CacheResult(urls, false);
     }
 
     public void createFolder() {
@@ -107,29 +127,27 @@ public class CacheLoader
         return Files.exists(Paths.get("cache"));
     }
 
-    public boolean cacheExists(String serverId){
-        log.debug("確認するファイル名："+ serverId + ".json");
-        return Files.exists(Paths.get("cache"+ File.separator + serverId + ".json"));
+    public boolean cacheExists(String serverId) {
+        log.debug("確認するファイル名：" + serverId + ".json");
+        return Files.exists(Paths.get("cache" + File.separator + serverId + ".cash"));
     }
 
-    public void createCache(String serverId)throws IOException {
+    public void createCache(String serverId) throws IOException {
 
-        if(cacheExists(serverId)){
+        if (cacheExists(serverId)) {
             log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
             deleteCache(serverId);
         }
-        Files.createFile(Paths.get("cache" + File.separator + serverId + ".json"));
+        Files.createFile(Paths.get("cache" + File.separator + serverId + ".cash"));
     }
 
     public void writeCache(String serverId, List<QueuedTrack> queuedTracks) throws IOException {
-
-        CacheObject cacheObject = new CacheObject();
-        List<dev.cosgy.JMusicBot.cache.Cache> data = new ArrayList<>();
+        List<dev.cosgy.JMusicBot.util.Cache> data = new ArrayList<>();
 
         for (QueuedTrack queuedTrack : queuedTracks) {
             AudioTrack que = queuedTrack.getTrack();
             queuedTrack.getTrack().getUserData();
-            data.add(new dev.cosgy.JMusicBot.cache.Cache(
+            data.add(new Cache(
                     que.getInfo().title,
                     que.getInfo().author,
                     que.getInfo().length,
@@ -140,26 +158,52 @@ public class CacheLoader
             ));
         }
 
-        cacheObject.setCache(data);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(cacheObject);
+        ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+        byte[] bytes = objectMapper.writeValueAsBytes(data);
+        FileOutputStream fos = new FileOutputStream(Paths.get("cache" + File.separator + serverId + ".cash").toString(), true);
 
-        Files.write(Paths.get("cache" + File.separator + serverId + ".json"), json.getBytes(StandardCharsets.UTF_8));
+        fos.write(bytes);
+        fos.flush();
+        fos.close();
     }
 
     public CacheLoader deleteCache(String serverId) throws IOException {
-        Files.delete(Paths.get("cache" + File.separator + serverId + ".json"));
+        Files.delete(Paths.get("cache" + File.separator + serverId + ".cash"));
         return null;
     }
 
-    public class Cache {
+    public static class CacheLoadError {
+        private final int number;
+        private final String item;
+        private final String reason;
+
+        private CacheLoadError(int number, String item, String reason) {
+            this.number = number;
+            this.item = item;
+            this.reason = reason;
+        }
+
+        public int getIndex() {
+            return number;
+        }
+
+        public String getItem() {
+            return item;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+    }
+
+    public class CacheResult {
         private final List<String> items;
         private final boolean shuffle;
         private final List<AudioTrack> tracks = new LinkedList<>();
         private final List<CacheLoadError> errors = new LinkedList<>();
         private boolean loaded = false;
 
-        public Cache(List<String> items, boolean shuffle) {
+        public CacheResult(List<String> items, boolean shuffle) {
             this.items = items;
             this.shuffle = shuffle;
         }
@@ -239,30 +283,6 @@ public class CacheLoader
 
         public List<CacheLoadError> getErrors() {
             return errors;
-        }
-    }
-
-    public static class CacheLoadError {
-        private final int number;
-        private final String item;
-        private final String reason;
-
-        private CacheLoadError(int number, String item, String reason) {
-            this.number = number;
-            this.item = item;
-            this.reason = reason;
-        }
-
-        public int getIndex() {
-            return number;
-        }
-
-        public String getItem() {
-            return item;
-        }
-
-        public String getReason() {
-            return reason;
         }
     }
 }
