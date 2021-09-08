@@ -251,7 +251,7 @@ public class JMusicBot {
         if (config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
         if (config.getGame() == null)
-            cb.useDefaultGame();
+            cb.setActivity(Activity.playing(config.getPrefix()+"helpでヘルプを確認"));
         else if (config.getGame().getName().toLowerCase().matches("(none|なし)")) {
             cb.setActivity(null);
             nogame = true;
