@@ -119,6 +119,13 @@ public class SetdjCmd extends AdminCommand {
             s.setDJRole(null);
             event.reply(client.getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
         }
+
+        @Override
+        protected void execute(CommandEvent event){
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
+            s.setDJRole(null);
+            event.replySuccess("DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。");
+        }
     }
 
 }

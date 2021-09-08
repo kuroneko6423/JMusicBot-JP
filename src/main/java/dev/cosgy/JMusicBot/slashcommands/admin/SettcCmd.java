@@ -117,6 +117,13 @@ public class SettcCmd extends AdminCommand {
             s.setTextChannel(null);
             event.reply(client.getSuccess() + "音楽コマンドは現在どのチャンネルでも使用できます。").queue();
         }
+
+        @Override
+        protected void execute(CommandEvent event) {
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
+            s.setTextChannel(null);
+            event.replySuccess("音楽コマンドは現在どのチャンネルでも使用できます。");
+        }
     }
 
 }
