@@ -54,8 +54,8 @@ public class BotConfig {
     private String searchingEmoji;
     private String nicoEmail;
     private String nicoPass;
-    // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm
-    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands;
+    // [JMusicBot-JP] added useNicoNico, changeNickName, pauseNoUsers, resumeJoined, stopNoUsers, cosgyDevHost, helpToDm, officialInvite
+    private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
@@ -108,25 +108,23 @@ public class BotConfig {
             mylistfolder = config.getString("mylistfolder");
             publistFolder = config.getString("publistfolder");
             aliases = config.getConfig("aliases");
-            dbots = owner == 113156185389092864L;
-            cosgyDevHost = false;
+            dbots = owner == 334091398263341056L;
 
 
-            // [JMusicBot-JP] new function: support niconico play
+            // [JMusicBot-JP]
             useNicoNico = config.getBoolean("useniconico");
             nicoEmail = config.getString("nicomail");
             nicoPass = config.getString("nicopass");
-
-            // [JMUsicBot-JP] new function: if all users disconnected from voice channel, pause or stop music and if joined resume music.
             pauseNoUsers = config.getBoolean("pausenousers");
             resumeJoined = config.getBoolean("resumejoined");
             stopNoUsers = config.getBoolean("stopnousers");
-
             changeNickName = config.getBoolean("changenickname");
-            // [JMusicBot-JP] End
             helpToDm = config.getBoolean("helptodm");
             autoStopQueueSave = config.getBoolean("autostopqueuesave");
             auditCommands = config.getBoolean("auditcommands");
+            officialInvite = config.getBoolean("officialinvite");
+            cosgyDevHost = false;
+            // [JMusicBot-JP] End
 
             // we may need to write a new config file
             boolean write = false;
@@ -349,4 +347,6 @@ public class BotConfig {
     public boolean getAuditCommands() {
         return auditCommands;
     }
+
+    public boolean isOfficialInvite(){return officialInvite;}
 }

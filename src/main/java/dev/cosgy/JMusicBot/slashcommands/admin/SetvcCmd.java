@@ -113,5 +113,12 @@ public class SetvcCmd extends AdminCommand {
             s.setVoiceChannel(null);
             event.reply(client.getSuccess() + "音楽はどの音声チャンネルでも再生できます。").queue();
         }
+
+        @Override
+        protected void execute(CommandEvent event) {
+            Settings s = event.getClient().getSettingsFor(event.getGuild());
+            s.setVoiceChannel(null);
+            event.replySuccess("音楽はどの音声チャンネルでも再生できます。");
+        }
     }
 }
