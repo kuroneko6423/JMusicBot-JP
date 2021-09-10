@@ -102,15 +102,6 @@ public class ForceRemoveCmd extends DJCommand {
 
     }
 
-    private void removeAllEntries(User target, CommandEvent event) {
-        int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
-        if (count == 0) {
-            event.replyWarning("**" + target.getName() + "** の再生待ちに曲がありません！");
-        } else {
-            event.replySuccess("**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。");
-        }
-    }
-
     @Override
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -125,6 +116,15 @@ public class ForceRemoveCmd extends DJCommand {
             event.reply(client.getWarning() + "**" + target.getName() + "** の再生待ちに曲がありません！").queue();
         } else {
             event.reply(client.getSuccess() + "**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。").queue();
+        }
+    }
+
+    private void removeAllEntries(User target, CommandEvent event) {
+        int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
+        if (count == 0) {
+            event.replyWarning("**" + target.getName() + "** の再生待ちに曲がありません！");
+        } else {
+            event.replySuccess("**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。");
         }
     }
 }

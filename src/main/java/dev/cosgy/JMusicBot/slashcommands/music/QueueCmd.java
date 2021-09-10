@@ -107,20 +107,6 @@ public class QueueCmd extends MusicCommand {
         builder.build().paginate(event.getChannel(), pagenum);
     }
 
-    private String getQueueTitle(AudioHandler ah, String success, int songslength, long total, RepeatMode repeatmode) {
-        StringBuilder sb = new StringBuilder();
-        if (ah.getPlayer().getPlayingTrack() != null) {
-            sb.append(ah.getPlayer().isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI).append(" **")
-                    .append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
-        }
-        return FormatUtil.filter(sb.append(success).append(" 再生待ち楽曲一覧 | ").append(songslength)
-                .append(" エントリー | `").append(FormatUtil.formatTime(total)).append("` ")
-                // RepeatMode.OFF - ""
-                // RepeatMode.ALL - QueueCmd.REPEAT_ALL
-                // RepeatMode.SINGLE = QueueCmd.REPEAT_SINGLE
-                .append(repeatmode != RepeatMode.OFF ? "| " + (repeatmode == RepeatMode.ALL ? REPEAT_ALL : REPEAT_SINGLE) : "").toString());
-    }
-
     @Override
     public void doCommand(SlashCommandEvent event) {
         InteractionHook m = event.reply("再生待ちを取得しています。").complete();
@@ -150,5 +136,19 @@ public class QueueCmd extends MusicCommand {
                 .setColor(event.getGuild().getSelfMember().getColor());
         builder.build().paginate(event.getChannel(), pagenum);
         m.deleteOriginal().queue();
+    }
+
+    private String getQueueTitle(AudioHandler ah, String success, int songslength, long total, RepeatMode repeatmode) {
+        StringBuilder sb = new StringBuilder();
+        if (ah.getPlayer().getPlayingTrack() != null) {
+            sb.append(ah.getPlayer().isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI).append(" **")
+                    .append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
+        }
+        return FormatUtil.filter(sb.append(success).append(" 再生待ち楽曲一覧 | ").append(songslength)
+                .append(" エントリー | `").append(FormatUtil.formatTime(total)).append("` ")
+                // RepeatMode.OFF - ""
+                // RepeatMode.ALL - QueueCmd.REPEAT_ALL
+                // RepeatMode.SINGLE = QueueCmd.REPEAT_SINGLE
+                .append(repeatmode != RepeatMode.OFF ? "| " + (repeatmode == RepeatMode.ALL ? REPEAT_ALL : REPEAT_SINGLE) : "").toString());
     }
 }

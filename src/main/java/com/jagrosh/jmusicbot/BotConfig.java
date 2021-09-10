@@ -348,5 +348,7 @@ public class BotConfig {
         return auditCommands;
     }
 
-    public boolean isOfficialInvite(){return officialInvite;}
+    public boolean isOfficialInvite() {
+        return officialInvite;
+    }
 }

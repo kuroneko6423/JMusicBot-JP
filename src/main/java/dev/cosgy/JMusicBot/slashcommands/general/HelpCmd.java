@@ -19,27 +19,23 @@ package dev.cosgy.JMusicBot.slashcommands.general;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 import java.util.Objects;
 
 public class HelpCmd extends Command {
     public void execute(CommandEvent event) {
-        StringBuilder builder = new StringBuilder("**"+event.getJDA().getSelfUser().getName()+"** コマンド一覧:\n");
+        StringBuilder builder = new StringBuilder("**" + event.getJDA().getSelfUser().getName() + "** コマンド一覧:\n");
         Category category = null;
         List<Command> commands = event.getClient().getCommands();
-        for(Command command : commands)
-        {
-            if(!command.isHidden() && (!command.isOwnerCommand() || event.isOwner()))
-            {
-                if(!Objects.equals(category, command.getCategory()))
-                {
+        for (Command command : commands) {
+            if (!command.isHidden() && (!command.isOwnerCommand() || event.isOwner())) {
+                if (!Objects.equals(category, command.getCategory())) {
                     category = command.getCategory();
-                    builder.append("\n\n  __").append(category==null ? "カテゴリなし" : category.getName()).append("__:\n");
+                    builder.append("\n\n  __").append(category == null ? "カテゴリなし" : category.getName()).append("__:\n");
                 }
-                builder.append("\n`").append(event.getClient().getTextualPrefix()).append(event.getClient().getPrefix()==null?" ":"").append(command.getName())
-                        .append(command.getArguments()==null ? "`" : " "+command.getArguments()+"`")
+                builder.append("\n`").append(event.getClient().getTextualPrefix()).append(event.getClient().getPrefix() == null ? " " : "").append(command.getName())
+                        .append(command.getArguments() == null ? "`" : " " + command.getArguments() + "`")
                         .append(" - ").append(command.getHelp());
             }
         }
@@ -47,7 +43,7 @@ public class HelpCmd extends Command {
             builder.append("\n\nさらにヘルプが必要な場合は、公式サーバーに参加することもできます: ").append(event.getClient().getServerInvite());
         event.replyInDm(builder.toString(), unused ->
         {
-            if(event.isFromType(ChannelType.TEXT))
+            if (event.isFromType(ChannelType.TEXT))
                 event.reactSuccess();
         }, t -> event.replyWarning("ダイレクトメッセージをブロックしているため、ヘルプを送信できません。"));
     }

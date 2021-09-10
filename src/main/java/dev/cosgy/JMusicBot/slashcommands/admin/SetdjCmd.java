@@ -121,7 +121,7 @@ public class SetdjCmd extends AdminCommand {
         }
 
         @Override
-        protected void execute(CommandEvent event){
+        protected void execute(CommandEvent event) {
             Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setDJRole(null);
             event.replySuccess("DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。");

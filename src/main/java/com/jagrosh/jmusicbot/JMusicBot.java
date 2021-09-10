@@ -35,7 +35,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -46,7 +45,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -134,11 +132,11 @@ public class JMusicBot {
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
                 .setListener(new CommandAudit())
-                .setHelpConsumer((event)->{
+                .setHelpConsumer((event) -> {
                     new HelpCmd().execute(event);
                 });
 
-        if(config.isOfficialInvite()){
+        if (config.isOfficialInvite()) {
             cb.setServerInvite("https://discord.gg/MjNfC6TK2y");
         }
 
@@ -260,7 +258,7 @@ public class JMusicBot {
         if (config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
         if (config.getGame() == null)
-            cb.setActivity(Activity.playing(config.getPrefix()+config.getHelp()+"でヘルプを確認"));
+            cb.setActivity(Activity.playing(config.getPrefix() + config.getHelp() + "でヘルプを確認"));
         else if (config.getGame().getName().toLowerCase().matches("(none|なし)")) {
             cb.setActivity(null);
             nogame = true;

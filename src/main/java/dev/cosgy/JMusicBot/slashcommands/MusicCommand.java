@@ -52,7 +52,14 @@ public abstract class MusicCommand extends SlashCommand {
     protected void execute(SlashCommandEvent event) {
         Settings settings = client.getSettingsFor(event.getGuild());
         TextChannel channel = settings.getTextChannel(event.getGuild());
-        //TODO: ここに公式ホスト用の処理を追加する。
+        if (bot.getConfig().getCosgyDevHost()) {
+            try {
+
+                MaintenanceInfo.CommandInfo(event, client);
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
         bot.getPlayerManager().setUpHandler(event.getGuild());
         if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
             event.reply(client.getError() + "コマンドを使用するには、再生中である必要があります。").queue();
