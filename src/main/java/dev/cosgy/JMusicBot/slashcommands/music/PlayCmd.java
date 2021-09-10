@@ -356,6 +356,35 @@ public class PlayCmd extends MusicCommand {
                     return;
                 }
 
+                if (handler.playFromDefault())
+                {
+                    Settings settings = client.getSettingsFor(event.getGuild());
+                    handler.stopAndClear();
+                    Playlist playlist = bot.getPlaylistLoader().getPlaylist(event.getGuild().getId(), settings.getDefaultPlaylist());
+                    if(playlist==null) {
+                        event.reply("プレイリストフォルダに`" + event.getOption("input").getAsString() + ".txt`が見つかりませんでした。").queue();
+                        return;
+                    }
+                    event.reply(loadingEmoji+" プレイリストを読み込んでいます**"+ settings.getDefaultPlaylist() +" ** ...（ "+ playlist.getItems().size() +"曲）").queue(m ->
+                    {
+
+                        playlist.loadTracks(bot.getPlayerManager(), (at)->handler.addTrack(new QueuedTrack(at, event.getUser())), () -> {
+                            StringBuilder builder = new StringBuilder(playlist.getTracks().isEmpty()
+                                    ? client.getWarning()+" 曲がロードされていません！"
+                                    : client.getSuccess()+" ** "+ playlist.getTracks().size()+" **曲をロードしました！");
+                            if(!playlist.getErrors().isEmpty())
+                                builder.append("\n次の曲を読み込めませんでした。:");
+                            playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex()+1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
+                            String str = builder.toString();
+                            if(str.length()>2000)
+                                str = str.substring(0,1994)+" (...)";
+                            m.editOriginal(FormatUtil.filter(str)).queue();
+                        });
+                    });
+                    return;
+
+                }
+
                 StringBuilder builder = new StringBuilder(client.getWarning() + " Play コマンド:\n");
                 builder.append("\n`").append(client.getPrefix()).append(name).append(" <曲名>` - YouTubeから最初の結果を再生");
                 builder.append("\n`").append(client.getPrefix()).append(name).append(" <URL>` - 指定された曲、再生リスト、またはストリームを再生します");
