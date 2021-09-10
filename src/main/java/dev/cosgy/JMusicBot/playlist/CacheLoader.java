@@ -128,7 +128,7 @@ public class CacheLoader {
     }
 
     public boolean cacheExists(String serverId) {
-        log.debug("確認するファイル名：" + serverId + ".json");
+        log.debug("確認するファイル名：" + serverId + ".cash");
         return Files.exists(Paths.get("cache" + File.separator + serverId + ".cash"));
     }
 
