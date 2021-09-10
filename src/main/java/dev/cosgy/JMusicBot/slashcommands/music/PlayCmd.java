@@ -24,6 +24,7 @@ import com.jagrosh.jmusicbot.PlayStatus;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader.Playlist;
+import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -118,6 +119,35 @@ public class PlayCmd extends MusicCommand {
                     e.printStackTrace();
                 }
                 return;
+            }
+
+            if (handler.playFromDefault())
+            {
+                Settings settings = event.getClient().getSettingsFor(event.getGuild());
+                handler.stopAndClear();
+                Playlist playlist = bot.getPlaylistLoader().getPlaylist(event.getGuild().getId(), settings.getDefaultPlaylist());
+                if(playlist==null) {
+                    event.replyError("プレイリストフォルダに`" + event.getArgs() + ".txt`が見つかりませんでした。");
+                    return;
+                }
+                event.getChannel().sendMessage(loadingEmoji+" プレイリストを読み込んでいます**"+ settings.getDefaultPlaylist() +" ** ...（ "+ playlist.getItems().size() +"曲）").queue(m ->
+                {
+
+                    playlist.loadTracks(bot.getPlayerManager(), (at)->handler.addTrack(new QueuedTrack(at, event.getAuthor())), () -> {
+                        StringBuilder builder = new StringBuilder(playlist.getTracks().isEmpty()
+                                ? event.getClient().getWarning()+" 曲がロードされていません！"
+                                : event.getClient().getSuccess()+" ** "+ playlist.getTracks().size()+" **曲をロードしました！");
+                        if(!playlist.getErrors().isEmpty())
+                            builder.append("\n次の曲を読み込めませんでした。:");
+                        playlist.getErrors().forEach(err -> builder.append("\n`[").append(err.getIndex()+1).append("]` **").append(err.getItem()).append("**: ").append(err.getReason()));
+                        String str = builder.toString();
+                        if(str.length()>2000)
+                            str = str.substring(0,1994)+" (...)";
+                        m.editMessage(FormatUtil.filter(str)).queue();
+                    });
+                });
+                return;
+
             }
 
             StringBuilder builder = new StringBuilder(event.getClient().getWarning() + " Play コマンド:\n");
