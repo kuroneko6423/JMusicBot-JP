@@ -178,6 +178,7 @@ public class SearchCmd extends MusicCommand {
 
         @Override
         public void playlistLoaded(AudioPlaylist playlist) {
+            m.delete().queue();
             builder.setColor(event.getSelfMember().getColor())
                     .setText(FormatUtil.filter(event.getClient().getSuccess() + " の検索結果 `" + event.getArgs() + "`:"))
                     .setChoices()
