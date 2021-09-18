@@ -59,7 +59,7 @@ public class BotConfig {
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
-    private Config aliases;
+    private Config aliases, transforms;
 
     private boolean valid = false;
 
@@ -108,6 +108,7 @@ public class BotConfig {
             mylistfolder = config.getString("mylistfolder");
             publistFolder = config.getString("publistfolder");
             aliases = config.getConfig("aliases");
+            transforms = config.getConfig("transforms");
             dbots = owner == 334091398263341056L;
 
 
@@ -348,5 +349,9 @@ public class BotConfig {
         return auditCommands;
     }
 
-    public boolean isOfficialInvite(){return officialInvite;}
+    public Config getTransforms() { return transforms; }
+
+    public boolean isOfficialInvite() {
+        return officialInvite;
+    }
 }

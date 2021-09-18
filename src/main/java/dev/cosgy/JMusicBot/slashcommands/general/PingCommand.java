@@ -43,8 +43,7 @@ public class PingCommand extends SlashCommand {
     @Override
     protected void execute(SlashCommandEvent event) {
         event.reply("Ping: ...").queue(m -> {
-            long ping = event.getTimeCreated().until(m.getInteraction().getTimeCreated(), ChronoUnit.MILLIS);
-            m.editOriginal("Ping: " + ping + "ms | Websocket: " + event.getJDA().getGatewayPing() + "ms").queue();
+            m.editOriginal("Websocket: " + event.getJDA().getGatewayPing() + "ms").queue();
         });
     }
 
@@ -52,7 +51,7 @@ public class PingCommand extends SlashCommand {
     protected void execute(CommandEvent event) {
         event.reply("Ping: ...", m -> {
             long ping = event.getMessage().getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
-            m.editMessage("Ping: " + ping + "ms | Websocket: " + event.getJDA().getGatewayPing() + "ms").queue();
+            m.editMessage("Ping: " + ping  + "ms | Websocket: " + event.getJDA().getGatewayPing() + "ms").queue();
         });
     }
 

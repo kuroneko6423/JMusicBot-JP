@@ -43,10 +43,6 @@ public class RepeatCmd extends DJCommand {
 
     }
 
-    @Override
-    public void doCommand(SlashCommandEvent event) {
-    }
-
     // override musiccommand's execute because we don't actually care where this is used
     @Override
     protected void execute(CommandEvent event) {
@@ -80,6 +76,10 @@ public class RepeatCmd extends DJCommand {
 
     @Override
     public void doCommand(CommandEvent event) { /* Intentionally Empty */ }
+
+    @Override
+    public void doCommand(SlashCommandEvent event) {
+    }
 
     private class SingleCmd extends DJCommand {
         public SingleCmd(Bot bot) {
