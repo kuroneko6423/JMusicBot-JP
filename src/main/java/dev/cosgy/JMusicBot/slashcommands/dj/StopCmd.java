@@ -78,6 +78,8 @@ public class StopCmd extends DJCommand {
         if(event.getOption("option") == null){
             event.reply(client.getSuccess() + " 再生待ちを削除して、再生を停止しました。").queue();
             log.info(event.getGuild().getName() + "で再生待ちを削除して,ボイスチャンネルから切断しました。");
+            handler.stopAndClear();
+            event.getGuild().getAudioManager().closeAudioConnection();
             return;
         }
 
