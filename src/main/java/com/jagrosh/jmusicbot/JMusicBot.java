@@ -169,6 +169,7 @@ public class JMusicBot {
             // DJ
             add(new ForceRemoveCmd(bot));
             add(new ForceskipCmd(bot));
+            add(new NextCmd(bot));
             add(new MoveTrackCmd(bot));
             add(new PauseCmd(bot));
             add(new PlaynextCmd(bot));
@@ -225,6 +226,7 @@ public class JMusicBot {
             // DJ
             add(new ForceRemoveCmd(bot));
             add(new ForceskipCmd(bot));
+            add(new NextCmd(bot));
             add(new MoveTrackCmd(bot));
             add(new PauseCmd(bot));
             add(new PlaynextCmd(bot));
