@@ -65,7 +65,7 @@ public class SettingsCmd extends SlashCommand {
                                 event.getJDA().getGuilds().size(),
                                 event.getJDA().getGuilds().stream().filter(g -> Objects.requireNonNull(g.getSelfMember().getVoiceState()).inVoiceChannel()).count()),
                         null);
-        event.getChannel().sendMessage(builder.append(ebuilder.build()).build()).queue();
+        event.getChannel().sendMessageEmbeds(ebuilder.build()).queue();
     }
 
     @Override

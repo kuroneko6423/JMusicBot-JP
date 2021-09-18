@@ -33,7 +33,6 @@ public class PlaylistsCmd extends MusicCommand {
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = true;
         this.beListening = false;
-        this.beListening = false;
     }
 
     @Override
@@ -65,7 +64,30 @@ public class PlaylistsCmd extends MusicCommand {
     }
 
     @Override
-    public void doCommand(SlashCommandEvent slashCommandEvent) {
-
+    public void doCommand(SlashCommandEvent event) {
+        String guildID = event.getGuild().getId();
+        if (!bot.getPlaylistLoader().folderExists())
+            bot.getPlaylistLoader().createFolder();
+        if (!bot.getPlaylistLoader().folderGuildExists(guildID))
+            bot.getPlaylistLoader().createGuildFolder(guildID);
+        if (!bot.getPlaylistLoader().folderExists()) {
+            event.reply(client.getWarning() + " 再生リストフォルダが存在しないため作成できませんでした。").queue();
+            return;
+        }
+        if (!bot.getPlaylistLoader().folderGuildExists(guildID)) {
+            event.reply(client.getWarning() + " このサーバーの再生リストフォルダが存在しないため作成できませんでした。").queue();
+            return;
+        }
+        List<String> list = bot.getPlaylistLoader().getPlaylistNames(guildID);
+        if (list == null)
+            event.reply(client.getError() + " 利用可能な再生リストを読み込めませんでした。").queue();
+        else if (list.isEmpty())
+            event.reply(client.getWarning() + " 再生リストフォルダにプレイリストがありません。").queue();
+        else {
+            StringBuilder builder = new StringBuilder(client.getSuccess() + " 利用可能な再生リスト:\n");
+            list.forEach(str -> builder.append("`").append(str).append("` "));
+            builder.append("\n`").append(client.getTextualPrefix()).append("play playlist <name>` と入力することで再生リストを再生できます。");
+            event.reply(builder.toString()).queue();
+        }
     }
 }
