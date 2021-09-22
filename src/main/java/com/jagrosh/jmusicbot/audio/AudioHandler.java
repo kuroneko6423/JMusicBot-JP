@@ -83,6 +83,16 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             return queue.add(qtrack);
     }
 
+    public void addTrackIfRepeat(AudioTrack track)
+    {
+        // リピートモードの場合は、キューの最後にトラックを追加します
+        RepeatMode mode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
+        if(mode != RepeatMode.OFF)
+        {
+            queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class)==null ? 0L : track.getUserData(Long.class)));
+        }
+    }
+
     public FairQueue<QueuedTrack> getQueue() {
         return queue;
     }
