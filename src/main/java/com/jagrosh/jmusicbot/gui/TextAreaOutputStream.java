@@ -32,7 +32,7 @@ public class TextAreaOutputStream extends OutputStream {
 // INSTANCE MEMBERS
 // *************************************************************************************************
 
-    private final byte[] oneByte;                                                    // array for write(int val);
+    private final byte[] oneByte;                                                // array for write(int val);
     private Appender appender;                                                   // most recent action
 
     public TextAreaOutputStream(JTextArea txtara) {
@@ -57,7 +57,7 @@ public class TextAreaOutputStream extends OutputStream {
     }
 
     /**
-     * Clear the current console text area.
+     * 現在のコンソールテキスト領域をクリアします。
      */
     public synchronized void clear() {
         if (appender != null) {
@@ -104,10 +104,10 @@ public class TextAreaOutputStream extends OutputStream {
 
         private final JTextArea textArea;
         private final int maxLines;                                                   // maximum lines allowed in text area
-        private final LinkedList<Integer> lengths;                                                    // length of lines within text area
-        private final List<String> values;                                                     // values waiting to be appended
+        private final LinkedList<Integer> lengths;                                    // length of lines within text area
+        private final List<String> values;                                            // values waiting to be appended
 
-        private int curLength;                                                  // length of current line
+        private int curLength;                                                        // length of current line
         private boolean clear;
         private boolean queue;
 

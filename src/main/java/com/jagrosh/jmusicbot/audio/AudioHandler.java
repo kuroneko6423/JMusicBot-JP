@@ -83,16 +83,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             return queue.add(qtrack);
     }
 
-    public void addTrackIfRepeat(AudioTrack track)
-    {
-        // if we're in repeat mode, add track to end of queue
-        RepeatMode mode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
-        if(mode != RepeatMode.OFF)
-        {
-            queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class)==null ? 0L : track.getUserData(Long.class)));
-        }
-    }
-
     public FairQueue<QueuedTrack> getQueue() {
         return queue;
     }
@@ -163,11 +153,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             } else if (repeatMode == RepeatMode.SINGLE) {
                 queue.addAt(0, new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
             }
-        }
-
-        if(endReason==AudioTrackEndReason.FINISHED)
-        {
-            addTrackIfRepeat(track);
         }
 
         if (queue.isEmpty()) {

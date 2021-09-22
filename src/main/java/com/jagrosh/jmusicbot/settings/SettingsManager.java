@@ -70,10 +70,10 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     /**
-     * Gets non-null settings for a Guild
+     * ギルドのnull以外の設定を取得します
      *
-     * @param guild the guild to get settings for
-     * @return the existing settings, or new settings for that guild
+     * @param guild 設定を取得するギルド
+     * @return the 既存の設定、またはそのギルドの新しい設定
      */
     @Override
     public Settings getSettings(Guild guild) {
