@@ -22,35 +22,52 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public abstract class DJCommand extends MusicCommand {
+    static Logger log = LoggerFactory.getLogger("DJCommand");
     public DJCommand(Bot bot) {
         super(bot);
         this.category = new Category("DJ", DJCommand::checkDJPermission);
     }
 
     public static boolean checkDJPermission(CommandEvent event) {
-        if (event.getAuthor().getId().equals(event.getClient().getOwnerId()))
+        log.debug("通常コマンドでDJ権限があるコマンドを実行しました。");
+        if (event.getAuthor().getId().equals(event.getClient().getOwnerId())) {
+            log.debug("DJコマンドの実行者がオーナーでした。");
             return true;
-        if (event.getGuild() == null)
+        }
+        if (event.getGuild() == null) {
+            log.debug("ギルドで実行されていません。");
             return true;
-        if (event.getMember().hasPermission(Permission.MANAGE_SERVER))
+        }
+        if (event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            log.debug("実行したユーザーがギルドの管理者でした。");
             return true;
+        }
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         Role dj = settings.getRole(event.getGuild());
         return dj != null && (event.getMember().getRoles().contains(dj) || dj.getIdLong() == event.getGuild().getIdLong());
     }
 
     public static boolean checkDJPermission(CommandClient client, SlashCommandEvent event) {
-        if (event.getUser().getId().equals(client.getOwnerId()))
+        log.debug("スラッシュコマンドでDJ権限があるコマンドを実行しました。");
+        if (event.getUser().getId().equals(client.getOwnerId())) {
+            log.debug("DJコマンドの実行者がオーナーでした。");
             return true;
-        if (event.getGuild() == null)
+        }
+        if (event.getGuild() == null) {
+            log.debug("ギルドで実行されていません。");
             return true;
-        if (event.getMember().hasPermission(Permission.MANAGE_SERVER))
+        }
+        if (event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            log.debug("実行したユーザーがギルドの管理者でした。");
             return true;
+        }
         Settings settings = client.getSettingsFor(event.getGuild());
         Role dj = settings.getRole(event.getGuild());
         return dj != null && (event.getMember().getRoles().contains(dj) || dj.getIdLong() == event.getGuild().getIdLong());

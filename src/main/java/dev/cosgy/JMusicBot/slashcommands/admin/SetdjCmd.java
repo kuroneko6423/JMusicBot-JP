@@ -47,6 +47,10 @@ public class SetdjCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
+        if(!checkAdminPermission(client, event)){
+            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+            return;
+        }
         Settings s = client.getSettingsFor(event.getGuild());
 
         if (event.getOption("role") != null) {
