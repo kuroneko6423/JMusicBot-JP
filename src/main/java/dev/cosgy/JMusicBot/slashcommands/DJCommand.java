@@ -36,17 +36,13 @@ public abstract class DJCommand extends MusicCommand {
     }
 
     public static boolean checkDJPermission(CommandEvent event) {
-        log.debug("通常コマンドでDJ権限があるコマンドを実行しました。");
         if (event.getAuthor().getId().equals(event.getClient().getOwnerId())) {
-            log.debug("DJコマンドの実行者がオーナーでした。");
             return true;
         }
         if (event.getGuild() == null) {
-            log.debug("ギルドで実行されていません。");
             return true;
         }
         if (event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            log.debug("実行したユーザーがギルドの管理者でした。");
             return true;
         }
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
@@ -55,17 +51,13 @@ public abstract class DJCommand extends MusicCommand {
     }
 
     public static boolean checkDJPermission(CommandClient client, SlashCommandEvent event) {
-        log.debug("スラッシュコマンドでDJ権限があるコマンドを実行しました。");
         if (event.getUser().getId().equals(client.getOwnerId())) {
-            log.debug("DJコマンドの実行者がオーナーでした。");
             return true;
         }
         if (event.getGuild() == null) {
-            log.debug("ギルドで実行されていません。");
             return true;
         }
         if (event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            log.debug("実行したユーザーがギルドの管理者でした。");
             return true;
         }
         Settings settings = client.getSettingsFor(event.getGuild());

@@ -22,6 +22,7 @@ import dev.cosgy.JMusicBot.slashcommands.MusicCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -51,11 +52,13 @@ public class NowplayingCmd extends MusicCommand {
     public void doCommand(SlashCommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         Message m = handler.getNowPlaying(event.getJDA());
+        event.reply("現在再生中の楽曲を表示します...").queue(h -> h.deleteOriginal().queue());
+
         if (m == null) {
-            event.reply(handler.getNoMusicPlaying(event.getJDA())).queue();
+            event.getTextChannel().sendMessage(handler.getNoMusicPlaying(event.getJDA())).queue();
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
         } else {
-            event.reply(m).queue();
+            event.getTextChannel().sendMessage(m).queue(bot.getNowplayingHandler()::setLastNPMessage);
         }
     }
 }
