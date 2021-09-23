@@ -4,7 +4,7 @@
 FROM openjdk:11-buster
 
 # change the version if new release is appeared
-ENV JMUSICBOT_VERSION=0.6.3
+ENV JMUSICBOT_VERSION=0.6.4
 
 # DO NOT EDIT UNDER THIS LINE
 RUN mkdir -p /opt/jmusicbot
