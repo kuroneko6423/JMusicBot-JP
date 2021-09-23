@@ -111,6 +111,10 @@ public class PlaylistCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             String pname = event.getOption("name").getAsString();
             String guildId = event.getGuild().getId();
 
@@ -171,6 +175,10 @@ public class PlaylistCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             String pname = event.getOption("name").getAsString();
             String guildid = event.getGuild().getId();
             if (bot.getPlaylistLoader().getPlaylist(guildid, pname) == null)
@@ -235,6 +243,10 @@ public class PlaylistCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
 
             String guildid = event.getGuild().getId();
             String pname = event.getOption("name").getAsString();
@@ -295,6 +307,10 @@ public class PlaylistCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             String guildId = event.getGuild().getId();
             if (!bot.getPlaylistLoader().folderGuildExists(guildId))
                 bot.getPlaylistLoader().createGuildFolder(guildId);

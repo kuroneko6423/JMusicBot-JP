@@ -49,6 +49,10 @@ public class AutoplaylistCmd extends AdminCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
+        if(!checkAdminPermission(client, event)){
+            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+            return;
+        }
         String pName = event.getOption("name").getAsString();
         if (pName.toLowerCase().matches("(none|なし)")) {
             Settings settings = client.getSettingsFor(event.getGuild());

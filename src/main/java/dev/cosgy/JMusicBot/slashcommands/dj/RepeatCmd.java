@@ -91,6 +91,10 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             Settings settings = client.getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.SINGLE);
             event.reply("リピートを `有効(1曲リピート)` にしました。").queue();
@@ -111,6 +115,10 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             Settings settings = client.getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.ALL);
             event.reply("リピートを `有効(全曲リピート)` にしました。").queue();
@@ -131,6 +139,10 @@ public class RepeatCmd extends DJCommand {
 
         @Override
         public void doCommand(SlashCommandEvent event) {
+            if(!checkDJPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             Settings settings = client.getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.OFF);
             event.reply("リピートを `無効` にしました。").queue();

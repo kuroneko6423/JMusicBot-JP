@@ -54,6 +54,10 @@ public class PauseCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
+        if(!checkDJPermission(client, event)){
+            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+            return;
+        }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getPlayer().isPaused()) {
             event.reply(client.getWarning() + "曲はすでに一時停止しています。 `" + client.getPrefix() + " play` を使用して一時停止を解除する事ができます。").queue();

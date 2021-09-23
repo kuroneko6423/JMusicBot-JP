@@ -72,6 +72,10 @@ public class PlaynextCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
+        if(!checkDJPermission(client, event)){
+            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+            return;
+        }
         String args = event.getOption("title").getAsString();
         log.info(event.getGuild().getName() + "で[" + args + "]の読み込みを開始しました。");
         event.reply(loadingEmoji + "`[" + args + "]`を読み込み中です...").queue(m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new SlashResultHandler(m, event, false)));

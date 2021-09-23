@@ -49,6 +49,10 @@ public class NextCmd extends DJCommand {
 
     @Override
     public void doCommand(SlashCommandEvent event) {
+        if(!checkDJPermission(client, event)){
+            event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+            return;
+        }
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
         User u = event.getJDA().getUserById(handler.getRequester());
 

@@ -88,6 +88,10 @@ public class SetvcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
+            if(!checkAdminPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             Settings s = client.getSettingsFor(event.getGuild());
             Long channel = event.getOption("channel").getAsLong();
 
@@ -109,6 +113,10 @@ public class SetvcCmd extends AdminCommand {
 
         @Override
         protected void execute(SlashCommandEvent event) {
+            if(!checkAdminPermission(client, event)){
+                event.reply(client.getWarning()+"権限がないため実行できません。").queue();
+                return;
+            }
             Settings s = client.getSettingsFor(event.getGuild());
             s.setVoiceChannel(null);
             event.reply(client.getSuccess() + "音楽はどの音声チャンネルでも再生できます。").queue();
