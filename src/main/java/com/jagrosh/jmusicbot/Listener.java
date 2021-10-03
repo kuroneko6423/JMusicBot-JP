@@ -22,6 +22,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
@@ -62,20 +64,7 @@ public class Listener extends ListenerAdapter {
             } catch (Exception ignore) {
             }
         });
-        if (bot.getConfig().useUpdateAlerts()) {
-            bot.getThreadpool().scheduleWithFixedDelay(() ->
-            {
-                User owner = bot.getJDA().getUserById(bot.getConfig().getOwnerId());
-                if (owner != null) {
-                    String currentVersion = OtherUtil.getCurrentVersion();
-                    String latestVersion = OtherUtil.getLatestVersion();
-                    if (latestVersion != null && !currentVersion.equalsIgnoreCase(latestVersion) && JMusicBot.CHECK_UPDATE) {
-                        String msg = String.format(OtherUtil.NEW_VERSION_AVAILABLE, currentVersion, latestVersion);
-                        owner.openPrivateChannel().queue(pc -> pc.sendMessage(msg).queue());
-                    }
-                }
-            }, 0, 24, TimeUnit.HOURS);
-        }
+
         bot.resetGame();
     }
 
@@ -96,6 +85,8 @@ public class Listener extends ListenerAdapter {
         //NUP = true -> GO
         if (!bot.getConfig().getNoUserPause())
             if (!bot.getConfig().getNoUserStop()) return;
+
+        Bot.INSTANCE.resetGame();
 
         Member botMember = event.getGuild().getSelfMember();
         //ボイチャにいる人数が1人、botがボイチャにいるか
@@ -134,6 +125,8 @@ public class Listener extends ListenerAdapter {
         Member botMember = event.getGuild().getSelfMember();
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
+        Bot.INSTANCE.resetGame();
+
         //ボイチャにいる人数が1人以上、botがボイチャにいるか、再生が一時停止されているか
         if ((event.getChannelJoined().getMembers().size() > 1 && event.getChannelJoined().getMembers().contains(botMember)) && Objects.requireNonNull(handler).getPlayer().isPaused()) {
             handler.getPlayer().setPaused(false);
@@ -145,5 +138,15 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onShutdown(@NotNull ShutdownEvent event) {
         bot.shutdown();
+    }
+
+    @Override
+    public void onGuildJoin(GuildJoinEvent e){
+        Bot.INSTANCE.resetGame();
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent e){
+        Bot.INSTANCE.resetGame();
     }
 }

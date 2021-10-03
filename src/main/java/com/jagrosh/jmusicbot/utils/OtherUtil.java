@@ -146,46 +146,4 @@ public class OtherUtil {
         OnlineStatus st = OnlineStatus.fromKey(status);
         return st == null ? OnlineStatus.ONLINE : st;
     }
-
-    public static String checkVersion(Prompt prompt) {
-        // Get current version number
-        String version = getCurrentVersion();
-
-        // Check for new version
-        String latestVersion = getLatestVersion();
-
-        if (latestVersion != null && !latestVersion.equals(version) && JMusicBot.CHECK_UPDATE) {
-            prompt.alert(Prompt.Level.WARNING, "Version", String.format(NEW_VERSION_AVAILABLE, version, latestVersion));
-        }
-
-        // Return the current version
-        return version;
-    }
-
-    public static String getCurrentVersion() {
-        if (JMusicBot.class.getPackage() != null && JMusicBot.class.getPackage().getImplementationVersion() != null)
-            return JMusicBot.class.getPackage().getImplementationVersion();
-        else
-            return "不明";
-    }
-
-    public static String getLatestVersion() {
-        try {
-            Response response = new OkHttpClient.Builder().build()
-                    .newCall(new Request.Builder().get().url("https://api.github.com/repos/Cosgy-Dev/MusicBot-JP-java/releases/latest").build())
-                    .execute();
-            ResponseBody body = response.body();
-            if (body != null) {
-                try (Reader reader = body.charStream()) {
-                    JSONObject obj = new JSONObject(new JSONTokener(reader));
-                    return obj.getString("tag_name");
-                } finally {
-                    response.close();
-                }
-            } else
-                return null;
-        } catch (IOException | JSONException | NullPointerException ex) {
-            return null;
-        }
-    }
 }

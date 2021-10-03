@@ -32,7 +32,7 @@ public class DebugCmd extends OwnerCommand {
         for (String key : PROPERTIES)
             sb.append("\n  ").append(key).append(" = ").append(System.getProperty(key));
         sb.append("\n\nJMusicBot JPの情報:")
-                .append("\n  Version = ").append(OtherUtil.getCurrentVersion())
+                .append("\n  Version = ").append("Customized by cron")
                 .append("\n  Owner = ").append(bot.getConfig().getOwnerId())
                 .append("\n  Prefix = ").append(bot.getConfig().getPrefix())
                 .append("\n  AltPrefix = ").append(bot.getConfig().getAltPrefix())
@@ -73,7 +73,7 @@ public class DebugCmd extends OwnerCommand {
         for (String key : PROPERTIES)
             sb.append("\n  ").append(key).append(" = ").append(System.getProperty(key));
         sb.append("\n\nJMusicBot JPの情報:")
-                .append("\n  Version = ").append(OtherUtil.getCurrentVersion())
+                .append("\n  Version = ").append("Customized by cron")
                 .append("\n  Owner = ").append(bot.getConfig().getOwnerId())
                 .append("\n  Prefix = ").append(bot.getConfig().getPrefix())
                 .append("\n  AltPrefix = ").append(bot.getConfig().getAltPrefix())

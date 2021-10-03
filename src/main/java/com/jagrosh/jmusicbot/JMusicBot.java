@@ -59,7 +59,7 @@ public class JMusicBot {
             Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI,
             Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE};
     public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES};
-    public static boolean CHECK_UPDATE = true;
+//    public static boolean CHECK_UPDATE = false;
     public static boolean COMMAND_AUDIT_ENABLED = false;
 
     /**
@@ -69,11 +69,11 @@ public class JMusicBot {
         // startup log
         Logger log = getLogger("Startup");
 
-        try {
-            System.out.println(FigletFont.convertOneLine("JMusicBot v" + OtherUtil.getCurrentVersion()) + "\n" + "by Cosgy Dev");
-        } catch (IOException e) {
-            System.out.println("JMusicBot v" + OtherUtil.getCurrentVersion() + "\nby Cosgy Dev");
-        }
+//        try {
+//            System.out.println(FigletFont.convertOneLine("JMusicBot v" + OtherUtil.getCurrentVersion()) + "\n" + "by Cosgy Dev");
+//        } catch (IOException e) {
+//            System.out.println("JMusicBot v" + OtherUtil.getCurrentVersion() + "\nby Cosgy Dev");
+//        }
 
 
         // create prompt to handle startup
@@ -84,16 +84,13 @@ public class JMusicBot {
             if ("-nogui".equalsIgnoreCase(arg)) {
                 prompt.alert(Prompt.Level.WARNING, "GUI", "-noguiフラグは廃止予定です。 "
                         + "jarの名前の前に-Dnogui = trueフラグを使用してください。 例：java -jar -Dnogui=true JMusicBot.jar");
-            } else if ("-nocheckupdates".equalsIgnoreCase(arg)) {
-                CHECK_UPDATE = false;
-                log.info("アップデートチェックを無効にしました");
+//            } else if ("-nocheckupdates".equalsIgnoreCase(arg)) {
+//                CHECK_UPDATE = false;
+//                log.info("アップデートチェックを無効にしました");
             } else if ("-auditcommands".equalsIgnoreCase(arg)) {
                 COMMAND_AUDIT_ENABLED = true;
                 log.info("実行されたコマンドの記録を有効にしました。");
             }
-
-        // get and check latest version
-        String version = OtherUtil.checkVersion(prompt);
 
         if (!System.getProperty("java.vm.name").contains("64"))
             prompt.alert(Prompt.Level.WARNING, "Java Version", "サポートされていないJavaバージョンを使用しています。64ビット版のJavaを使用してください。");
@@ -256,13 +253,7 @@ public class JMusicBot {
         boolean nogame = false;
         if (config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
-        if (config.getGame() == null)
-            cb.setActivity(Activity.playing(config.getPrefix() + config.getHelp() + "でヘルプを確認"));
-        else if (config.getGame().getName().toLowerCase().matches("(none|なし)")) {
-            cb.setActivity(null);
-            nogame = true;
-        } else
-            cb.setActivity(config.getGame());
+        cb.setActivity(Activity.playing("Loading..."));
         if (!prompt.isNoGUI()) {
             try {
                 GUI gui = new GUI(bot);
