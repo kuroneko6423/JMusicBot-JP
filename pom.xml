@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
     <artifactId>JMusicBot</artifactId>
     <!-- バージョン装飾子参考の参考に: https://kengotoda.gitbooks.io/what-is-maven/deploy/snapshot-and-stable.html -->
-    <version>0.6.5</version>
+    <version>0.6.3</version>
     <packaging>jar</packaging>
 
     <repositories>
         <repository>
-            <id>dv8tion</id>
-            <name>m2-dv8tion</name>
-            <url>https://m2.dv8tion.net/releases</url>
-        </repository>
-        <repository>
             <id>central</id>
             <name>bintray</name>
             <url>https://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>dv8tion</id>
+            <name>m2-dv8tion</name>
+            <url>https://m2.dv8tion.net/releases</url>
         </repository>
         <repository>
             <id>bintray-sedmelluq-com.sedmelluq</id>
@@ -39,35 +42,35 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_331</version>
+            <version>4.3.0_315</version>
         </dependency>
         <dependency>
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
             <version>1.3.78</version>
         </dependency>
-        <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer-natives-extra</artifactId>
-            <version>1.3.13</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.sedmelluq</groupId>-->
+        <!--            <artifactId>lavaplayer-natives-extra</artifactId>-->
+        <!--            <version>1.3.13</version>-->
+        <!--        </dependency>-->
         <!-- YouTube IP Addresses rotator -->
-        <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer-ext-youtube-rotator</artifactId>
-            <version>LATEST</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.sedmelluq</groupId>-->
+        <!--            <artifactId>lavaplayer-ext-youtube-rotator</artifactId>-->
+        <!--            <version>LATEST</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>pw.chew</groupId>
             <artifactId>jda-chewtils</artifactId>
-            <version>1.22.0</version>
+            <version>1.21.0</version>
             <scope>compile</scope>
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.jagrosh</groupId>
+            <groupId>com.github.jagrosh</groupId>
             <artifactId>JLyrics</artifactId>
-            <version>0.5</version>
+            <version>-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -139,12 +142,10 @@
                                 </includes>
                             </artifactSet>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>com.jagrosh.jmusicbot.JMusicBot</Main-Class>
                                         <Specification-Title>${project.artifactId}</Specification-Title>
@@ -168,4 +169,3 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 </project>
-
