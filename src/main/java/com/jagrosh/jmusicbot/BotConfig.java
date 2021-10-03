@@ -58,7 +58,7 @@ public class BotConfig {
     private boolean useNicoNico, changeNickName, stayInChannel, pauseNoUsers, resumeJoined, stopNoUsers, songInGame, npImages, updatealerts, useEval, dbots, cosgyDevHost, helpToDm, autoStopQueueSave, auditCommands, officialInvite;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
-    private Activity game;
+    private String game;
     private Config aliases, transforms;
 
     private boolean valid = false;
@@ -95,7 +95,7 @@ public class BotConfig {
             errorEmoji = config.getString("error");
             loadingEmoji = config.getString("loading");
             searchingEmoji = config.getString("searching");
-            game = OtherUtil.parseGame(config.getString("game"));
+            game = config.getString("game");
             status = OtherUtil.parseStatus(config.getString("status"));
             stayInChannel = config.getBoolean("stayinchannel");
             songInGame = config.getBoolean("songinstatus");
@@ -229,7 +229,7 @@ public class BotConfig {
         return searchingEmoji;
     }
 
-    public Activity getGame() {
+    public String getGame() {
         return game;
     }
 

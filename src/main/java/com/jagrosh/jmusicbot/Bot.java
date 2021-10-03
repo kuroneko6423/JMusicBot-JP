@@ -55,6 +55,7 @@ public class Bot {
     private final NowplayingHandler nowplaying;
     private final AloneInVoiceHandler aloneInVoiceHandler;
 
+
     private boolean shuttingDown = false;
     private JDA jda;
     private GUI gui;
@@ -159,9 +160,13 @@ public class Bot {
     }
 
     public void resetGame() {
-        Activity game = config.getGame() == null || config.getGame().getName().toLowerCase().matches("(none|なし)") ? null : config.getGame();
-        if (!Objects.equals(jda.getPresence().getActivity(), game))
-            jda.getPresence().setActivity(game);
+        String game = config.getGame()
+                .replace("{servers}",String.valueOf(jda.getGuilds().size()))
+                .replace("{vcs}",String.valueOf( jda.getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count() ))
+                ;
+
+
+        jda.getPresence().setActivity(Activity.playing(game));
     }
 
     public void shutdown() {

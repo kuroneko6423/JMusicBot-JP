@@ -76,6 +76,7 @@ public class Listener extends ListenerAdapter {
                 }
             }, 0, 24, TimeUnit.HOURS);
         }
+        bot.resetGame();
     }
 
     @Override
